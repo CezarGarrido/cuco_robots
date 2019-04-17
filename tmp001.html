@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Relat&oacute;rio de Notas</title>
+	<meta name="GENERATOR" content="Quanta Plus" />
+	<meta name="AUTHOR" content="ph0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="temas/default/principal.css" media="screen" />
+	<script language="javascript" type="text/javascript" src="https://sistemas.uems.br/web/js/functions.js"></script>
+	<script language="javascript" type="text/javascript" src="include/jquery.js"></script>
+    <script src="include/jquery.sumoselect.js"></script>
+    <link href="temas/default/sumoselect.css" rel="stylesheet" />
+    <script language="javascript" type="text/javascript">
+    $(window).on( "load", function () {
+
+            $("button:contains('X')").css({'background-color' : '#FA5858', 'border' : '0', 'color': 'white'});
+            $("button:contains('Cancelar')").css({'background-color' : '#FA5858', 'border' : '0', 'color': 'white'});
+            $("#save_").css({'background-color' : '#3C8DBC', 'border' : '0', 'color': 'white'});
+            sessionStorage.setItem('init', false);
+            $('select.SlectBox').SumoSelect({'search' : true});
+            sessionStorage.setItem('init', true);
+        });
+
+        $(window).on( "unload", function(){
+            sessionStorage.clear();
+        });
+    </script>
+	<script language="javascript" type="text/javascript" src="script.js" defer></script>
+
+	<script language="javascript" type="text/javascript">
+		function SelecionarEvento( evento ) {
+			document.form_event.event.value = evento;
+			document.form_event.submit();
+		}
+		function AddFieldList( fields ) {
+			var vars = fields.split('&');
+			var form = document.getElementById('form_event');
+			for(i = 1; i < vars.length; i++){
+				var name = vars[i].substring(vars[i].indexOf('[')+1 , vars[i].indexOf(']'));
+				var value = vars[i].substring(vars[i].indexOf('=')+1 , vars[i].length);
+				form.innerHTML += '<input type="hidden" name="list['+name+']" value="'+value+'" />';
+			}
+			//document.form_list. = evento;
+		}
+	</script>
+        <link rel="icon" href="https://sistemas.uems.br/web/images/logo.png"/>
+</head>
+
+<body class="uc"  id="body_uc">
+	
+	<h1>Relat&oacute;rio de Notas</h1>
+	<center>
+	<div id="cabecalho" class="cabecalho"></div>
+		<div id="malert" class="alert"></div>
+	<div class="msg" id="msg">
+		<div class="button_footer" style="display: none" id="btn_ok">
+				<input id="closeAlert" type="button" onclick="closeMessage()" value="OK">
+		</div>
+	</div>
+
+		<div id="ajax_list">
+
+		</div>
+	<form name="form_event" id="form_event" method="POST">
+		<input type="hidden" name="event" value="notas" />
+	</form>
+	<form name="form_list" id="form_list" method="POST">
+
+	</form>
+
+	<h2>Relat&oacute;rio de Notas</h2>
+		<p class="message">Nenhuma nota foi lan&ccedil;ada para esta disciplina.</p>
+		<br>
+		<button type="button" onclick="location.href=''">Voltar</button>
+<div class="bottom_menu">
+	<span class="bottom_menu">Observa&ccedil;&atilde;o:</span> Este documento &eacute; v&aacute;lido apenas para visualiza&ccedil;&atilde;o.<br>
+	Acesso em 8 de abril de 2019, às 19h48.
+</div>
+	</center>
+</body>
+</html>
