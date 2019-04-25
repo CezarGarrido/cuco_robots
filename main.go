@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"strings"
 
-	"./internal"
-	"./models"
+	"github.com/CezarGarrido/cuco_robots/internal"
+	"github.com/CezarGarrido/cuco_robots/models"
 )
 func main() {
 	db, err := internal.ConexaoPostgres()

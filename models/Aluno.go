@@ -15,6 +15,7 @@ type Aluno struct {
 	CreatedAt time.Time
 	UpdatedAt *time.Time
 }
+
 //GetAll: Busca todos os alunos cadastrados no sistema
 func (this Aluno) GetAll(db *sql.DB) ([]*Aluno, error) {
 	alunos := make([]*Aluno, 0)
