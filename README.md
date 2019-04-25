@@ -14,28 +14,43 @@ Estas instruções serve para obter uma cópia do projeto e executar em sua máq
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+```
+   go get github.com/lib/pq
+   
+   go get https://github.com/CezarGarrido/cuco_robots
 
+```
 ### Executing program
 
 * How to run the program
 * Step-by-step bullets
 ```
-code blocks for commands
+
+   cd ./cuco_robots
+   go run main.go
 ```
 
-
-
 ## Authors
-
-Contributors names and contact info
-Cezar Garrido Britez  
+ex. Cezar Garrido Britez  
+ex. [@DomPizzie](https://twitter.com/dompizzie)
 
 ## Version History
+
+* 0.2
+    * Various bug fixes and optimizations
+    * See [commit change]() or See [release history]()
 * 0.1
     * Initial Release
 
 ## License
 
-Este projeto está licenciado sob a Licença MIT - ver a LICENÇA.md arquivo para detalhess
+This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+
+## Acknowledgments
+
+Inspiration, code snippets, etc.
+* [awesome-readme](https://github.com/matiassingers/awesome-readme)
+* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
+* [dbader](https://github.com/dbader/readme-template)
+* [zenorocha](https://gist.github.com/zenorocha/4526327)
+* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
