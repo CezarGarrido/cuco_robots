@@ -74,7 +74,7 @@ func main() {
 				fmt.Println("> Disciplina já cadastrada para o aluno")
 			}
 			nota := models.Nota{}
-			
+
 			nota.IDAluno = auxAluno.ID
 			nota.IDDisciplina = uemsDisciplina.ID
 			strID := strconv.FormatInt(alunoDisciplina.IDUEMS, 10)
@@ -152,9 +152,6 @@ func consultarNotas(idDisciplina string, client *http.Client) (*string, error) {
 	defer resp.Body.Close()
 	doc := string(body)
 	return &doc, nil
-
-	//consultarDisciplinas(aluno, client)
-
 }
 
 func consultarDisciplinas(aluno *models.Aluno, client *http.Client) ([]Disciplina, error) {
