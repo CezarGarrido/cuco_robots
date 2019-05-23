@@ -48,14 +48,14 @@ func main() {
 			if !uemsDisciplina.IsExist(db) {
 				idDisc, err := uemsDisciplina.Create(db)
 				if err != nil {
-					fmt.Println("Erro ao criar disciplina",err.Error())
+					fmt.Println("Erro ao criar disciplina", err.Error())
 					return
 				}
 				uemsDisciplina.ID = idDisc
 			} else {
 				err = uemsDisciplina.GetByIDUEMS(uemsDisciplina.IDUEMS, db)
 				if err != nil {
-					fmt.Println("Erro ao buscar disciplina",err.Error())
+					fmt.Println("Erro ao buscar disciplina", err.Error())
 					return
 				}
 				fmt.Println("> Disciplina já cadastrada no sistema")
@@ -69,7 +69,7 @@ func main() {
 				fmt.Println("> Cadastrando disciplina para o aluno")
 				_, err = alunoDisciplina.Create(db)
 				if err != nil {
-					fmt.Println("Erro ao cadastra disciplina para o aluno",err.Error())
+					fmt.Println("Erro ao cadastra disciplina para o aluno", err.Error())
 					return
 				}
 
@@ -83,7 +83,7 @@ func main() {
 			strID := strconv.FormatInt(alunoDisciplina.IDUEMS, 10)
 			doc, err := consultarNotas(strID, client)
 			if err != nil {
-				fmt.Println("Erro ao consultar notas",err.Error())
+				fmt.Println("Erro ao consultar notas", err.Error())
 				return
 			}
 			nota.Documento = *doc
@@ -91,21 +91,21 @@ func main() {
 				fmt.Println("Nota existe")
 				err = nota.GetByAluno(nota.IDAluno, db)
 				if err != nil {
-					fmt.Println("Erro ao buscar nota",err.Error())
+					fmt.Println("Erro ao buscar nota", err.Error())
 					return
 				}
 				hoje := time.Now()
 				nota.UpdatedAt = &hoje
 				err := nota.Update(db)
 				if err != nil {
-					fmt.Println("Erro ao atualizar notas",err.Error())
+					fmt.Println("Erro ao atualizar notas", err.Error())
 					return
 				}
 			} else {
 				nota.CreatedAt = time.Now()
 				_, err = nota.Create(db)
 				if err != nil {
-					fmt.Println("Erro ao criar nota",err.Error())
+					fmt.Println("Erro ao criar nota", err.Error())
 					return
 				}
 			}
