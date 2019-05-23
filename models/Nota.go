@@ -17,7 +17,7 @@ type Nota struct {
 //Create:Insere o html encontrado
 func (this Nota) Create(db *sql.DB) (int64, error) {
 	var id int64
-	stmt, err := db.Prepare("INSERT INTO cadastros.notas (id_aluno,id_disciplina,documento,created_at) values($1,$2,$3,$4)")
+	stmt, err := db.Prepare("INSERT INTO cadastros.notas (id_aluno,id_disciplina,documento,created_at) values($1,$2,$3,$4) returning id")
 	if err != nil {
 		return id, err
 	}
