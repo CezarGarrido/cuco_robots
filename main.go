@@ -74,8 +74,9 @@ func main() {
 				fmt.Println("> Disciplina já cadastrada para o aluno")
 			}
 			nota := models.Nota{}
-			nota.IdAluno = auxAluno.ID
-			nota.IdDisciplina = uemsDisciplina.ID
+			
+			nota.IDAluno = auxAluno.ID
+			nota.IDDisciplina = uemsDisciplina.ID
 			strID := strconv.FormatInt(alunoDisciplina.IDUEMS, 10)
 			doc, err := consultarNotas(strID, client)
 			if err != nil {
@@ -83,12 +84,24 @@ func main() {
 				return
 			}
 			nota.Documento = *doc
-			err = nota.Create(db)
-			if err != nil {
-				fmt.Println(err.Error())
-				return
+			if nota.IsExist(db) {
+				err = nota.GetByAluno(nota.IDAluno, db)
+				if err != nil {
+					fmt.Println(err.Error())
+					return
+				}
+				err := nota.Update(db)
+				if err != nil {
+					fmt.Println(err.Error())
+					return
+				}
+			} else {
+				_, err = nota.Create(db)
+				if err != nil {
+					fmt.Println(err.Error())
+					return
+				}
 			}
-
 		}
 	}
 }
