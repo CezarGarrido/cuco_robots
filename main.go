@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/CezarGarrido/cuco_robots/internal"
+	"github.com/CezarGarrido/cuco_robots/driver"
 	"github.com/CezarGarrido/cuco_robots/models"
 	"github.com/PuerkitoBio/goquery"
 )
