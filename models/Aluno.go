@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"time"
 )
+
 type Aluno struct {
-	Id        int64
+	ID        int64
 	Nome      string
 	Curso     string
 	Ano       int
@@ -26,7 +27,7 @@ func (this Aluno) GetAll(db *sql.DB) ([]*Aluno, error) {
 	for selDB.Next() {
 		auxAluno := new(Aluno)
 		err = selDB.Scan(
-			&auxAluno.Id,
+			&auxAluno.ID,
 			&auxAluno.Nome,
 			&auxAluno.Curso,
 			&auxAluno.Ano,
