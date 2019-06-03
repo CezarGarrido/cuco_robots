@@ -18,33 +18,68 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func main() {
+type Disciplina struct {
+	ID        int64
+	Descricao string
+	Oferta    string
+}
+
+type Detalhes struct {
+	Unidade                string
+	Curso                  string
+	Disciplina             string
+	Turma                  string
+	SerieDisciplina        string
+	CargaHorariaPresencial string
+	MaximoFaltas           string
+	PeriodoLetivo          string
+	Professor              string
+	MediaAvaliacoes        string
+	Optativa               string
+	Exame                  string
+	MediaFinal             string
+	Faltas                 string
+	Situacao               string
+	Notas                  []Nota
+}
+
+type Nota struct {
+	Descricao string
+	Valor     string
+}
+
+func Start() {
+	fmt.Println("> 🔥 Starting")
+
 	db, err := internal.ConexaoPostgres()
 	if err != nil {
 		panic(err)
 	}
 	aluno := models.Aluno{}
+	fmt.Println("> buscando alunos")
 	alunos, err := aluno.GetAll(db)
 	if err != nil {
 		panic(err)
 	}
 	for _, auxAluno := range alunos {
+		fmt.Println("> iniciando sessão")
 		client, err := newClient(auxAluno)
 		if err != nil {
 			fmt.Printf("%+v\n", err.Error())
 			return
 		}
+		fmt.Println("> consultando disciplinas")
 		disciplinas, err := consultarDisciplinas(auxAluno, client)
 		if err != nil {
 			fmt.Printf("%+v\n", err.Error())
 			return
 		}
 		for _, disciplina := range disciplinas {
-			fmt.Println(disciplina.ID)
 			uemsDisciplina := models.Disciplina{}
 			uemsDisciplina.IDUEMS = disciplina.ID
 			uemsDisciplina.Descricao = disciplina.Descricao
 			uemsDisciplina.CreatedAt = time.Now()
+			fmt.Println("> Disciplina", disciplina.Descricao)
 			if !uemsDisciplina.IsExist(db) {
 				idDisc, err := uemsDisciplina.Create(db)
 				if err != nil {
@@ -58,7 +93,6 @@ func main() {
 					fmt.Println("Erro ao buscar disciplina", err.Error())
 					return
 				}
-				fmt.Println("> Disciplina já cadastrada no sistema")
 			}
 			alunoDisciplina := models.AlunoDisciplina{}
 			alunoDisciplina.IDAluno = auxAluno.ID
@@ -73,53 +107,106 @@ func main() {
 					return
 				}
 
-			} else {
-				fmt.Println("> Disciplina já cadastrada para o aluno")
 			}
-			nota := models.Nota{}
-
-			nota.IDAluno = auxAluno.ID
-			nota.IDDisciplina = uemsDisciplina.ID
 			strID := strconv.FormatInt(alunoDisciplina.IDUEMS, 10)
+			fmt.Println("> consultando notas")
 			doc, err := consultarNotas(strID, client)
 			if err != nil {
 				fmt.Println("Erro ao consultar notas", err.Error())
 				return
 			}
-			nota.Documento = *doc
-			if nota.IsExist(db) {
-				fmt.Println("Nota existe")
-				err = nota.GetByAluno(nota.IDAluno, db)
+			detalhe, err := parserNotas(*doc)
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+			alunoNota := models.AlunoNota{}
+			alunoNota.IDAluno = auxAluno.ID
+			alunoNota.IDDisciplina = uemsDisciplina.ID
+			alunoNota.Unidade = detalhe.Unidade
+			alunoNota.Curso = detalhe.Curso
+			alunoNota.Disciplina = detalhe.Disciplina
+			alunoNota.Turma = detalhe.Turma
+			alunoNota.SerieDisciplina = detalhe.SerieDisciplina
+			alunoNota.CargaHorariaPresencial = detalhe.CargaHorariaPresencial
+			alunoNota.MaximoFaltas = detalhe.MaximoFaltas
+			alunoNota.PeriodoLetivo = detalhe.PeriodoLetivo
+			alunoNota.Professor = detalhe.Professor
+			alunoNota.MediaAvaliacoes = detalhe.MediaAvaliacoes
+			alunoNota.Optativa = detalhe.Optativa
+			alunoNota.Exame = detalhe.Exame
+			alunoNota.MediaFinal = detalhe.MediaFinal
+			alunoNota.Faltas = detalhe.Faltas
+			alunoNota.Situacao = detalhe.Situacao
+			alunoNota.CreatedAt = time.Now()
+			alunoNota.UpdatedAt = time.Now()
+			if !alunoNota.IsExist(db) {
+				notaID, err := alunoNota.Create(db)
 				if err != nil {
-					fmt.Println("Erro ao buscar nota", err.Error())
+					fmt.Println(err.Error())
 					return
 				}
-				hoje := time.Now()
-				nota.UpdatedAt = &hoje
-				err := nota.Update(db)
-				if err != nil {
-					fmt.Println("Erro ao atualizar notas", err.Error())
-					return
-				}
+				alunoNota.ID = notaID
 			} else {
-				nota.CreatedAt = time.Now()
-				_, err = nota.Create(db)
+				err = alunoNota.GetByDisciplina(uemsDisciplina.ID, db)
 				if err != nil {
-					fmt.Println("Erro ao criar nota", err.Error())
+					fmt.Println(err.Error())
+					return
+				}
+				err = alunoNota.Update(db)
+				if err != nil {
+					fmt.Println(err.Error())
 					return
 				}
 			}
+			for _, n := range detalhe.Notas {
+				fmt.Println(">", n.Descricao, " -->", n.Valor)
+				valorNota := models.ValorNota{
+					IDNota:    alunoNota.ID,
+					Descricao: n.Descricao,
+					Valor:     n.Valor,
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+				}
+				if !valorNota.IsExist(db) {
+					_, err := valorNota.Create(db)
+					if err != nil {
+						fmt.Println("Erro ao criar valor nota", err.Error())
+						return
+					}
+				} else {
+					err = valorNota.GetByDescricao(n.Descricao, db)
+					if err != nil {
+						fmt.Println(err.Error())
+						return
+					}
+					fmt.Println("> Atualizando nota")
+					valorNota.UpdatedAt = time.Now()
+					err = valorNota.Update(db)
+					if err != nil {
+						fmt.Println("erro ao atualizar valor da nota", err.Error())
+						return
+					}
+				}
+			}
+
 		}
 	}
 }
 
 func newClient(aluno *models.Aluno) (*http.Client, error) {
-	parm := url.Values{}
-	parm.Add("login", "")
-	parm.Add("rgm", aluno.Rgm)
-	parm.Add("senha", aluno.Senha)
-	cookieJar, _ := cookiejar.New(nil)
-	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/index.php", strings.NewReader(parm.Encode()))
+
+	param := url.Values{}
+	param.Add("login", "")
+	param.Add("rgm", aluno.Rgm)
+	param.Add("senha", aluno.Senha)
+
+	cookieJar, err := cookiejar.New(nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/index.php", strings.NewReader(param.Encode()))
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	client := &http.Client{
@@ -149,7 +236,6 @@ func consultarNotas(idDisciplina string, client *http.Client) (*string, error) {
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("%s", err)
 		return nil, err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
@@ -181,12 +267,6 @@ func consultarDisciplinas(aluno *models.Aluno, client *http.Client) ([]Disciplin
 	return disciplinas, nil
 }
 
-type Disciplina struct {
-	ID        int64
-	Descricao string
-	Oferta    string
-}
-
 func parserDisciplinas(html string) ([]Disciplina, error) {
 
 	disciplinas := []Disciplina{}
@@ -194,17 +274,10 @@ func parserDisciplinas(html string) ([]Disciplina, error) {
 	if err != nil {
 		return disciplinas, err
 	}
-	//doc.Find("script").Remove()
-	//doc.Find("style").Remove()
-	//doc.Find("img").Remove()
 	var disciplina Disciplina
 	isError := false
 	var erros []string
 	doc.Find("table.event_list").Each(func(index int, tablehtml *goquery.Selection) {
-		//band, ok := tablehtml.Attr("class")
-		//if ok {
-		//if band == "event_list" {
-
 		tablehtml.Find("tr#link").Each(func(indextr int, rowhtml *goquery.Selection) {
 			band, ok := rowhtml.Attr("onclick")
 			if ok {
@@ -226,11 +299,130 @@ func parserDisciplinas(html string) ([]Disciplina, error) {
 			}
 			disciplinas = append(disciplinas, disciplina)
 		})
-		//}
-		//}
 	})
 	if isError {
 		return disciplinas, errors.New(strings.Join(erros, " "))
 	}
 	return disciplinas, nil
+}
+
+func parserNotas(html string) (Detalhes, error) {
+	var detalhe Detalhes
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return detalhe, err
+	}
+	var nota Nota
+	var notas []Nota
+	doc.Find("table.event_form").Each(func(index int, tablehtml *goquery.Selection) {
+		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
+			band, ok := rowhtml.Attr("id")
+			if ok {
+				if band == "tr_unidade" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Unidade = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_curso" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Curso = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_disciplina" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Disciplina = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_turma" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Turma = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_serie" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.SerieDisciplina = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_carga_horaria" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.CargaHorariaPresencial = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				//tr_curso
+				//tr_disciplina
+				//tr_turma
+				//tr_serie
+				//tr_carga_horaria
+			} else {
+				var texto string
+				rowhtml.Find("th").Each(func(indexth int, tablecell *goquery.Selection) {
+					texto = strings.Join(strings.Fields(tablecell.Text()), " ")
+				})
+				if texto == "Máximo de Faltas" {
+					rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+						detalhe.MaximoFaltas = strings.Join(strings.Fields(tablecell.Text()), " ")
+					})
+				}
+				if texto == "Período Letivo" {
+					rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+						detalhe.PeriodoLetivo = strings.Join(strings.Fields(tablecell.Text()), " ")
+					})
+				}
+				if texto == "Professor(a)" {
+					rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+						detalhe.Professor = strings.Join(strings.Fields(tablecell.Text()), " ")
+					})
+				}
+			}
+			rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+
+				band, ok := tablecell.Attr("colspan")
+				if ok {
+					if band == "2" {
+						tablecell.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
+							if indextr == 1 {
+								rowhtml.Find("th").Each(func(indexth int, thtml *goquery.Selection) {
+									nota.Descricao = strings.Join(strings.Fields(thtml.Text()), " ")
+									notas = append(notas, nota)
+								})
+							}
+							if indextr == 2 {
+								rowhtml.Find("td").Each(func(indexth int, thtml *goquery.Selection) {
+									if indexth < len(notas) {
+										notas[indexth].Valor = strings.Join(strings.Fields(thtml.Text()), " ")
+									} else {
+										if indexth == len(notas) {
+											fmt.Println(strings.Join(strings.Fields(thtml.Text()), " "))
+											detalhe.MediaAvaliacoes = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+1 {
+											detalhe.Optativa = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+2 {
+											detalhe.Exame = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+3 {
+											detalhe.MediaFinal = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+4 {
+											detalhe.Faltas = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+5 {
+											detalhe.Situacao = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+									}
+								})
+							}
+						})
+					}
+				}
+			})
+		})
+	})
+	detalhe.Notas = notas
+	return detalhe, nil
+}
+
+func main() {
+	Start()
 }
