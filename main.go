@@ -18,12 +18,18 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// Disciplina formatos usando os formatos predefinidos para seus operandos e escreve para w.
+// Espaços são adicionados entre os operandos quando nem é uma seqüência de caracteres.
+// Retorna o número de bytes gravados e qualquer erro de escrita encontrados.
 type Disciplina struct {
 	ID        int64
 	Descricao string
 	Oferta    string
 }
 
+// Detalhes formatos usando os formatos predefinidos para seus operandos e escreve para w.
+// Espaços são adicionados entre os operandos quando nem é uma seqüência de caracteres.
+// Retorna o número de bytes gravados e qualquer erro de escrita encontrados.
 type Detalhes struct {
 	Unidade                string
 	Curso                  string
@@ -43,11 +49,17 @@ type Detalhes struct {
 	Notas                  []Nota
 }
 
+// Nota formatos usando os formatos predefinidos para seus operandos e escreve para w.
+// Espaços são adicionados entre os operandos quando nem é uma seqüência de caracteres.
+// Retorna o número de bytes gravados e qualquer erro de escrita encontrados.
 type Nota struct {
 	Descricao string
 	Valor     string
 }
 
+// Start formatos usando os formatos predefinidos para seus operandos e escreve para w.
+// Espaços são adicionados entre os operandos quando nem é uma seqüência de caracteres.
+// Retorna o número de bytes gravados e qualquer erro de escrita encontrados.
 func Start() {
 	fmt.Println("> 🔥 Starting")
 
@@ -103,7 +115,7 @@ func Start() {
 				fmt.Println("> Cadastrando disciplina para o aluno")
 				_, err = alunoDisciplina.Create(db)
 				if err != nil {
-					fmt.Println("Erro ao cadastra disciplina para o aluno", err.Error())
+					fmt.Println("Erro ao cadastrar disciplina para o aluno", err.Error())
 					return
 				}
 
@@ -194,6 +206,9 @@ func Start() {
 	}
 }
 
+// newClient formatos usando os formatos predefinidos para seus operandos e escreve para w.
+// Espaços são adicionados entre os operandos quando nem é uma seqüência de caracteres.
+// Retorna o número de bytes gravados e qualquer erro de escrita encontrados.
 func newClient(aluno *models.Aluno) (*http.Client, error) {
 
 	param := url.Values{}
@@ -226,6 +241,9 @@ func newClient(aluno *models.Aluno) (*http.Client, error) {
 	return client, nil
 }
 
+// consultarNotas formatos usando os formatos predefinidos para seus operandos e escreve para w.
+// Espaços são adicionados entre os operandos quando nem é uma seqüência de caracteres.
+// Retorna o número de bytes gravados e qualquer erro de escrita encontrados.
 func consultarNotas(idDisciplina string, client *http.Client) (*string, error) {
 
 	param := url.Values{}
@@ -425,4 +443,44 @@ func parserNotas(html string) (Detalhes, error) {
 
 func main() {
 	Start()
+}
+
+type Client struct {
+	Conn *http.Client
+}
+
+func NewClient(aluno *models.Aluno) (*Client, error) {
+
+	client := new(Client)
+
+	param := url.Values{}
+	param.Add("login", "")
+	param.Add("rgm", aluno.Rgm)
+	param.Add("senha", aluno.Senha)
+
+	cookieJar, err := cookiejar.New(nil)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/index.php", strings.NewReader(param.Encode()))
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	HtppClient := &http.Client{
+		Jar: cookieJar,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}
+	resp, err := HtppClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	client.Conn = HtppClient
+
+	return client, nil
 }
