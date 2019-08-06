@@ -25,7 +25,6 @@ Estas instruções serve para obter uma cópia do projeto e executar em sua máq
 * How to run the program
 * Step-by-step bullets
 ```
-
    cd ./cuco_robots
    go run main.go
 ```

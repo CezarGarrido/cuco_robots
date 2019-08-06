@@ -1,0 +1,10 @@
+1-Facilidade de aprendizagem:
+Sistema intuitivo fácil de utilizar, utilizando conceitos como ux, google material design etc;
+Produtividade dos usuários:
+Usuários vai ter em mãos uma ferramenta que gera praticamente tudo automaticamente;
+Taxa de erros:
+Os erro serão controlados através de erros, o sistema terá uma interoperabilidade, praticamente todos os erros serão tratados;
+Retenção ao longo do tempo:
+Muito provável que o usuário utilizara o sistema ao longo de sua jornada academica, pois o sistema será de fácil acesso e ainda será grátis;
+Satisfação do usuário:
+Contaremos com um sistema de feedback do usuário assim podemos colher informações e saber oque realmente podemos fazer pelo usuário caso seja necessário;

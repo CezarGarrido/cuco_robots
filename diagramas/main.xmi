@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMI verified="false" xmi.version="1.2" timestamp="2019-06-24T12:54:43" xmlns:UML="http://schema.omg.org/spec/UML/1.4">
+ <XMI.header>
+  <XMI.documentation>
+   <XMI.exporter>umbrello uml modeller http://umbrello.kde.org</XMI.exporter>
+   <XMI.exporterVersion>1.6.16</XMI.exporterVersion>
+   <XMI.exporterEncoding>UnicodeUTF8</XMI.exporterEncoding>
+  </XMI.documentation>
+  <XMI.metamodel xmi.version="1.4" href="UML.xml" xmi.name="UML"/>
+ </XMI.header>
+ <XMI.content>
+  <UML:Model isSpecification="false" isAbstract="false" isLeaf="false" xmi.id="m1" isRoot="false" name="UML Model">
+   <UML:Namespace.ownedElement>
+    <UML:Stereotype visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="folder" name="folder"/>
+    <UML:Model visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Logical_View" name="Logical View">
+     <UML:Namespace.ownedElement>
+      <UML:Package stereotype="folder" visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Datatypes" name="Datatypes">
+       <UML:Namespace.ownedElement>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ujUUPS0D02ulv" name="char"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uo3NYtgadbEWx" name="int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uy0rNjzK8EVhg" name="float"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ujygREupMreBE" name="double"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uBlNjfAQLR6Mt" name="bool"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uFmudjMuqJGLA" name="string"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uUfLK4YjnSsY8" name="unsigned char"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uzIP4o4GXH5Xq" name="signed char"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uO7QmHdvtDMe3" name="unsigned int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u2559iEi7LOjK" name="signed int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uc5iWwmuQHb5h" name="short int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ugcasM0pMsa0F" name="unsigned short int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ugAsoWisx5VGo" name="signed short int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="up7H7Ij37Z8Yx" name="long int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uVnuxBGK6tGQd" name="signed long int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="urOPHEPJH5Jdl" name="unsigned long int"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uaEyOV7HV4CGI" name="long double"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u8r3p6IfNfa3m" name="wchar_t"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ucG4Rh8SVRlVL" name="([]*Aluno,error)"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uYb5pcPsBrCt5" name="Boolean"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uocz7M8xat5ax" name="Character"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uVQOpScZhMpZt" name="Positive"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="umhRTPs0UnTWB" name="Natural"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uG2iNG8FjGUKQ" name="Integer"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uX7j8NDPJyXqH" name="Short_Integer"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uzQKVF0Cltd2e" name="Long_Integer"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uqlQIGpZi64K3" name="Long_Float"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ujE3woUhnTTmg" name="Duration"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uorDpuyqxFlJA" name="array"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uRkJoKa6jk4WC" name="tuple"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uf4Y9CjQphcTQ" name="list"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ulLqa6ujVSHak" name="long"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uOD12z5KrQI1V" name="dict"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uG4m55LPEgFEk" name="object"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uZuAXKeKm1Ucq" name="set"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uzQpuZGTQ8NlB" name="*http.Client"/>
+        <UML:DataType visibility="public" isSpecification="false" namespace="Datatypes" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u5vgGiWybSxh5" name="(*Cliente,error)"/>
+       </UML:Namespace.ownedElement>
+      </UML:Package>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u5gW3QvFrvNK3" name="client"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u5gNcaNK6OCQf" name="aluno">
+       <UML:Classifier.feature>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ucxlq38uLE4yv" type="uo3NYtgadbEWx" name="id"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uqzAo32iodHUV" type="uFmudjMuqJGLA" name="nome"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ufDkzaTO9FhoV" type="uFmudjMuqJGLA" name="curso"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u6dRCa5foEzpp" type="uo3NYtgadbEWx" name="ano"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uhOq9CbuK7PSW" type="uFmudjMuqJGLA" name="unidade"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u96BhrECrTfD6" type="uFmudjMuqJGLA" name="rgm"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ux7SIDfQOQPn2" type="uFmudjMuqJGLA" name="senha"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uO3ElH9nG07zx" type="u2jcCrRDUw2PP" name="createdAt"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uPhr8jzcefofy" type="u2jcCrRDUw2PP" name="updatedAt"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u9SjaLnkDZW46" isOverride="false" name="getAll" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter kind="return" xmi.id="uJbF9wQWpBi6Q" type="ucG4Rh8SVRlVL"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uekc3QsQ6EhOV" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+       </UML:Classifier.feature>
+      </UML:Class>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u2jcCrRDUw2PP" name="timestamp"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u7dMdAZA6R2gI" name="*sql.DB"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ukhpYUIpNiE0V" name="Disciplina">
+       <UML:Classifier.feature>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u6CIIdFspv0Ch" type="uo3NYtgadbEWx" name="id"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uTZDTGIi1Z6w8" type="uo3NYtgadbEWx" name="descricao"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uawxf2ZLJKt1r" type="uo3NYtgadbEWx" name="iduems"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u6PDbHgg4TgM0" type="uo3NYtgadbEWx" name="ano"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u1XyNH9MMPuSA" type="u2jcCrRDUw2PP" name="createdAt"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uCgHdaMIVPSPc" type="u2jcCrRDUw2PP" name="updatedAt"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uE6rar7fnZ4J9" isOverride="false" name="Create" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uvVyBGbL0gyJG" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ub3tCHDfV0ET6" isOverride="false" name="isExist" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter kind="return" xmi.id="uRmU4CDHglVeE" type="uBlNjfAQLR6Mt"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="ujgAymy9f3CnI" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="umnqhBHYaNBOC" isOverride="false" name="GetByIDUEMS" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uTI8gFuQoU14D" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+       </UML:Classifier.feature>
+      </UML:Class>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uzoCApvL1fXzy" name="AlunoNota">
+       <UML:Classifier.feature>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uDEYsR3tTeoiE" type="uo3NYtgadbEWx" name="ID"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uagnpOASlth54" type="uo3NYtgadbEWx" name="IDAluno"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ulLe2qN6PSrV2" type="uo3NYtgadbEWx" name="IDDisciplina"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u4FfPcOhSu9YW" type="uFmudjMuqJGLA" name="Unidade"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ubbVCB5pQcZzx" type="uFmudjMuqJGLA" name="Curso"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uzNLrdjHEwiGm" type="uFmudjMuqJGLA" name="Disciplina"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ufQqXeNEpHvS9" type="uFmudjMuqJGLA" name="Turma"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ukvxt143pCVR1" type="uFmudjMuqJGLA" name="SerieDisciplina"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uWZID6GMP4d8A" type="uFmudjMuqJGLA" name="CargaHorariaPresencial"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="unELwrTwqQjOq" type="uFmudjMuqJGLA" name="MaximoFaltas"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uewk5veutBnri" type="uFmudjMuqJGLA" name="PeriodoLetivo"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uAcuyuShZyA1l" type="uFmudjMuqJGLA" name="Professor"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="u0Ma6G9USsy6a" type="uFmudjMuqJGLA" name="MediaAvaliacoes"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uSYxaCiPo6rU1" type="uFmudjMuqJGLA" name="Optativa"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uOlqfKvH40dex" type="uFmudjMuqJGLA" name="Exame"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ukHD77Vg8sEwE" type="uFmudjMuqJGLA" name="MediaFinal"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uR2IlC7x9GLhm" type="uFmudjMuqJGLA" name="Faltas"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ur9npmtziiIq4" type="uFmudjMuqJGLA" name="Situacao"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uZ58TcdTKWLXe" type="u809r0Ei74Pbe" name="Notas"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uzi2GAo6hgSwn" type="u2jcCrRDUw2PP" name="CreatedAt"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="ulcC5KbK9EABP" type="u2jcCrRDUw2PP" name="UpdatedAt"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="unOo7pSwCzCwl" isOverride="false" name="Create" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uWUcKcbEbb1zf" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uAKHSMTEDFkUo" isOverride="false" name="IsExist" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter kind="return" xmi.id="uTB8HgbScixck" type="uBlNjfAQLR6Mt"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="u4LCPRwUFEJ6l" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ubNzX3ff8lYPN" isOverride="false" name="Update" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="u3Hbe8C1jv1lT" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uPyNRJfiyYoYw" isOverride="false" name="GetByDisciplina" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uxLNp5EpUnVrL" type="u4JmQaQ3iF7fw" value="" name="id"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uZAnmlxbBT6B1" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uNg2GZvAEE4IK" isOverride="false" name="GetByDescricao" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uTDL09iSM9k6V" type="uFmudjMuqJGLA" value="" name="descricao"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="ureJtqXYkiGJB" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+       </UML:Classifier.feature>
+      </UML:Class>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u809r0Ei74Pbe" name="[]ValorNota"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u4JmQaQ3iF7fw" name="int64"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u4fswd2spwYdM" name="ValorNota">
+       <UML:Classifier.feature>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uMvQaRMqlZe3w" type="uo3NYtgadbEWx" name="ID"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uOJ4H7Nxb6M6h" type="uo3NYtgadbEWx" name="IDNOTA"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uw5SQC4R9abrf" type="uFmudjMuqJGLA" name="Descricao"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="up9Q9U614s7qW" type="uFmudjMuqJGLA" name="Valor"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uo9CWhA8iRGpm" type="u2jcCrRDUw2PP" name="CreatedAt"/>
+        <UML:Attribute visibility="public" isSpecification="false" xmi.id="uwW3Hs6y1VwwR" type="u2jcCrRDUw2PP" name="UpdatedAt"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uqD4zuBi5toDv" isOverride="false" name="Create" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uub0WY8xQQjSA" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u8pc7taRGNxpw" isOverride="false" name="IsExist" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter kind="return" xmi.id="upCxuicLyPOBW" type="uBlNjfAQLR6Mt"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uHmQlVZT5TTuk" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uVFFJ1EqMCIo5" isOverride="false" name="Update" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="ucrhnEyU0SaZx" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uimT3NXIaupB6" isOverride="false" name="GetByDescricao" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="u2oUdf4y5TpeJ" type="uFmudjMuqJGLA" value="" name="descicao"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="upWBpEKF3qtaV" type="u7dMdAZA6R2gI" value="" name="db"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+       </UML:Classifier.feature>
+      </UML:Class>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical_View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="uThj5mix7Ngjq" name="Cliente">
+       <UML:Classifier.feature>
+        <UML:Attribute visibility="private" isSpecification="false" xmi.id="uSKKekRHks0cA" type="uzQpuZGTQ8NlB" name="conn"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u2iXG9zMlDzzy" isOverride="false" name="NewClient" isInline="false" isVirtual="false">
+         <UML:BehavioralFeature.parameter>
+          <UML:Parameter kind="return" xmi.id="u4hFiPBhPl8f2" type="u5vgGiWybSxh5"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uldN8TcTEMms7" type="uFmudjMuqJGLA" value="" name="rgm"/>
+          <UML:Parameter visibility="private" isSpecification="false" xmi.id="uf6bY2mK9hdfB" type="uFmudjMuqJGLA" value="" name="senha"/>
+         </UML:BehavioralFeature.parameter>
+        </UML:Operation>
+       </UML:Classifier.feature>
+      </UML:Class>
+     </UML:Namespace.ownedElement>
+     <XMI.extension xmi.extender="umbrello">
+      <diagrams resolution="96">
+       <diagram showopsig="1" linecolor="#ff0000" snapx="25" showattribassocs="1" snapy="25" linewidth="0" showattsig="1" textcolor="#000000" isopen="1" showpackage="1" showpubliconly="0" showstereotype="1" name="class diagram" font="Sans Serif,9,-1,0,50,0,0,0,0,0" canvasheight="898.53" canvaswidth="3636.32" localid="-1" snapcsgrid="0" showgrid="0" showops="1" griddotcolor="#d3d3d3" backgroundcolor="#ffffff" usefillcolor="1" fillcolor="#ffff00" zoom="46.52391396064095" xmi.id="uuWgVIiLVBfsp" documentation="" showscope="1" snapgrid="0" showatts="1" type="1">
+        <widgets>
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="0" textcolor="#000000" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="0" showpackage="1" x="-6065.29" showattsigs="601" showstereotype="1" y="-1543.5" showattributes="1" font="Sans Serif,9,-1,0,50,0,0,0,0,0" localid="uYHb5uY6t7fWk" width="211" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="u5gNcaNK6OCQf" autoresize="1" showscope="1" height="165" showopsigs="601"/>
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="0" textcolor="#000000" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="0" showpackage="1" x="-5726.74" showattsigs="601" showstereotype="1" y="-1571.24" showattributes="1" font="Sans Serif,9,-1,0,50,0,0,0,0,0" localid="uVIHrxyXYLDjZ" width="171" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="ukhpYUIpNiE0V" autoresize="1" showscope="1" height="150" showopsigs="601"/>
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="0" textcolor="#000000" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="0" showpackage="1" x="-4943.44" showattsigs="601" showstereotype="1" y="-1500.11" showattributes="1" font="Sans Serif,9,-1,0,50,0,0,0,0,0" localid="u7sXeRf3Y2XQ6" width="281" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="uzoCApvL1fXzy" autoresize="1" showscope="1" height="405" showopsigs="601"/>
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="0" textcolor="#000000" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="0" showpackage="1" x="-5389.06" showattsigs="601" showstereotype="1" y="-1571.6" showattributes="1" font="Sans Serif,9,-1,0,50,0,0,0,0,0" localid="u971jbKLdYmUJ" width="277" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="u4fswd2spwYdM" autoresize="1" showscope="1" height="165" showopsigs="601"/>
+         <classwidget linecolor="#ff0000" usesdiagramfillcolor="0" linewidth="0" textcolor="#000000" showoperations="1" usesdiagramusefillcolor="0" showpubliconly="0" showpackage="1" x="-5184.04" showattsigs="601" showstereotype="1" y="-1025.04" showattributes="1" font="Sans Serif,9,-1,0,50,0,0,0,0,0" localid="uSKUnt3PkMBOT" width="318" isinstance="0" usefillcolor="1" fillcolor="#ffff00" xmi.id="uThj5mix7Ngjq" autoresize="1" showscope="1" height="45" showopsigs="601"/>
+        </widgets>
+        <messages/>
+        <associations/>
+       </diagram>
+      </diagrams>
+     </XMI.extension>
+    </UML:Model>
+    <UML:Model visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Use_Case_View" name="Use Case View">
+     <UML:Namespace.ownedElement/>
+    </UML:Model>
+    <UML:Model visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Component_View" name="Component View">
+     <UML:Namespace.ownedElement/>
+    </UML:Model>
+    <UML:Model visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Deployment_View" name="Deployment View">
+     <UML:Namespace.ownedElement/>
+    </UML:Model>
+    <UML:Model visibility="public" isSpecification="false" namespace="m1" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Entity_Relationship_Model" name="Entity Relationship Model">
+     <UML:Namespace.ownedElement/>
+    </UML:Model>
+   </UML:Namespace.ownedElement>
+  </UML:Model>
+ </XMI.content>
+ <XMI.extensions xmi.extender="umbrello">
+  <docsettings viewid="uuWgVIiLVBfsp" uniqueid="u1spxQiDOpgt7" documentation=""/>
+  <listview>
+   <listitem open="1" type="800" id="Views">
+    <listitem open="1" type="821" id="Component_View"/>
+    <listitem open="1" type="827" id="Deployment_View"/>
+    <listitem open="1" type="836" id="Entity_Relationship_Model"/>
+    <listitem open="1" type="801" id="Logical_View">
+     <listitem open="1" type="813" id="u7dMdAZA6R2gI"/>
+     <listitem open="1" type="813" id="u809r0Ei74Pbe"/>
+     <listitem open="1" type="813" id="u5gNcaNK6OCQf">
+      <listitem open="0" type="814" id="u6dRCa5foEzpp"/>
+      <listitem open="0" type="814" id="uO3ElH9nG07zx"/>
+      <listitem open="0" type="814" id="ufDkzaTO9FhoV"/>
+      <listitem open="0" type="815" id="u9SjaLnkDZW46"/>
+      <listitem open="0" type="814" id="ucxlq38uLE4yv"/>
+      <listitem open="0" type="814" id="uqzAo32iodHUV"/>
+      <listitem open="0" type="814" id="u96BhrECrTfD6"/>
+      <listitem open="0" type="814" id="ux7SIDfQOQPn2"/>
+      <listitem open="0" type="814" id="uhOq9CbuK7PSW"/>
+      <listitem open="0" type="814" id="uPhr8jzcefofy"/>
+     </listitem>
+     <listitem open="1" type="813" id="uzoCApvL1fXzy">
+      <listitem open="0" type="814" id="uWZID6GMP4d8A"/>
+      <listitem open="0" type="815" id="unOo7pSwCzCwl"/>
+      <listitem open="0" type="814" id="uzi2GAo6hgSwn"/>
+      <listitem open="0" type="814" id="ubbVCB5pQcZzx"/>
+      <listitem open="0" type="814" id="uzNLrdjHEwiGm"/>
+      <listitem open="0" type="814" id="uOlqfKvH40dex"/>
+      <listitem open="0" type="814" id="uR2IlC7x9GLhm"/>
+      <listitem open="0" type="815" id="uNg2GZvAEE4IK"/>
+      <listitem open="0" type="815" id="uPyNRJfiyYoYw"/>
+      <listitem open="0" type="814" id="uDEYsR3tTeoiE"/>
+      <listitem open="0" type="814" id="uagnpOASlth54"/>
+      <listitem open="0" type="814" id="ulLe2qN6PSrV2"/>
+      <listitem open="0" type="815" id="uAKHSMTEDFkUo"/>
+      <listitem open="0" type="814" id="unELwrTwqQjOq"/>
+      <listitem open="0" type="814" id="u0Ma6G9USsy6a"/>
+      <listitem open="0" type="814" id="ukHD77Vg8sEwE"/>
+      <listitem open="0" type="814" id="uZ58TcdTKWLXe"/>
+      <listitem open="0" type="814" id="uSYxaCiPo6rU1"/>
+      <listitem open="0" type="814" id="uewk5veutBnri"/>
+      <listitem open="0" type="814" id="uAcuyuShZyA1l"/>
+      <listitem open="0" type="814" id="ukvxt143pCVR1"/>
+      <listitem open="0" type="814" id="ur9npmtziiIq4"/>
+      <listitem open="0" type="814" id="ufQqXeNEpHvS9"/>
+      <listitem open="0" type="814" id="u4FfPcOhSu9YW"/>
+      <listitem open="0" type="815" id="ubNzX3ff8lYPN"/>
+      <listitem open="0" type="814" id="ulcC5KbK9EABP"/>
+     </listitem>
+     <listitem open="0" type="807" id="uuWgVIiLVBfsp" label="class diagram"/>
+     <listitem open="1" type="813" id="u5gW3QvFrvNK3"/>
+     <listitem open="1" type="813" id="uThj5mix7Ngjq">
+      <listitem open="0" type="814" id="uSKKekRHks0cA"/>
+      <listitem open="0" type="815" id="u2iXG9zMlDzzy"/>
+     </listitem>
+     <listitem open="0" type="830" id="Datatypes">
+      <listitem open="1" type="829" id="u5vgGiWybSxh5"/>
+      <listitem open="1" type="829" id="ucG4Rh8SVRlVL"/>
+      <listitem open="1" type="829" id="uzQpuZGTQ8NlB"/>
+      <listitem open="1" type="829" id="uorDpuyqxFlJA"/>
+      <listitem open="0" type="829" id="uBlNjfAQLR6Mt"/>
+      <listitem open="1" type="829" id="uYb5pcPsBrCt5"/>
+      <listitem open="0" type="829" id="ujUUPS0D02ulv"/>
+      <listitem open="1" type="829" id="uocz7M8xat5ax"/>
+      <listitem open="1" type="829" id="uOD12z5KrQI1V"/>
+      <listitem open="0" type="829" id="ujygREupMreBE"/>
+      <listitem open="1" type="829" id="ujE3woUhnTTmg"/>
+      <listitem open="0" type="829" id="uy0rNjzK8EVhg"/>
+      <listitem open="0" type="829" id="uo3NYtgadbEWx"/>
+      <listitem open="1" type="829" id="uG2iNG8FjGUKQ"/>
+      <listitem open="1" type="829" id="uf4Y9CjQphcTQ"/>
+      <listitem open="1" type="829" id="ulLqa6ujVSHak"/>
+      <listitem open="0" type="829" id="uaEyOV7HV4CGI"/>
+      <listitem open="0" type="829" id="up7H7Ij37Z8Yx"/>
+      <listitem open="1" type="829" id="uqlQIGpZi64K3"/>
+      <listitem open="1" type="829" id="uzQKVF0Cltd2e"/>
+      <listitem open="1" type="829" id="umhRTPs0UnTWB"/>
+      <listitem open="1" type="829" id="uG4m55LPEgFEk"/>
+      <listitem open="1" type="829" id="uVQOpScZhMpZt"/>
+      <listitem open="1" type="829" id="uZuAXKeKm1Ucq"/>
+      <listitem open="0" type="829" id="uc5iWwmuQHb5h"/>
+      <listitem open="1" type="829" id="uX7j8NDPJyXqH"/>
+      <listitem open="0" type="829" id="uzIP4o4GXH5Xq"/>
+      <listitem open="0" type="829" id="u2559iEi7LOjK"/>
+      <listitem open="0" type="829" id="uVnuxBGK6tGQd"/>
+      <listitem open="0" type="829" id="ugAsoWisx5VGo"/>
+      <listitem open="0" type="829" id="uFmudjMuqJGLA"/>
+      <listitem open="1" type="829" id="uRkJoKa6jk4WC"/>
+      <listitem open="0" type="829" id="uUfLK4YjnSsY8"/>
+      <listitem open="0" type="829" id="uO7QmHdvtDMe3"/>
+      <listitem open="0" type="829" id="urOPHEPJH5Jdl"/>
+      <listitem open="0" type="829" id="ugcasM0pMsa0F"/>
+      <listitem open="0" type="829" id="u8r3p6IfNfa3m"/>
+     </listitem>
+     <listitem open="1" type="813" id="ukhpYUIpNiE0V">
+      <listitem open="0" type="814" id="u6PDbHgg4TgM0"/>
+      <listitem open="0" type="815" id="uE6rar7fnZ4J9"/>
+      <listitem open="0" type="814" id="u1XyNH9MMPuSA"/>
+      <listitem open="0" type="814" id="uTZDTGIi1Z6w8"/>
+      <listitem open="0" type="815" id="umnqhBHYaNBOC"/>
+      <listitem open="0" type="814" id="u6CIIdFspv0Ch"/>
+      <listitem open="0" type="814" id="uawxf2ZLJKt1r"/>
+      <listitem open="0" type="815" id="ub3tCHDfV0ET6"/>
+      <listitem open="0" type="814" id="uCgHdaMIVPSPc"/>
+     </listitem>
+     <listitem open="1" type="813" id="u4JmQaQ3iF7fw"/>
+     <listitem open="1" type="813" id="u2jcCrRDUw2PP"/>
+     <listitem open="1" type="813" id="u4fswd2spwYdM">
+      <listitem open="0" type="815" id="uqD4zuBi5toDv"/>
+      <listitem open="0" type="814" id="uo9CWhA8iRGpm"/>
+      <listitem open="0" type="814" id="uw5SQC4R9abrf"/>
+      <listitem open="0" type="815" id="uimT3NXIaupB6"/>
+      <listitem open="0" type="814" id="uMvQaRMqlZe3w"/>
+      <listitem open="0" type="814" id="uOJ4H7Nxb6M6h"/>
+      <listitem open="0" type="815" id="u8pc7taRGNxpw"/>
+      <listitem open="0" type="815" id="uVFFJ1EqMCIo5"/>
+      <listitem open="0" type="814" id="uwW3Hs6y1VwwR"/>
+      <listitem open="0" type="814" id="up9Q9U614s7qW"/>
+     </listitem>
+    </listitem>
+    <listitem open="1" type="802" id="Use_Case_View"/>
+   </listitem>
+  </listview>
+  <codegeneration>
+   <codegenerator language="Python">
+    <sourcecode value="func (this Aluno) GetAll(db *sql.DB) ([]*Aluno, error) {&#xa;    alunos := make([]*Aluno, 0)&#xa;    selDB, err := db.Query(&quot;Select * from cadastros.alunos&quot;)&#xa;    if err != nil {&#xa;        return alunos, err&#xa;    }&#xa;    for selDB.Next() {&#xa;        auxAluno := new(Aluno)&#xa;        err = selDB.Scan(&#xa;            &amp;auxAluno.ID,&#xa;            &amp;auxAluno.Nome,&#xa;            &amp;auxAluno.Curso,&#xa;            &amp;auxAluno.Ano,&#xa;            &amp;auxAluno.Unidade,&#xa;            &amp;auxAluno.Rgm,&#xa;            &amp;auxAluno.Senha,&#xa;            &amp;auxAluno.CreatedAt,&#xa;            &amp;auxAluno.UpdatedAt,&#xa;        )&#xa;        if err != nil {&#xa;            return alunos, err&#xa;        }&#xa;        alunos = append(alunos, auxAluno)&#xa;    }&#xa;    return alunos, err&#xa;}" id="u9SjaLnkDZW46"/>
+    <sourcecode value="func (this *Disciplina) Create(db *sql.DB) (int64, error) {&#xa;&#x9;var id int64&#xa;&#x9;stmtIns, err := db.Prepare(&quot;INSERT INTO cadastros.disciplinas (descricao,id_uems,ano,created_at,updated_at) VALUES ($1,$2,$3,$4,$5) RETURNING id&quot;)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return id, err&#xa;&#x9;}&#xa;&#x9;if err := stmtIns.QueryRow(&#xa;&#x9;&#x9;this.Descricao,&#xa;&#x9;&#x9;this.IDUEMS,&#xa;&#x9;&#x9;this.Ano,&#xa;&#x9;&#x9;this.CreatedAt,&#xa;&#x9;&#x9;this.UpdatedAt,&#xa;&#x9;).Scan(&amp;id); err != nil {&#xa;&#x9;&#x9;return id, err&#xa;&#x9;}&#xa;&#x9;defer stmtIns.Close()&#xa;&#x9;return id, nil&#xa;}" id="uE6rar7fnZ4J9"/>
+    <sourcecode value="func (this Disciplina) IsExist(db *sql.DB) bool {&#xa;&#x9;var count bool&#xa;&#x9;_ = db.QueryRow(&quot;select exists(select 1 from cadastros.disciplinas where id_uems=$1 and Descricao=$2)&quot;, this.IDUEMS, this.Descricao).Scan(&amp;count)&#xa;&#x9;return count&#xa;}" id="ub3tCHDfV0ET6"/>
+    <sourcecode value="func (this *Disciplina) GetByIDUEMS(id_uems int64, db *sql.DB) error {&#xa;&#x9;sql := &quot;SELECT id, descricao, id_uems, ano,created_at,updated_at FROM cadastros.disciplinas where id_uems = $1&quot;&#xa;&#x9;selDB, err := db.Query(sql, id_uems)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;for selDB.Next() {&#xa;&#x9;&#x9;err = selDB.Scan(&#xa;&#x9;&#x9;&#x9;&amp;this.ID,&#xa;&#x9;&#x9;&#x9;&amp;this.Descricao,&#xa;&#x9;&#x9;&#x9;&amp;this.IDUEMS,&#xa;&#x9;&#x9;&#x9;&amp;this.Ano,&#xa;&#x9;&#x9;&#x9;&amp;this.CreatedAt,&#xa;&#x9;&#x9;&#x9;&amp;this.UpdatedAt,&#xa;&#x9;&#x9;)&#xa;&#x9;&#x9;if err != nil {&#xa;&#x9;&#x9;&#x9;return err&#xa;&#x9;&#x9;}&#xa;&#x9;}&#xa;&#x9;return nil&#xa;}&#xa;" id="umnqhBHYaNBOC"/>
+    <sourcecode value="func (this *AlunoNota) Create(db *sql.DB) (int64, error) {&#xa;&#x9;var id int64&#xa;&#x9;stmtIns, err := db.Prepare(&quot;INSERT INTO cadastros.alunos_notas (id_aluno,id_disciplina,unidade,curso,disciplina,turma,&quot; +&#xa;&#x9;&#x9;&quot;seriedisciplina,cargahorariapresencial,maximofaltas,periodoletivo,professor,mediaavaliacoes,optativa,exame,mediafinal,&quot; +&#xa;&#x9;&#x9;&quot;faltas,situacao,created_at,updated_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19) RETURNING id&quot;)&#xa;&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return id, err&#xa;&#x9;}&#xa;&#x9;if err := stmtIns.QueryRow(&#xa;&#x9;&#x9;this.IDAluno,&#xa;&#x9;&#x9;this.IDDisciplina,&#xa;&#x9;&#x9;this.Unidade,&#xa;&#x9;&#x9;this.Curso,&#xa;&#x9;&#x9;this.Disciplina,&#xa;&#x9;&#x9;this.Turma,&#xa;&#x9;&#x9;this.SerieDisciplina,&#xa;&#x9;&#x9;this.CargaHorariaPresencial,&#xa;&#x9;&#x9;this.MaximoFaltas,&#xa;&#x9;&#x9;this.PeriodoLetivo,&#xa;&#x9;&#x9;this.Professor,&#xa;&#x9;&#x9;this.MediaAvaliacoes,&#xa;&#x9;&#x9;this.Optativa,&#xa;&#x9;&#x9;this.Exame,&#xa;&#x9;&#x9;this.MediaFinal,&#xa;&#x9;&#x9;this.Faltas,&#xa;&#x9;&#x9;this.Situacao,&#xa;&#x9;&#x9;this.CreatedAt,&#xa;&#x9;&#x9;this.UpdatedAt,&#xa;&#x9;).Scan(&amp;id); err != nil {&#xa;&#x9;&#x9;return id, err&#xa;&#x9;}&#xa;&#x9;defer stmtIns.Close()&#xa;&#x9;return id, nil&#xa;}" id="unOo7pSwCzCwl"/>
+    <sourcecode value="func (this AlunoNota) IsExist(db *sql.DB) bool {&#xa;&#x9;var count bool&#xa;&#x9;_ = db.QueryRow(&quot;select exists(select 1 from cadastros.alunos_notas where id_disciplina=$1 and id_aluno=$2)&quot;, this.IDDisciplina, this.IDAluno).Scan(&amp;count)&#xa;&#x9;return count&#xa;}" id="uAKHSMTEDFkUo"/>
+    <sourcecode value="func (this AlunoNota) Update(db *sql.DB) error {&#xa;&#x9;stmtIns, err := db.Prepare(&quot;UPDATE cadastros.alunos_notas set id_aluno=$1, id_disciplina=$2,&quot; +&#xa;&#x9;&#x9;&quot;unidade=$3, curso=$4, disciplina=$5, turma=$6, seriedisciplina=$7, cargahorariapresencial=$8,&quot; +&#xa;&#x9;&#x9;&quot;maximofaltas=$9, periodoletivo=$10, professor=$11, mediaavaliacoes=$12, optativa=$13, exame=$14, mediafinal=$15,&quot; +&#xa;&#x9;&#x9;&quot;faltas=$16, situacao=$17, created_at=$18, updated_at=$19 Where id=$20 &quot;) // ? = placeholder&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;defer stmtIns.Close()&#xa;&#x9;if _, err := stmtIns.Exec(&#xa;&#x9;&#x9;this.IDAluno,&#xa;&#x9;&#x9;this.IDDisciplina,&#xa;&#x9;&#x9;this.Unidade,&#xa;&#x9;&#x9;this.Curso,&#xa;&#x9;&#x9;this.Disciplina,&#xa;&#x9;&#x9;this.Turma,&#xa;&#x9;&#x9;this.SerieDisciplina,&#xa;&#x9;&#x9;this.CargaHorariaPresencial,&#xa;&#x9;&#x9;this.MaximoFaltas,&#xa;&#x9;&#x9;this.PeriodoLetivo,&#xa;&#x9;&#x9;this.Professor,&#xa;&#x9;&#x9;this.MediaAvaliacoes,&#xa;&#x9;&#x9;this.Optativa,&#xa;&#x9;&#x9;this.Exame,&#xa;&#x9;&#x9;this.MediaFinal,&#xa;&#x9;&#x9;this.Faltas,&#xa;&#x9;&#x9;this.Situacao,&#xa;&#x9;&#x9;this.CreatedAt,&#xa;&#x9;&#x9;this.UpdatedAt,&#xa;&#x9;&#x9;this.ID,&#xa;&#x9;); err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;return nil&#xa;}&#xa;" id="ubNzX3ff8lYPN"/>
+    <sourcecode value="func (this *AlunoNota) GetByDisciplina(id int64, db *sql.DB) error {&#xa;&#x9;sql := &quot;SELECT id, id_aluno, id_disciplina, &quot; +&#xa;&#x9;&#x9;&quot;unidade, curso, disciplina, turma, seriedisciplina, cargahorariapresencial, &quot; +&#xa;&#x9;&#x9;&quot;maximofaltas, periodoletivo, professor, mediaavaliacoes, optativa, exame, mediafinal, &quot; +&#xa;&#x9;&#x9;&quot;faltas, situacao, created_at, updated_at FROM cadastros.alunos_notas Where id_disciplina=$1 and id_aluno=$2&quot;&#xa;&#x9;selDB, err := db.Query(sql, id, this.IDAluno)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;for selDB.Next() {&#xa;&#x9;&#x9;err = selDB.Scan(&#xa;&#x9;&#x9;&#x9;&amp;this.ID,&#xa;&#x9;&#x9;&#x9;&amp;this.IDAluno,&#xa;&#x9;&#x9;&#x9;&amp;this.IDDisciplina,&#xa;&#x9;&#x9;&#x9;&amp;this.Unidade,&#xa;&#x9;&#x9;&#x9;&amp;this.Curso,&#xa;&#x9;&#x9;&#x9;&amp;this.Disciplina,&#xa;&#x9;&#x9;&#x9;&amp;this.Turma,&#xa;&#x9;&#x9;&#x9;&amp;this.SerieDisciplina,&#xa;&#x9;&#x9;&#x9;&amp;this.CargaHorariaPresencial,&#xa;&#x9;&#x9;&#x9;&amp;this.MaximoFaltas,&#xa;&#x9;&#x9;&#x9;&amp;this.PeriodoLetivo,&#xa;&#x9;&#x9;&#x9;&amp;this.Professor,&#xa;&#x9;&#x9;&#x9;&amp;this.MediaAvaliacoes,&#xa;&#x9;&#x9;&#x9;&amp;this.Optativa,&#xa;&#x9;&#x9;&#x9;&amp;this.Exame,&#xa;&#x9;&#x9;&#x9;&amp;this.MediaFinal,&#xa;&#x9;&#x9;&#x9;&amp;this.Faltas,&#xa;&#x9;&#x9;&#x9;&amp;this.Situacao,&#xa;&#x9;&#x9;&#x9;&amp;this.CreatedAt,&#xa;&#x9;&#x9;&#x9;&amp;this.UpdatedAt,&#xa;&#x9;&#x9;)&#xa;&#x9;&#x9;if err != nil {&#xa;&#x9;&#x9;&#x9;return err&#xa;&#x9;&#x9;}&#xa;&#x9;}&#xa;&#x9;return nil&#xa;}&#xa;" id="uPyNRJfiyYoYw"/>
+    <sourcecode value="func (this *ValorNota) GetByDescricao(descricao string, db *sql.DB) error {&#xa;&#x9;sql := &quot;SELECT id, id_nota, descricao, valor, created_at, updated_at FROM cadastros.valores_notas Where id_nota=$1 and descricao=$2&quot;&#xa;&#x9;selDB, err := db.Query(sql, this.IDNota, descricao)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;for selDB.Next() {&#xa;&#x9;&#x9;err = selDB.Scan(&#xa;&#x9;&#x9;&#x9;&amp;this.ID,&#xa;&#x9;&#x9;&#x9;&amp;this.IDNota,&#xa;&#x9;&#x9;&#x9;&amp;this.Descricao,&#xa;&#x9;&#x9;&#x9;&amp;this.Valor,&#xa;&#x9;&#x9;&#x9;&amp;this.CreatedAt,&#xa;&#x9;&#x9;&#x9;&amp;this.UpdatedAt,&#xa;&#x9;&#x9;)&#xa;&#x9;&#x9;if err != nil {&#xa;&#x9;&#x9;&#x9;return err&#xa;&#x9;&#x9;}&#xa;&#x9;}&#xa;&#x9;return nil&#xa;}&#xa;" id="uNg2GZvAEE4IK"/>
+    <sourcecode value="func (this *ValorNota) Create(db *sql.DB) (int64, error) {&#xa;&#x9;var id int64&#xa;&#x9;stmtIns, err := db.Prepare(&quot;INSERT INTO cadastros.valores_notas (id_nota,descricao,valor,created_at,updated_at) VALUES ($1,$2,$3,$4,$5) RETURNING id&quot;)&#xa;&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return id, err&#xa;&#x9;}&#xa;&#x9;if err := stmtIns.QueryRow(&#xa;&#x9;&#x9;this.IDNota,&#xa;&#x9;&#x9;this.Descricao,&#xa;&#x9;&#x9;this.Valor,&#xa;&#x9;&#x9;this.CreatedAt,&#xa;&#x9;&#x9;this.UpdatedAt,&#xa;&#x9;).Scan(&amp;id); err != nil {&#xa;&#x9;&#x9;return id, err&#xa;&#x9;}&#xa;&#x9;defer stmtIns.Close()&#xa;&#x9;return id, nil&#xa;}" id="uqD4zuBi5toDv"/>
+    <sourcecode value="func (this ValorNota) IsExist(db *sql.DB) bool {&#xa;&#x9;var count bool&#xa;&#x9;_ = db.QueryRow(&quot;select exists(select 1 from cadastros.valores_notas where id_nota=$1 and descricao=$2)&quot;, this.IDNota, this.Descricao).Scan(&amp;count)&#xa;&#x9;return count&#xa;}" id="u8pc7taRGNxpw"/>
+    <sourcecode value="func (this ValorNota) Update(db *sql.DB) error {&#xa;&#x9;stmtIns, err := db.Prepare(&quot;UPDATE cadastros.valores_notas set id_nota=$1,descricao=$2,valor=$3,created_at=$4,updated_at=$5 Where id=$6 &quot;) // ? = placeholder&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;defer stmtIns.Close()&#xa;&#x9;if _, err := stmtIns.Exec(&#xa;&#x9;&#x9;this.IDNota,&#xa;&#x9;&#x9;this.Descricao,&#xa;&#x9;&#x9;this.Valor,&#xa;&#x9;&#x9;this.CreatedAt,&#xa;&#x9;&#x9;this.UpdatedAt,&#xa;&#x9;&#x9;this.ID,&#xa;&#x9;); err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;return nil&#xa;}" id="uVFFJ1EqMCIo5"/>
+    <sourcecode value="func (this *ValorNota) GetByDescricao(descricao string, db *sql.DB) error {&#xa;&#x9;sql := &quot;SELECT id, id_nota, descricao, valor, created_at, updated_at FROM cadastros.valores_notas Where id_nota=$1 and descricao=$2&quot;&#xa;&#x9;selDB, err := db.Query(sql, this.IDNota, descricao)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return err&#xa;&#x9;}&#xa;&#x9;for selDB.Next() {&#xa;&#x9;&#x9;err = selDB.Scan(&#xa;&#x9;&#x9;&#x9;&amp;this.ID,&#xa;&#x9;&#x9;&#x9;&amp;this.IDNota,&#xa;&#x9;&#x9;&#x9;&amp;this.Descricao,&#xa;&#x9;&#x9;&#x9;&amp;this.Valor,&#xa;&#x9;&#x9;&#x9;&amp;this.CreatedAt,&#xa;&#x9;&#x9;&#x9;&amp;this.UpdatedAt,&#xa;&#x9;&#x9;)&#xa;&#x9;&#x9;if err != nil {&#xa;&#x9;&#x9;&#x9;return err&#xa;&#x9;&#x9;}&#xa;&#x9;}&#xa;&#x9;return nil&#xa;}&#xa;" id="uimT3NXIaupB6"/>
+    <sourcecode value="func NewClient(rgm, senha string) (*Client, error) {&#xa;&#x9;&#xa;&#x9;client := new(Client)&#xa;&#xa;&#x9;param := url.Values{}&#xa;&#xa;&#x9;param.Add(&quot;login&quot;, &quot;&quot;)&#xa;&#x9;param.Add(&quot;rgm&quot;, rgm)&#xa;&#x9;param.Add(&quot;senha&quot;, senha)&#xa;&#xa;&#x9;cookieJar, err := cookiejar.New(nil)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return nil, err&#xa;&#x9;}&#xa;&#x9;req, err := http.NewRequest(&quot;POST&quot;, &quot;https://sistemas.uems.br/academico/index.php&quot;, strings.NewReader(param.Encode()))&#xa;&#x9;req.Header.Add(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&quot;)&#xa;&#x9;req.Header.Set(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;)&#xa;&#x9;HtppClient := &amp;http.Client{&#xa;&#x9;&#x9;Jar: cookieJar,&#xa;&#x9;&#x9;Transport: &amp;http.Transport{&#xa;&#x9;&#x9;&#x9;TLSClientConfig: &amp;tls.Config{&#xa;&#x9;&#x9;&#x9;&#x9;InsecureSkipVerify: true,&#xa;&#x9;&#x9;&#x9;},&#xa;&#x9;&#x9;},&#xa;&#x9;}&#xa;&#x9;resp, err := HtppClient.Do(req)&#xa;&#x9;if err != nil {&#xa;&#x9;&#x9;return nil, err&#xa;&#x9;}&#xa;&#x9;defer resp.Body.Close()&#xa;&#x9;client.Conn = HtppClient&#xa;&#x9;return client, nil&#xa;}&#xa;" id="u2iXG9zMlDzzy"/>
+   </codegenerator>
+  </codegeneration>
+ </XMI.extensions>
+</XMI>

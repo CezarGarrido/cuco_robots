@@ -449,14 +449,15 @@ type Client struct {
 	Conn *http.Client
 }
 
-func NewClient(aluno *models.Aluno) (*Client, error) {
-
+func NewClient(rgm, senha string) (*Client, error) {
+	
 	client := new(Client)
 
 	param := url.Values{}
+
 	param.Add("login", "")
-	param.Add("rgm", aluno.Rgm)
-	param.Add("senha", aluno.Senha)
+	param.Add("rgm", rgm)
+	param.Add("senha", senha)
 
 	cookieJar, err := cookiejar.New(nil)
 	if err != nil {
@@ -477,10 +478,7 @@ func NewClient(aluno *models.Aluno) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	defer resp.Body.Close()
-
 	client.Conn = HtppClient
-
 	return client, nil
 }
