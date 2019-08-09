@@ -3,7 +3,7 @@ import 'package:app/menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app/zoom_scaffold.dart';
 import 'package:provider/provider.dart';
-
+import 'package:app/notas.dart';
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         menuScreen: MenuScreen(),
         contentScreen: Layout(
             contentBuilder: (cc) => Container(
+               
                   color: Colors.grey[200],
                   child: Container(
                     color: Colors.grey[200],

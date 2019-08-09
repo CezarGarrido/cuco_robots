@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:app/notas.dart';
 
 class ZoomScaffold extends StatefulWidget {
   final Widget menuScreen;
@@ -20,7 +21,7 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
   Curve scaleUpCurve = new Interval(0.0, 1.0, curve: Curves.easeOut);
   Curve slideOutCurve = new Interval(0.0, 1.0, curve: Curves.easeOut);
   Curve slideInCurve = new Interval(0.0, 1.0, curve: Curves.easeOut);
-
+  int index = 0;
   createContentDisplay() {
     return zoomAndSlideContent(new Container(
       child: new Scaffold(
@@ -45,10 +46,11 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
                 ),
               )
             ]),
-        body: widget.contentScreen.contentBuilder(context),
+        body: _getBody(index),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: 0,
+          onTap: (value) => setState(() => index = value),
           items: [
             BottomNavigationBarItem(
                 title: Text(''),
@@ -70,9 +72,30 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
     ));
   }
 
+  Widget _getBody(int index) {
+    switch (index) {
+      case 0:
+        return Container(
+          color: Colors.grey[200],
+          child: Page1(),
+        ); // Create this function, it should return your first page as a widget
+      case 1:
+        return Page1(); // Create this function, it should return your second page as a widget
+      case 2:
+        return Page1(); // Create this function, it should return your third page as a widget
+      case 3:
+        return Page1(); // Create this function, it should return your fourth page as a widget
+    }
+
+    return Center(
+      child: Text("There is no page builder for this index."),
+    );
+  }
+
   zoomAndSlideContent(Widget content) {
     var slidePercent, scalePercent;
-
+    slidePercent = 0.0;
+    scalePercent = 0.0;
     switch (Provider.of<MenuController>(context, listen: true).state) {
       case MenuState.closed:
         slidePercent = 0.0;
