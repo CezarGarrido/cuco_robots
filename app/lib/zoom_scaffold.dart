@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/notas.dart';
+import 'package:app/disciplinas.dart';
 
 class ZoomScaffold extends StatefulWidget {
   final Widget menuScreen;
@@ -80,7 +81,10 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
           child: Page1(),
         ); // Create this function, it should return your first page as a widget
       case 1:
-        return Page1(); // Create this function, it should return your second page as a widget
+               return Container(
+          color: Colors.grey[200],
+          child: Page2(),
+        ); // Create this function, it should return your second page as a widget
       case 2:
         return Page1(); // Create this function, it should return your third page as a widget
       case 3:

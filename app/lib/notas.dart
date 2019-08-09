@@ -1,5 +1,3 @@
-
-    
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -17,12 +15,12 @@ class _Page1State extends State<Page1> {
     final response =
         await http.get("https://jsonplaceholder.typicode.com/posts/");
     if (response.statusCode == 200) {
-     await new Future.delayed(const Duration(seconds: 1));
-     if (mounted){
+      await new Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
         setState(() {
           list = json.decode(response.body) as List;
         });
-     }
+      }
     } else {
       throw Exception('Failed to load posts');
     }
@@ -40,7 +38,21 @@ class _Page1State extends State<Page1> {
       itemCount: list.length,
       itemBuilder: (BuildContext context, int index) {
         final data = list[index];
+        if (index % 2 == 0) {
+          return ListTile(
+            title: Text(
+              "Matemática",
+            ),
+            trailing: Icon(Icons.keyboard_arrow_right),
+          );
+        }
         return ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.redAccent,
+            child: Text('5'),
+          ),
+          // leading: new Icon(Icons.brightness_1, size: 28.0,
+          //       color: Colors.redAccent),
           contentPadding: EdgeInsets.all(10.0),
           title: Text(data['title']),
           subtitle: Text(
