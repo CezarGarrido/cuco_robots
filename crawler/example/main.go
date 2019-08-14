@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/CezarGarrido/cuco_robots/crawler"
@@ -15,6 +16,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(*aluno)
+	b, err := json.Marshal(aluno)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(b))
 
 }
