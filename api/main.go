@@ -26,9 +26,11 @@ func main() {
 	}
 	alunoHandler := appHandler.NewAluno(connection)
 	r := mux.NewRouter()
+
 	r.HandleFunc("/api/v1/login", alunoHandler.Login).Methods("POST")
 
 	headersOk := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
+	
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS", "PUT", "DELETE"})
 	log.Println("Servidor startado na porta :8091")

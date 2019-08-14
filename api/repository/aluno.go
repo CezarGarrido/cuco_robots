@@ -8,18 +8,18 @@ import (
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 )
 
-// LogRepo explain...
+// AlunoRepo explain...
 type AlunoRepo interface {
-	//Fetch(ctx context.Context, uf string) ([]*entities.Aluno, error)
 	//GetByID(ctx context.Context, id int64) (*entities.Log, error)*/
+	IsExiste(ctx context.Context, rgm, senha string) (bool, error)
+
 	Create(ctx context.Context, advogado *entities.Aluno) (int64, error)
 	/*Update(ctx context.Context, p *entities.Log) (*entities.Log, error)*/
 	Update(ctx context.Context, p *entities.Aluno) (*entities.Aluno, error)
 	GetByLogin(ctx context.Context, rgm string) (*entities.Aluno, error)
-	//Delete(ctx context.Context, id int64) (bool, error)
 }
 
-// NewSQLLogRepo retunrs implement of post repository interface
+// NewSQLAlunoRepo retunrs implement of Aluno repository interface
 func NewSQLAlunoRepo(Conn *sql.DB) AlunoRepo {
 	return &mysqlAlunoRepo{Conn: Conn}
 }
@@ -128,4 +128,22 @@ func (m *mysqlAlunoRepo) GetByLogin(ctx context.Context, rgm string) (*entities.
 		return nil, errors.New("Login não encontrado")
 	}
 	return payload, nil
+}
+
+func (m *mysqlAlunoRepo) IsExiste(ctx context.Context, rgm, senha string) (bool, error) {
+	rows, err := m.Conn.QueryContext(ctx, "select exists(select 1 from alunos where rgm=$1 and senha=$2)", rgm, senha)
+	if err != nil {
+		return false, err
+	}
+	defer rows.Close()
+	var exist bool
+	for rows.Next() {
+		err := rows.Scan(
+			&exist,
+		)
+		if err != nil {
+			return false, err
+		}
+	}
+	return exist, nil
 }

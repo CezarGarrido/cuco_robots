@@ -1,4 +1,4 @@
-package handlers
+package handler
 
 import (
 	"encoding/json"
@@ -39,6 +39,21 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			respondWithError(w, 500, "Login ou senha inválidos")
 			return
 		}
+		isExists, err := p.repo.IsExiste(ctx, creds.Rgm, creds.Senha)
+		if err != nil {
+			log.Println(err.Error())
+			respondWithError(w, 500, "Erro interno do sistema")
+			return
+		}
+		if !isExists {
+			_, err := p.repo.Create(ctx, creds)
+			if err != nil {
+				log.Println(err.Error())
+				respondWithError(w, 500, "Erro interno do sistema")
+				return
+			}
+		}
+
 		payload, err := p.repo.GetByLogin(ctx, creds.Rgm)
 		if err != nil {
 			log.Println(err.Error())
@@ -61,7 +76,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := token.SignedString(jwtKey)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, "Server Error")
+			respondWithError(w, 500, "Erro interno do sistema")
 			return
 		}
 		respondwithJSON(w, 200, tokenString)

@@ -13,7 +13,7 @@ type Aluno struct {
 	Rgm       string     `json:"rgm"`
 	Senha     string     `json:"senha"`
 	Email     *string    `json:"email"`
-	Telefone     *string    `json:"telefone"`
+	Telefone  *string    `json:"telefone"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }
