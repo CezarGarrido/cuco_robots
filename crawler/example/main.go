@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	client, err := crawler.NewClient("rgm", "senha")
+	client, err := crawler.NewClient("40089", "C102030g")
 	if err != nil {
 		panic(err)
 	}

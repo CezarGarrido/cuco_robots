@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"crypto/tls"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -46,6 +47,14 @@ func NewClient(rgm, senha string) (Client, error) {
 		return client, err
 	}
 	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return client, err
+	}
+	msg, ok := checkLoginError(string(body))
+	if !ok {
+		return client, errors.New(msg)
+	}
 	client.Conn = HtppClient
 	return client, nil
 }
@@ -72,10 +81,10 @@ func parserAluno(html string) (*Aluno, error) {
 	if err != nil {
 		return aluno, err
 	}
-	doc.Find("body.uc table.event_form").Each(func(index int, tablehtml *goquery.Selection) {
+	doc.Find("table#table_event_form").Each(func(index int, tablehtml *goquery.Selection) {
 		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
 			band, ok := rowhtml.Attr("id")
-			fmt.Println("# ok:",ok,"band:",band)
+			fmt.Println("# ok:", ok, "band:", band)
 			if !ok {
 				rowhtml.Find("th").Each(func(indexth int, thhtml *goquery.Selection) {
 					fmt.Println(strings.Join(strings.Fields(thhtml.Text()), " "))
@@ -88,4 +97,18 @@ func parserAluno(html string) (*Aluno, error) {
 		})
 	})
 	return aluno, nil
+}
+
+func checkLoginError(html string) (string, bool) {
+	var isLoggged = true
+	var msg = "Bem-vindo"
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return "", false
+	}
+	doc.Find(".error").Each(func(index int, errorhtml *goquery.Selection) {
+		msg = strings.Join(strings.Fields(errorhtml.Text()), " ")
+		isLoggged = false
+	})
+	return msg, isLoggged
 }
