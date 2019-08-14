@@ -25,7 +25,9 @@ type Contato struct {
 	Tipo  string
 	Valor string
 }
+type Endereco struct {
 
+}
 /*
 # th: Nome
 # td: CEZAR GARRIDO BRITEZ
@@ -150,7 +152,8 @@ func parserAluno(html string) (*Aluno, error) {
 			})
 		}
 	})
-	parserContatosAluno(html)
+	//parserContatosAluno(html)
+	parserEnderecosAluno(html)
 	return aluno, nil
 }
 
@@ -178,6 +181,39 @@ func parserContatosAluno(html string) (*Contato, error) {
 		})
 	})
 	return contato, nil
+}
+
+func parserEnderecosAluno(html string)(*Endereco, error){
+	endereco:= &Endereco{}
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return endereco, err
+	}
+	doc.Find("table#SubDatasetField2").Each(func(index int, tablehtml *goquery.Selection) {
+		//fmt.Println("# SubDatasetField2_tbody:", strings.Join(strings.Fields(tablehtml.Text()), " "))
+		tablehtml.Find("tr").Each(func(indextr int, trhtml *goquery.Selection) {
+			trhtml.Find("th").Each(func(indexth int, thhtml *goquery.Selection) {
+				fmt.Println("# th:", strings.Join(strings.Fields(thhtml.Text()), " "),"indice tr:", indextr, "indice th:", indexth)
+			})
+		})
+		tablehtml.Find("tbody#SubDatasetField2_tbody").Each(func(indextbody int, trhtml *goquery.Selection) {
+			trhtml.Find("tr").Each(func(indextr int, thhtml *goquery.Selection) {
+				thhtml.Find("td").Each(func(indextd int, tdhtml *goquery.Selection) {
+					tdhtml.Find("input").Each(func(indexinput int, inputhtml *goquery.Selection) {
+						band, ok := inputhtml.Attr("value")
+						if ok {
+							if band != "f" && band != "t" {
+								fmt.Println("# td input:", strings.Join(strings.Fields(band), " "), "indice:", indextd)
+								fmt.Println("is Phone:", isPhoneNumber(strings.Join(strings.Fields(band), " ")))
+							}
+						}
+					})
+					
+				})
+			})
+		})
+	})
+	return endereco, nil
 }
 
 //checkLoginError: Função que recebe o html retornado na pagina de login
