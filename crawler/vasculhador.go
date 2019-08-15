@@ -3,6 +3,7 @@ package crawler
 import (
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
@@ -18,7 +19,24 @@ import (
 type Client struct {
 	Conn *http.Client
 }
-
+type Detalhes struct {
+	Unidade                string
+	Curso                  string
+	Disciplina             string
+	Turma                  string
+	SerieDisciplina        string
+	CargaHorariaPresencial string
+	MaximoFaltas           string
+	PeriodoLetivo          string
+	Professor              string
+	MediaAvaliacoes        string
+	Optativa               string
+	Exame                  string
+	MediaFinal             string
+	Faltas                 string
+	Situacao               string
+	Notas                  []Nota
+}
 type Aluno struct {
 	Nome            string
 	DataNascimento  time.Time
@@ -48,6 +66,15 @@ type Endereco struct {
 	Bairro      string
 	CEP         string
 	Cidade      string
+}
+type Disciplina struct {
+	ID        int64
+	Descricao string
+	Oferta    string
+}
+type Nota struct {
+	Descricao string
+	Valor     string
 }
 
 //Logradouro	Nº	Complemento	Bairro	CEP	Cidade
@@ -245,6 +272,191 @@ func parserEnderecosAluno(html string) ([]*Endereco, error) {
 	return enderecos, nil
 }
 
+func (c Client) FindNotasByDisciplina(idDisciplina string) (*string, error) {
+
+	param := url.Values{}
+	param.Add("event", "notas")
+	param.Add("list[matricula_aluno_turma.codigo]", idDisciplina)
+	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/dcu003.php", strings.NewReader(param.Encode()))
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := c.Conn.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	doc := string(body)
+	return &doc, nil
+}
+func parserNotas(html string) (Detalhes, error) {
+	var detalhe Detalhes
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return detalhe, err
+	}
+	var nota Nota
+	var notas []Nota
+	doc.Find("table.event_form").Each(func(index int, tablehtml *goquery.Selection) {
+		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
+			band, ok := rowhtml.Attr("id")
+			if ok {
+				if band == "tr_unidade" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Unidade = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_curso" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Curso = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_disciplina" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Disciplina = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_turma" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.Turma = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_serie" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.SerieDisciplina = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+				if band == "tr_carga_horaria" {
+					rowhtml.Find("td").Each(func(indexth int, tdtml *goquery.Selection) {
+						detalhe.CargaHorariaPresencial = strings.Join(strings.Fields(tdtml.Text()), " ")
+					})
+				}
+			} else {
+				var texto string
+				rowhtml.Find("th").Each(func(indexth int, tablecell *goquery.Selection) {
+					texto = strings.Join(strings.Fields(tablecell.Text()), " ")
+				})
+				if texto == "Máximo de Faltas" {
+					rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+						detalhe.MaximoFaltas = strings.Join(strings.Fields(tablecell.Text()), " ")
+					})
+				}
+				if texto == "Período Letivo" {
+					rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+						detalhe.PeriodoLetivo = strings.Join(strings.Fields(tablecell.Text()), " ")
+					})
+				}
+				if texto == "Professor(a)" {
+					rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+						detalhe.Professor = strings.Join(strings.Fields(tablecell.Text()), " ")
+					})
+				}
+			}
+			rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+
+				band, ok := tablecell.Attr("colspan")
+				if ok {
+					if band == "2" {
+						tablecell.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
+							if indextr == 1 {
+								rowhtml.Find("th").Each(func(indexth int, thtml *goquery.Selection) {
+									nota.Descricao = strings.Join(strings.Fields(thtml.Text()), " ")
+									notas = append(notas, nota)
+								})
+							}
+							if indextr == 2 {
+								rowhtml.Find("td").Each(func(indexth int, thtml *goquery.Selection) {
+									if indexth < len(notas) {
+										notas[indexth].Valor = strings.Join(strings.Fields(thtml.Text()), " ")
+									} else {
+										if indexth == len(notas) {
+											fmt.Println(strings.Join(strings.Fields(thtml.Text()), " "))
+											detalhe.MediaAvaliacoes = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+1 {
+											detalhe.Optativa = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+2 {
+											detalhe.Exame = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+3 {
+											detalhe.MediaFinal = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+4 {
+											detalhe.Faltas = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+										if indexth == len(notas)+5 {
+											detalhe.Situacao = strings.Join(strings.Fields(thtml.Text()), " ")
+										}
+									}
+								})
+							}
+						})
+					}
+				}
+			})
+		})
+	})
+	detalhe.Notas = notas
+	return detalhe, nil
+}
+
+func (c Client) FindDisciplinas() ([]*Disciplina, error) {
+	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/dcu003.php", nil)
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := c.Conn.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return parserDisciplinas(string(body))
+}
+
+func parserDisciplinas(html string) ([]*Disciplina, error) {
+	disciplinas := make([]*Disciplina, 0)
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return disciplinas, err
+	}
+	var disciplina Disciplina
+	isError := false
+	var erros []string
+	doc.Find("table.event_list").Each(func(index int, tablehtml *goquery.Selection) {
+		tablehtml.Find("tr#link").Each(func(indextr int, rowhtml *goquery.Selection) {
+			band, ok := rowhtml.Attr("onclick")
+			if ok {
+				re := regexp.MustCompile("[0-9]+")
+				id := strings.Join(re.FindAllString(band, -1), "")
+				n, err := strconv.ParseInt(id, 10, 64)
+				if err != nil {
+					erros = append(erros, err.Error())
+					isError = true
+				}
+				disciplina.ID = n
+				rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
+					if indexth == 0 {
+						disciplina.Descricao = strings.Join(strings.Fields(tablecell.Text()), " ")
+					} else if indexth == 1 {
+						disciplina.Oferta = strings.Join(strings.Fields(tablecell.Text()), " ")
+					}
+				})
+			}
+			disciplinas = append(disciplinas, &disciplina)
+		})
+	})
+	if isError {
+		return disciplinas, errors.New(strings.Join(erros, " "))
+	}
+	return disciplinas, nil
+}
 //checkLoginError: Função que recebe o html retornado na pagina de login
 //e checa se existe a class error no html,
 //se a class existir retorna o texto que esta na class e false,
@@ -263,6 +475,7 @@ func checkLoginError(html string) (string, bool) {
 	return msg, isLoggged
 }
 
+//isPhoneNumber: verifica se uma string é um numero de telefone valido
 func isPhoneNumber(number string) (ok bool) {
 	re := regexp.MustCompile(`^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$`)
 	submatch := re.FindStringSubmatch(number)
