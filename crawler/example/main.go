@@ -34,10 +34,21 @@ func main() {
 		fmt.Printf("Error: %s", err)
 		return
 	}
+	bdisciplinas, err := json.Marshal(disciplinas)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(bdisciplinas))
 	for _, disciplina := range disciplinas {
-		fmt.Println(disciplina.Descricao)
+
 		detalhe, _ := client.FindNotasByDisciplina(strconv.FormatInt(disciplina.ID, 10))
-		fmt.Println(detalhe)
+		bdetalhe, err := json.Marshal(detalhe)
+		if err != nil {
+			fmt.Printf("Error: %s", err)
+			return
+		}
+		fmt.Println(string(bdetalhe))
 	}
 	_,_ = client.Logout()
 }
