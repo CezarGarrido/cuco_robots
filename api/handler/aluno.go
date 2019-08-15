@@ -40,14 +40,12 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			respondWithError(w, 500, "Login ou senha inválidos")
 			return
 		}
-		fmt.Println(creds.Rgm, creds.Senha)
 		isExists, err := p.repo.IsExiste(ctx, creds.Rgm, creds.Senha)
 		if err != nil {
 			log.Println(err.Error())
 			respondWithError(w, 500, "Erro interno do sistema")
 			return
 		}
-		fmt.Println(isExists)
 		if !isExists {
 			fmt.Println("== Buscando aluno ==")
 			client, err := crawler.NewClient(creds.Rgm, creds.Senha)
@@ -73,7 +71,6 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-
 		payload, err := p.repo.GetByLogin(ctx, creds.Rgm)
 		if err != nil {
 			log.Println(err.Error())
