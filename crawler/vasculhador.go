@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -17,7 +18,8 @@ import (
 )
 
 type Client struct {
-	Conn *http.Client
+	BaseURL string
+	Conn    *http.Client
 }
 type Detalhes struct {
 	Unidade                string
@@ -77,9 +79,9 @@ type Nota struct {
 	Valor     string
 }
 
-//Logradouro	Nº	Complemento	Bairro	CEP	Cidade
 func NewClient(rgm, senha string) (Client, error) {
 	client := Client{}
+	client.BaseURL = "https://sistemas.uems.br/academico/index.php"
 	param := url.Values{}
 	param.Add("login", "")
 	param.Add("rgm", rgm)
@@ -88,7 +90,7 @@ func NewClient(rgm, senha string) (Client, error) {
 	if err != nil {
 		return client, err
 	}
-	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/index.php", strings.NewReader(param.Encode()))
+	req, err := http.NewRequest("POST", client.BaseURL, strings.NewReader(param.Encode()))
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	HtppClient := &http.Client{
@@ -114,6 +116,26 @@ func NewClient(rgm, senha string) (Client, error) {
 	}
 	client.Conn = HtppClient
 	return client, nil
+}
+func (c Client) GetCookies() []*http.Cookie {
+	u, err := url.Parse(c.BaseURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return c.Conn.Jar.Cookies(u)
+}
+func (c Client) Logout() (Client, error) {
+	param := url.Values{}
+	param.Add("acao", "fechar")
+	req, err := http.NewRequest("POST", c.BaseURL, strings.NewReader(param.Encode()))
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := c.Conn.Do(req)
+	if err != nil {
+		return c, err
+	}
+	defer resp.Body.Close()
+	return c, nil
 }
 
 func (c Client) FindAluno() (*Aluno, error) {
@@ -148,6 +170,7 @@ func parserAluno(html string) (*Aluno, error) {
 				tablehtml.Find("td").Each(func(indextd int, tdhtml *goquery.Selection) {
 					valor = strings.Join(strings.Fields(tdhtml.Text()), " ")
 				})
+				//fmt.Println(tipo)
 				switch tipo {
 				case "Nome":
 					aluno.Nome = valor
@@ -180,11 +203,14 @@ func parserAluno(html string) (*Aluno, error) {
 
 		}
 	})
+
 	contatos, _ := parserContatosAluno(html)
 	aluno.Contatos = contatos
-	//fmt.Println(contatos)
 	enderecos, _ := parserEnderecosAluno(html)
 	aluno.Enderecos = enderecos
+
+	//fmt.Println(contatos)
+
 	return aluno, nil
 }
 
@@ -233,14 +259,9 @@ func parserEnderecosAluno(html string) ([]*Endereco, error) {
 			trhtml.Find("tr").Each(func(indextr int, thhtml *goquery.Selection) {
 				endereco := &Endereco{}
 				thhtml.Find("td").Each(func(indextd int, tdhtml *goquery.Selection) {
-					tdhtml.Find("select").Each(func(indexselect int, selecthtml *goquery.Selection) {
-						selecthtml.Find("option").Each(func(indexopt int, optionhtml *goquery.Selection) {
-							_, ok := optionhtml.Attr("selected")
-							if ok {
-								endereco.Cidade = strings.Join(strings.Fields(optionhtml.Text()), " ")
-							}
-						})
-					})
+					if indextd == 5 {
+						endereco.Cidade = buscaCidade(indextd, tdhtml)
+					}
 					tdhtml.Find("input").Each(func(indexinput int, inputhtml *goquery.Selection) {
 						band, ok := inputhtml.Attr("value")
 						if ok {
@@ -271,9 +292,21 @@ func parserEnderecosAluno(html string) ([]*Endereco, error) {
 	})
 	return enderecos, nil
 }
-
-func (c Client) FindNotasByDisciplina(idDisciplina string) (*string, error) {
-
+func buscaCidade(index int, tdhtml *goquery.Selection) string {
+	var cidade string
+	tdhtml.Find("select").Each(func(indexselect int, selecthtml *goquery.Selection) {
+		selecthtml.Find("option").Each(func(indexopt int, optionhtml *goquery.Selection) {
+			_, ok := optionhtml.Attr("selected")
+			if ok {
+				cidade = strings.Join(strings.Fields(optionhtml.Text()), " ")
+				return
+			}
+		})
+	})
+	return cidade
+}
+func (c Client) FindNotasByDisciplina(idDisciplina string) (Detalhes, error) {
+	var detalhe Detalhes
 	param := url.Values{}
 	param.Add("event", "notas")
 	param.Add("list[matricula_aluno_turma.codigo]", idDisciplina)
@@ -282,15 +315,15 @@ func (c Client) FindNotasByDisciplina(idDisciplina string) (*string, error) {
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := c.Conn.Do(req)
 	if err != nil {
-		return nil, err
+		return detalhe, err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return detalhe, err
 	}
 	defer resp.Body.Close()
-	doc := string(body)
-	return &doc, nil
+	//doc := string(body)
+	return parserNotas(string(body))
 }
 func parserNotas(html string) (Detalhes, error) {
 	var detalhe Detalhes
@@ -426,11 +459,13 @@ func parserDisciplinas(html string) ([]*Disciplina, error) {
 	if err != nil {
 		return disciplinas, err
 	}
-	var disciplina Disciplina
+
 	isError := false
 	var erros []string
 	doc.Find("table.event_list").Each(func(index int, tablehtml *goquery.Selection) {
+
 		tablehtml.Find("tr#link").Each(func(indextr int, rowhtml *goquery.Selection) {
+			var disciplina Disciplina
 			band, ok := rowhtml.Attr("onclick")
 			if ok {
 				re := regexp.MustCompile("[0-9]+")
@@ -457,6 +492,7 @@ func parserDisciplinas(html string) ([]*Disciplina, error) {
 	}
 	return disciplinas, nil
 }
+
 //checkLoginError: Função que recebe o html retornado na pagina de login
 //e checa se existe a class error no html,
 //se a class existir retorna o texto que esta na class e false,
@@ -485,57 +521,3 @@ func isPhoneNumber(number string) (ok bool) {
 	}
 	return
 }
-
-/*
-# th: Nome
-# td: CEZAR GARRIDO BRITEZ
-# th: Data de Nascimento
-# td: 28/12/1997
-# th: Sexo
-# td: Masculino
-# th: Nome do Pai
-# td: VITOR BRITEZ
-# th: Nome da Mãe
-# td: MARIANA GARRIDO
-# th: Estado Civil
-# td: Solteiro(a)
-# th: Nacionalidade
-# td: BRASILEIRO
-# th: Naturalidade
-# td: PARANHOS/MS
-# th: Fenótipo *
-# td: AmarelaBrancaIndígenaNão declaradoPardaPreta
-# th: CPF
-# td: 050.433.691-67
-# th: DOCUMENTO DE IDENTIFICAÇÃO
-# th: RG
-# td: 2.225.228
-# th: Órgão Emissor
-# td: SEJUSP
-# th: Estado
-# td: MS
-# th: Data de Emissão
-# td:
-# th: TÍTULO ELEITORAL
-# th: Número
-# td: 027682941937
-# th: Zona
-# td: 43
-# th: Seção
-# td: 242
-# th: Cidade
-# td: DOURADOS/MS
-# th: Data de Expedição
-# td: 08/03/2018
-# th: ALISTAMENTO MILITAR
-# th: Reservista
-# td: 32000058497-3
-# th: Categoria
-# td:
-# th: Órgão Emissor
-# td: MD
-# th: Série
-# td:
-# th: Data de Expedição
-# td: 30/01/2018
-*/

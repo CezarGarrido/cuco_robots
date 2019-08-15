@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 )
@@ -29,12 +30,13 @@ type mysqlAlunoRepo struct {
 }
 
 func (m *mysqlAlunoRepo) Create(ctx context.Context, aluno *entities.Aluno) (int64, error) {
-	query := "Insert alunos SET nome=$1, curso=$2, ano=$3, unidade=$4, rgm=$5, senha=$6, created_at=$7, updated_at=$8 Returning id"
+	query := "Insert into cadastros.alunos (nome,curso,ano,unidade,rgm,senha,email,created_at,updated_at) values($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id"
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return -1, err
 	}
-	res, err := stmt.ExecContext(ctx,
+	var alunoID int64
+	err = stmt.QueryRowContext(ctx,
 		aluno.Nome,
 		aluno.Curso,
 		aluno.Ano,
@@ -44,12 +46,12 @@ func (m *mysqlAlunoRepo) Create(ctx context.Context, aluno *entities.Aluno) (int
 		aluno.Email,
 		aluno.CreatedAt,
 		aluno.UpdatedAt,
-	)
+	).Scan(&alunoID)
 	if err != nil {
 		return -1, err
 	}
-	stmt.Close()
-	return res.LastInsertId()
+	defer stmt.Close()
+	return alunoID, nil
 }
 
 /*func (m *mysqlAdvogadoRepo) Fetch(ctx context.Context, uf string) ([]*entities.Aluno, error) {
@@ -131,19 +133,13 @@ func (m *mysqlAlunoRepo) GetByLogin(ctx context.Context, rgm string) (*entities.
 }
 
 func (m *mysqlAlunoRepo) IsExiste(ctx context.Context, rgm, senha string) (bool, error) {
-	rows, err := m.Conn.QueryContext(ctx, "select exists(select 1 from alunos where rgm=$1 and senha=$2)", rgm, senha)
+	var exist = false
+	err := m.Conn.QueryRowContext(ctx, "Select exists(Select 1 from cadastros.alunos where rgm=$1 and senha=$2);", rgm, senha).Scan(
+		&exist,
+	)
+	fmt.Println(exist)
 	if err != nil {
 		return false, err
-	}
-	defer rows.Close()
-	var exist bool
-	for rows.Next() {
-		err := rows.Scan(
-			&exist,
-		)
-		if err != nil {
-			return false, err
-		}
 	}
 	return exist, nil
 }

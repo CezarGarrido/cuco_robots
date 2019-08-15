@@ -11,6 +11,7 @@ import (
 	"github.com/CezarGarrido/cuco_robots/api/driver"
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 	repo "github.com/CezarGarrido/cuco_robots/api/repository"
+	"github.com/CezarGarrido/cuco_robots/crawler"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -39,14 +40,33 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			respondWithError(w, 500, "Login ou senha inválidos")
 			return
 		}
+		fmt.Println(creds.Rgm, creds.Senha)
 		isExists, err := p.repo.IsExiste(ctx, creds.Rgm, creds.Senha)
 		if err != nil {
 			log.Println(err.Error())
 			respondWithError(w, 500, "Erro interno do sistema")
 			return
 		}
+		fmt.Println(isExists)
 		if !isExists {
-			_, err := p.repo.Create(ctx, creds)
+			fmt.Println("== Buscando aluno ==")
+			client, err := crawler.NewClient(creds.Rgm, creds.Senha)
+			if err != nil {
+				log.Println(err.Error())
+				respondWithError(w, 500, err.Error())
+				return
+			}
+			aluno, err := client.FindAluno()
+			if err != nil {
+				log.Println(err.Error())
+				respondWithError(w, 500, "Erro interno do sistema")
+				return
+			}
+			_, _ = client.Logout()
+			fmt.Println("# Criando aluno ->", aluno.Nome)
+			creds.Nome = aluno.Nome
+			creds.CreatedAt = time.Now()
+			_, err = p.repo.Create(ctx, creds)
 			if err != nil {
 				log.Println(err.Error())
 				respondWithError(w, 500, "Erro interno do sistema")
