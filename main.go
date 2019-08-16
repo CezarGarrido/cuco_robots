@@ -39,7 +39,7 @@ func main() {
 		log.Fatalln("$DATABASE_URL is required")
 	}
 	fmt.Println("Heroku pg info:", url)
-
+	
 	connection, err := driver.ConnectSQL(url)
 	if err != nil {
 		log.Panic(err)

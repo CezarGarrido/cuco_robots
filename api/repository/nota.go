@@ -49,7 +49,7 @@ func (m *mysqlNotaRepo) Create(ctx context.Context, nota *entities.Nota) (int64,
 }
 
 func (m *mysqlNotaRepo) GetByDisciplinaID(ctx context.Context, alunoID, disciplinaID int64) ([]*entities.Nota, error) {
-	query := "Select id, aluno_id, disciplina_id, descricao, valor, created_at, updated_at From notas where aluno_id=$1 and disciplina_id=$2"
+	query := "Select id, aluno_id, disciplina_id, descricao, valor, created_at, updated_at From cadastros.aluno_notas  where aluno_id=$1 and disciplina_id=$2"
 	return m.fetch(ctx, query, alunoID, disciplinaID)
 }
 

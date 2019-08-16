@@ -72,7 +72,21 @@ func (m *mysqlAlunoDisciplinaRepo) Create(ctx context.Context, alunoDisciplina *
 
 func (m *mysqlAlunoDisciplinaRepo) GetByAlunoID(ctx context.Context, alunoID int64) ([]*entities.AlunoDisciplina, error) {
 	query := `SELECT id, aluno_id, uems_id, unidade, curso, disciplina, turma, serie_disciplina, carga_horaria_presencial, maximo_faltas, periodo_letivo, professor, media_avaliacoes, optativa, exame, media_final, faltas, situacao, created_at, updated_at FROM cadastros.aluno_disciplinas WHERE aluno_id=$1;`
-	return m.fetch(ctx, query, alunoID)
+	payload, err := m.fetch(ctx, query, alunoID)
+	if err != nil {
+		return nil, err
+	}
+	slice_payload := make([]*entities.AlunoDisciplina, 0)
+	notaRepo := NewSQLNotaRepo(m.Conn)
+	for _, data := range payload {
+		notas, err := notaRepo.GetByDisciplinaID(ctx, data.AlunoID, data.ID)
+		if err != nil {
+			return nil, err
+		}
+		data.Notas = notas
+		slice_payload = append(slice_payload, data)
+	}
+	return slice_payload, nil
 }
 
 func (m *mysqlAlunoDisciplinaRepo) fetch(ctx context.Context, query string, args ...interface{}) ([]*entities.AlunoDisciplina, error) {
