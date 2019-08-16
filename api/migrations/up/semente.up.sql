@@ -1,4 +1,4 @@
-CREATE TABLE cadastros.alunos (
+CREATE TABLE IF NOT EXISTS cadastros.alunos (
   id bigserial CONSTRAINT pk_id_aluno primary key,
   guid TEXT,
   nome TEXT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE cadastros.alunos (
   updated_at TIMESTAMP
 );
 
-CREATE TABLE cadastros.aluno_contatos (
+CREATE TABLE  IF NOT EXISTS cadastros.aluno_contatos (
   id bigserial CONSTRAINT pk_id_aluno_contato primary key,
   aluno_id int8 not null,
   Tipo TEXT,
@@ -31,7 +31,7 @@ CREATE TABLE cadastros.aluno_contatos (
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE
 );
 
-CREATE TABLE cadastros.aluno_enderecos (
+CREATE TABLE IF NOT EXISTS cadastros.aluno_enderecos (
   id bigserial CONSTRAINT pk_id_aluno_endereco primary key,
   aluno_id int8 not null,
   Logradouro TEXT,
@@ -45,7 +45,7 @@ CREATE TABLE cadastros.aluno_enderecos (
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE
 );
 
-CREATE TABLE cadastros.aluno_disciplinas (
+CREATE TABLE IF NOT EXISTS cadastros.aluno_disciplinas (
   id bigserial CONSTRAINT pk_id_aluno_disciplina primary key,
   aluno_id int8 not null,
   uems_id int8 not null,
@@ -69,7 +69,7 @@ CREATE TABLE cadastros.aluno_disciplinas (
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE
 );
 
-CREATE TABLE cadastros.aluno_notas (
+CREATE TABLE  IF NOT EXISTS cadastros.aluno_notas (
   id bigserial CONSTRAINT pk_id_aluno_nota primary key,
   aluno_id int8 not null,
   disciplina_id int8 not null,
