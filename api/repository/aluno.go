@@ -60,6 +60,22 @@ func (m *mysqlAlunoRepo) Create(ctx context.Context, aluno *entities.Aluno) (int
 		return -1, err
 	}
 	defer stmt.Close()
+	contatoRepo := NewSQLContatoRepo(m.Conn)
+	for _, contato := range aluno.Contatos {
+		contato.AlunoID = alunoID
+		_, err = contatoRepo.Create(ctx, contato)
+		if err != nil {
+			return -1, err
+		}
+	}
+	enderecoRepo := NewSQLEnderecoRepo(m.Conn)
+	for _, endereco := range aluno.Enderecos {
+		endereco.AlunoID = alunoID
+		_, err = enderecoRepo.Create(ctx, endereco)
+		if err != nil {
+			return -1, err
+		}
+	}
 	return alunoID, nil
 }
 
@@ -140,7 +156,34 @@ func (m *mysqlAlunoRepo) Update(ctx context.Context, aluno *entities.Aluno) (*en
 		return nil, err
 	}
 	defer stmt.Close()
-
+	contatoRepo := NewSQLContatoRepo(m.Conn)
+	for _, contato := range aluno.Contatos {
+		contato.AlunoID = aluno.ID
+		deletedOk, err := contatoRepo.DeleteAll(ctx, aluno.ID)
+		if err != nil {
+			return nil, err
+		}
+		if deletedOk {
+			_, err = contatoRepo.Create(ctx, contato)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	enderecoRepo := NewSQLEnderecoRepo(m.Conn)
+	for _, endereco := range aluno.Enderecos {
+		endereco.AlunoID = aluno.ID
+		deletedOk, err := enderecoRepo.DeleteAll(ctx, aluno.ID)
+		if err != nil {
+			return nil, err
+		}
+		if deletedOk {
+			_, err = enderecoRepo.Create(ctx, endereco)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return aluno, nil
 }
 
@@ -155,6 +198,17 @@ func (m *mysqlAlunoRepo) GetByLogin(ctx context.Context, rgm string) (*entities.
 		payload = rows[0]
 	} else {
 		return nil, errors.New("Aluno não encontrado")
+	}
+
+	enderecoRepo := NewSQLEnderecoRepo(m.Conn)
+	payload.Enderecos, err = enderecoRepo.GetByAlunoID(ctx, payload.ID)
+	if err != nil {
+		return nil, err
+	}
+	contatoRepo := NewSQLContatoRepo(m.Conn)
+	payload.Contatos, err = contatoRepo.GetByAlunoID(ctx, payload.ID)
+	if err != nil {
+		return nil, err
 	}
 	return payload, nil
 }

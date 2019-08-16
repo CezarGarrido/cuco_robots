@@ -85,7 +85,7 @@ func (m *postgresEnderecoRepo) fetch(ctx context.Context, query string, args ...
 	return payload, nil
 }
 func (m *postgresEnderecoRepo) DeleteAll(ctx context.Context, aluno_id int64) (bool, error) {
-	query := "Delete From cadastros.aluno_enderecos Where aluno_id=?"
+	query := "Delete From cadastros.aluno_enderecos Where aluno_id=$1"
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return false, err

@@ -25,9 +25,10 @@ func NewSQLContatoRepo(Conn *sql.DB) ContatoRepo {
 type postgresContatoRepo struct {
 	Conn *sql.DB
 }
-func (m *postgresContatoRepo)GetByAlunoID(ctx context.Context, aluno_id int64) ([]*entities.Contato, error){
-	query:="SELECT id, aluno_id, tipo, valor, created_at, updated_at FROM cadastros.aluno_contatos WHERE aluno_id IS $1;"
-	return m.fetch(ctx,query, aluno_id)
+
+func (m *postgresContatoRepo) GetByAlunoID(ctx context.Context, aluno_id int64) ([]*entities.Contato, error) {
+	query := "SELECT id, aluno_id, tipo, valor, created_at, updated_at FROM cadastros.aluno_contatos WHERE aluno_id IS $1;"
+	return m.fetch(ctx, query, aluno_id)
 }
 func (m *postgresContatoRepo) Create(ctx context.Context, contato *entities.Contato) (int64, error) {
 	query := `INSERT INTO cadastros.aluno_contatos (aluno_id, tipo, valor, created_at, updated_at) 
@@ -75,8 +76,8 @@ func (m *postgresContatoRepo) fetch(ctx context.Context, query string, args ...i
 	}
 	return payload, nil
 }
-func (m *postgresContatoRepo) DeleteAll(ctx context.Context, aluno_id int64) (bool, error){
-	query := "Delete From cadastros.aluno_contatos Where aluno_id=?"
+func (m *postgresContatoRepo) DeleteAll(ctx context.Context, aluno_id int64) (bool, error) {
+	query := "Delete From cadastros.aluno_contatos Where aluno_id=$1"
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return false, err

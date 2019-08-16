@@ -13,6 +13,7 @@ import (
 	repo "github.com/CezarGarrido/cuco_robots/api/repository"
 	"github.com/CezarGarrido/cuco_robots/crawler"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/satori/go.uuid"
 )
 
 var jwtKey = []byte("aplicativo_uems_dourados")
@@ -61,8 +62,14 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			}
 			_, _ = client.Logout()
 			hoje := time.Now()
+			genUuid, err := uuid.NewV4()
+			if err != nil {
+				log.Println(err.Error())
+				respondWithError(w, 500, err.Error())
+				return
+			}
 			newAluno := &entities.Aluno{
-				Guid:  "aluno.Guid,",
+				Guid:  genUuid.String(),
 				Nome:  aluno.Nome,
 				Rgm:   creds.Rgm,
 				Senha: creds.Senha,
@@ -82,6 +89,30 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				RGDataEmissao:   &aluno.RGDataEmissao,
 				CreatedAt:       &hoje,
 			}
+			contatos := make([]*entities.Contato, 0)
+			for _, contato := range aluno.Contatos {
+				newContato := &entities.Contato{
+					Tipo:  contato.Tipo,
+					Valor: &contato.Valor,
+				}
+				newContato.CreatedAt = &hoje
+				contatos = append(contatos, newContato)
+			}
+			newAluno.Contatos = contatos
+			enderecos := make([]*entities.Endereco, 0)
+			for _, endereco := range aluno.Enderecos {
+				newEndereco := &entities.Endereco{
+					Logradouro:  &endereco.Logradouro,
+					Numero:      &endereco.Numero,
+					Complemento: &endereco.Complemento,
+					Bairro:      &endereco.Bairro,
+					CEP:         &endereco.CEP,
+					Cidade:      &endereco.Cidade,
+				}
+				newEndereco.CreatedAt = &hoje
+				enderecos = append(enderecos, newEndereco)
+			}
+			newAluno.Enderecos = enderecos
 			_, err = p.repo.Create(ctx, newAluno)
 			if err != nil {
 				log.Println(err.Error())
