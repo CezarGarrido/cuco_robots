@@ -68,6 +68,8 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				respondWithError(w, 500, err.Error())
 				return
 			}
+			fmt.Println("# aluno.contatos", aluno.Contatos)
+			fmt.Println("# aluno.enderecos", aluno.Enderecos)
 			newAluno := &entities.Aluno{
 				Guid:  genUuid.String(),
 				Nome:  aluno.Nome,
