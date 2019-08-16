@@ -25,7 +25,7 @@ Estas instruções servem para obter uma cópia do projeto e executar em sua má
 * Rodando a api
 * Step-by-step bullets
 ```
-   cd ./cuco_robots/api
+   cd ./cuco_robots
    go run main.go
 ```
 
