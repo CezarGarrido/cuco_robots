@@ -2,7 +2,6 @@ package driver
 
 import (
 	"database/sql"
-	"fmt"
 
 	//"github.com/CezarGarrido/sqllogs"
 	_ "github.com/lib/pq"
@@ -17,11 +16,9 @@ type DB struct {
 // DBConn ...
 var dbConn = &DB{}
 
-func ConnectSQL(host, port, user, password, dbname string) (*DB, error) {
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+func ConnectSQL(url string) (*DB, error) {
+
+	db, err := sql.Open("postgres", url)
 	if err != nil {
 		panic(err)
 	}
