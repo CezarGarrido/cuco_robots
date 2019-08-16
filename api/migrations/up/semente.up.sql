@@ -45,19 +45,10 @@ CREATE TABLE cadastros.aluno_enderecos (
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE
 );
 
-CREATE TABLE cadastros.disciplinas (
-  id bigserial CONSTRAINT pk_id_disciplina primary key,
-  uems_id int8 not null,
-  descricao TEXT not null,
-  oferta TEXT,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
-);
-
 CREATE TABLE cadastros.aluno_disciplinas (
   id bigserial CONSTRAINT pk_id_aluno_disciplina primary key,
   aluno_id int8 not null,
-  disciplina_id int8 not null,
+  uems_id int8 not null,
   unidade TEXT,
   curso TEXT,
   disciplina TEXT,
@@ -75,18 +66,17 @@ CREATE TABLE cadastros.aluno_disciplinas (
   situacao TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
-  FOREIGN KEY (disciplina_id) REFERENCES cadastros.disciplinas(id) ON DELETE CASCADE,
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE
 );
 
 CREATE TABLE cadastros.aluno_notas (
   id bigserial CONSTRAINT pk_id_aluno_nota primary key,
   aluno_id int8 not null,
-  aluno_disciplina_id int8 not null,
+  disciplina_id int8 not null,
   descricao TEXT not null,
   valor numeric(18,2),
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE,
-  FOREIGN KEY (aluno_disciplina_id) REFERENCES cadastros.aluno_disciplinas(id) ON DELETE CASCADE
+  FOREIGN KEY (disciplina_id) REFERENCES cadastros.aluno_disciplinas(id) ON DELETE CASCADE
 );

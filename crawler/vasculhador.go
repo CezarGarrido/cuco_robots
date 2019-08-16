@@ -3,7 +3,6 @@ package crawler
 import (
 	"crypto/tls"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -70,7 +69,7 @@ type Endereco struct {
 	Cidade      string
 }
 type Disciplina struct {
-	ID        int64
+	UemsID    int64
 	Descricao string
 	Oferta    string
 }
@@ -406,7 +405,6 @@ func parserNotas(html string) (Detalhes, error) {
 										notas[indexth].Valor = strings.Join(strings.Fields(thtml.Text()), " ")
 									} else {
 										if indexth == len(notas) {
-											fmt.Println(strings.Join(strings.Fields(thtml.Text()), " "))
 											detalhe.MediaAvaliacoes = strings.Join(strings.Fields(thtml.Text()), " ")
 										}
 										if indexth == len(notas)+1 {
@@ -438,7 +436,7 @@ func parserNotas(html string) (Detalhes, error) {
 }
 
 func (c Client) FindDisciplinas() ([]*Disciplina, error) {
-	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/dcu003.php", nil)
+	req, err := http.NewRequest("GET", "https://sistemas.uems.br/academico/dcu003.php", nil)
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	resp, err := c.Conn.Do(req)
@@ -475,7 +473,7 @@ func parserDisciplinas(html string) ([]*Disciplina, error) {
 					erros = append(erros, err.Error())
 					isError = true
 				}
-				disciplina.ID = n
+				disciplina.UemsID = n
 				rowhtml.Find("td").Each(func(indexth int, tablecell *goquery.Selection) {
 					if indexth == 0 {
 						disciplina.Descricao = strings.Join(strings.Fields(tablecell.Text()), " ")

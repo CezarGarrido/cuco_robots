@@ -4,14 +4,14 @@ Crawler para consulta de dados da UEMS (Universidade estadual de Mato Grosso do 
 
 ## Description
 
-Estas instruções serve para obter uma cópia do projeto e executar em sua máquina local para fins de teste e desenvolvimento. Você pode implantar seu próprio "robozinho" para capturar suas notas.
+Estas instruções servem para obter uma cópia do projeto e executar em sua máquina local para fins de teste e desenvolvimento. Você pode implantar seu próprio "robozinho" para capturar suas notas.
 
 ## Getting Started
 
 ### Dependencies
 
 * Golang instalado na sua máquina, você pode instalar por aqui (https://golang.org/dl/).
-
+* Banco de dados Postgresql, baixando nesse momento por aqui (https://www.postgresql.org/download/)
 ### Installing
 
 ```
@@ -22,10 +22,10 @@ Estas instruções serve para obter uma cópia do projeto e executar em sua máq
 ```
 ### Executing program
 
-* How to run the program
+* Rodando a api
 * Step-by-step bullets
 ```
-   cd ./cuco_robots
+   cd ./cuco_robots/api
    go run main.go
 ```
 

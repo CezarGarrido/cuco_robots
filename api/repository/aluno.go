@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 )
@@ -30,20 +29,30 @@ type mysqlAlunoRepo struct {
 }
 
 func (m *mysqlAlunoRepo) Create(ctx context.Context, aluno *entities.Aluno) (int64, error) {
-	query := "Insert into cadastros.alunos (nome,curso,ano,unidade,rgm,senha,email,created_at,updated_at) values($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id"
+	query := `INSERT INTO cadastros.alunos (guid, nome, rgm, senha, data_nascimento, sexo, nome_pai, nome_mae, estado_civil, nacionalidade,naturalidade, fenotipo, cpf, rg, rg_orgao_emissor, rg_estado_emissor, rg_data_emissao, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING id`
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return -1, err
 	}
 	var alunoID int64
 	err = stmt.QueryRowContext(ctx,
+		aluno.Guid,
 		aluno.Nome,
-		aluno.Curso,
-		aluno.Ano,
-		aluno.Unidade,
 		aluno.Rgm,
 		aluno.Senha,
-		aluno.Email,
+		aluno.DataNascimento,
+		aluno.Sexo,
+		aluno.NomePai,
+		aluno.NomeMae,
+		aluno.EstadoCivil,
+		aluno.Nacionalidade,
+		aluno.Naturalidade,
+		aluno.Fenotipo,
+		aluno.CPF,
+		aluno.RG,
+		aluno.RGOrgaoEmissor,
+		aluno.RGEstadoEmissor,
+		aluno.RGDataEmissao,
 		aluno.CreatedAt,
 		aluno.UpdatedAt,
 	).Scan(&alunoID)
@@ -70,14 +79,23 @@ func (m *mysqlAlunoRepo) fetch(ctx context.Context, query string, args ...interf
 		aluno := new(entities.Aluno)
 		err := rows.Scan(
 			&aluno.ID,
+			&aluno.Guid,
 			&aluno.Nome,
-			&aluno.Curso,
-			&aluno.Ano,
-			&aluno.Unidade,
 			&aluno.Rgm,
 			&aluno.Senha,
-			&aluno.Email,
-			&aluno.Telefone,
+			&aluno.DataNascimento,
+			&aluno.Sexo,
+			&aluno.NomePai,
+			&aluno.NomeMae,
+			&aluno.EstadoCivil,
+			&aluno.Nacionalidade,
+			&aluno.Naturalidade,
+			&aluno.Fenotipo,
+			&aluno.CPF,
+			&aluno.RG,
+			&aluno.RGOrgaoEmissor,
+			&aluno.RGEstadoEmissor,
+			&aluno.RGDataEmissao,
 			&aluno.CreatedAt,
 			&aluno.UpdatedAt,
 		)
@@ -90,24 +108,33 @@ func (m *mysqlAlunoRepo) fetch(ctx context.Context, query string, args ...interf
 }
 
 func (m *mysqlAlunoRepo) Update(ctx context.Context, aluno *entities.Aluno) (*entities.Aluno, error) {
-	query := "Update alunos set id=$1,nome=$2, curso=$3, ano=$4, unidade=$5, rgm=$6, senha=$7, created_at=$8, updated_at=$9 where id=$1"
+	query := `UPDATE cadastros.alunos SET guid=$1, nome=$2, rgm=$3, senha=$4, data_nascimento=$5, sexo=$6, nome_pai=$7, nome_mae=$7, estado_civil=$8, nacionalidade=$9, naturalidade=$10, fenotipo=$11, cpf=$12, rg=$13, rg_orgao_emissor=$14, rg_estado_emissor=$15, rg_data_emissao=$16,updated_at=$17 WHERE id IS $18;`
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
 	_, err = stmt.ExecContext(
 		ctx,
-		&aluno.ID,
-		&aluno.Nome,
-		&aluno.Curso,
-		&aluno.Ano,
-		&aluno.Unidade,
-		&aluno.Rgm,
-		&aluno.Senha,
-		&aluno.Email,
-		&aluno.Telefone,
-		&aluno.CreatedAt,
-		&aluno.UpdatedAt,
+		aluno.Guid,
+		aluno.Nome,
+		aluno.Rgm,
+		aluno.Senha,
+		aluno.Curso,
+		aluno.DataNascimento,
+		aluno.Sexo,
+		aluno.NomePai,
+		aluno.NomeMae,
+		aluno.EstadoCivil,
+		aluno.Nacionalidade,
+		aluno.Naturalidade,
+		aluno.Fenotipo,
+		aluno.CPF,
+		aluno.RG,
+		aluno.RGOrgaoEmissor,
+		aluno.RGEstadoEmissor,
+		aluno.RGDataEmissao,
+		aluno.UpdatedAt,
+		aluno.ID,
 	)
 	if err != nil {
 		return nil, err
@@ -118,7 +145,7 @@ func (m *mysqlAlunoRepo) Update(ctx context.Context, aluno *entities.Aluno) (*en
 }
 
 func (m *mysqlAlunoRepo) GetByLogin(ctx context.Context, rgm string) (*entities.Aluno, error) {
-	query := "Select id,nome,curso,ano,unidade,rgm,senha,email,telefone,created_at,updated_at FROM cadastros.alunos WHERE rgm=$1"
+	query := `SELECT id, guid, nome, rgm, senha, data_nascimento, sexo, nome_pai, nome_mae, estado_civil, nacionalidade, naturalidade, fenotipo, cpf, rg, rg_orgao_emissor, rg_estado_emissor, rg_data_emissao, created_at, updated_at FROM cadastros.alunos WHERE rgm=$1`
 	rows, err := m.fetch(ctx, query, rgm)
 	if err != nil {
 		return nil, err
@@ -127,7 +154,7 @@ func (m *mysqlAlunoRepo) GetByLogin(ctx context.Context, rgm string) (*entities.
 	if len(rows) > 0 {
 		payload = rows[0]
 	} else {
-		return nil, errors.New("Login não encontrado")
+		return nil, errors.New("Aluno não encontrado")
 	}
 	return payload, nil
 }
@@ -137,7 +164,6 @@ func (m *mysqlAlunoRepo) IsExiste(ctx context.Context, rgm, senha string) (bool,
 	err := m.Conn.QueryRowContext(ctx, "Select exists(Select 1 from cadastros.alunos where rgm=$1 and senha=$2);", rgm, senha).Scan(
 		&exist,
 	)
-	fmt.Println(exist)
 	if err != nil {
 		return false, err
 	}

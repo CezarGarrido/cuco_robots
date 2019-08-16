@@ -6,9 +6,11 @@ import (
 
 type Aluno struct {
 	ID              int64       `json:"id"`
+	Guid            string      `json:"guid"`
 	Nome            string      `json:"nome"`
 	Rgm             string      `json:"rgm"`
 	Senha           string      `json:"senha"`
+	Curso           string      `json:"curso"`
 	DataNascimento  *time.Time  `json:"data_nascimento"`
 	Sexo            *string     `json:"sexo"`
 	NomePai         *string     `json:"nome_pai"`

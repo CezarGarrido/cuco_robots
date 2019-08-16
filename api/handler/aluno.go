@@ -15,7 +15,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("C_hello_uems_G")
+var jwtKey = []byte("aplicativo_uems_dourados")
 
 func NewAluno(db *driver.DB) *Aluno {
 	return &Aluno{
@@ -47,7 +47,6 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if !isExists {
-			fmt.Println("== Buscando aluno ==")
 			client, err := crawler.NewClient(creds.Rgm, creds.Senha)
 			if err != nil {
 				log.Println(err.Error())
@@ -61,10 +60,29 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			_, _ = client.Logout()
-			fmt.Println("# Criando aluno ->", aluno.Nome)
-			creds.Nome = aluno.Nome
-			creds.CreatedAt = time.Now()
-			_, err = p.repo.Create(ctx, creds)
+			hoje := time.Now()
+			newAluno := &entities.Aluno{
+				Guid:  "aluno.Guid,",
+				Nome:  aluno.Nome,
+				Rgm:   creds.Rgm,
+				Senha: creds.Senha,
+				//Curso:           aluno.Curso,
+				DataNascimento:  &aluno.DataNascimento,
+				Sexo:            &aluno.Sexo,
+				NomePai:         &aluno.NomePai,
+				NomeMae:         &aluno.NomeMae,
+				EstadoCivil:     &aluno.EstadoCivil,
+				Nacionalidade:   &aluno.Nacionalidade,
+				Naturalidade:    &aluno.Naturalidade,
+				Fenotipo:        &aluno.Fenotipo,
+				CPF:             &aluno.CPF,
+				RG:              &aluno.RG,
+				RGOrgaoEmissor:  &aluno.RGOrgaoEmissor,
+				RGEstadoEmissor: &aluno.RGEstadoEmissor,
+				RGDataEmissao:   &aluno.RGDataEmissao,
+				CreatedAt:       &hoje,
+			}
+			_, err = p.repo.Create(ctx, newAluno)
 			if err != nil {
 				log.Println(err.Error())
 				respondWithError(w, 500, "Erro interno do sistema")

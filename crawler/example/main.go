@@ -42,7 +42,7 @@ func main() {
 	fmt.Println(string(bdisciplinas))
 	for _, disciplina := range disciplinas {
 
-		detalhe, _ := client.FindNotasByDisciplina(strconv.FormatInt(disciplina.ID, 10))
+		detalhe, _ := client.FindNotasByDisciplina(strconv.FormatInt(disciplina.UemsID, 10))
 		bdetalhe, err := json.Marshal(detalhe)
 		if err != nil {
 			fmt.Printf("Error: %s", err)
