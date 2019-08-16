@@ -4,6 +4,7 @@ import (
 	//"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/CezarGarrido/cuco_robots/api/driver"
 	appHandler "github.com/CezarGarrido/cuco_robots/api/handler"
@@ -25,7 +26,13 @@ const (
 	password = "de56c756197c4d8f41745acf76ff3df6c3cc39852c7eb5572d173778d7ba28de"
 	dbname   = "dbif64ksnitjje"
 )
+
 func main() {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 	connection, err := driver.ConnectSQL(host, port, user, password, dbname)
 	if err != nil {
 		log.Panic(err)
@@ -41,10 +48,10 @@ func main() {
 
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS", "PUT", "DELETE"})
-	log.Println("Servidor startado na porta :8091")
+	log.Println("Servidor startado na porta ",port)
 
 	recoveryH := handlers.RecoveryHandler()(r)
-	err = http.ListenAndServe(":8091", handlers.CompressHandler(handlers.CORS(headersOk, methodsOk, originsOk)(recoveryH)))
+	err = http.ListenAndServe(":"+port, handlers.CompressHandler(handlers.CORS(headersOk, methodsOk, originsOk)(recoveryH)))
 	if err != nil {
 		log.Panic(err)
 	}
