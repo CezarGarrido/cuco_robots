@@ -19,7 +19,7 @@ var dbConn = &DB{}
 
 func ConnectSQL(host, port, user, password, dbname string) (*DB, error) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
+		"password=%s dbname=%s",
 		host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
