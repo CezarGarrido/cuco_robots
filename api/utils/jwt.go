@@ -29,6 +29,5 @@ func ValidToken(r *http.Request) (*entities.Claims, error) {
 		}
 		return claim, errors.New("Bearer token inválido.")
 	}
-
 	return claim, nil
 }

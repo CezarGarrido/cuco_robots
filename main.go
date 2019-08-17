@@ -22,41 +22,28 @@ const (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
+	port := map[bool]string{true: os.Getenv("PORT"), false: "8080"}[os.Getenv("PORT") != ""]
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s",
 		host, port, user, password, dbname)
-
-	fmt.Println("Local pg info:", psqlInfo)
-
 	url, ok := os.LookupEnv("DATABASE_URL")
-	if !ok {
-		log.Fatalln("$DATABASE_URL is required")
+	if ok {
+		psqlInfo = url
 	}
-	fmt.Println("Heroku pg info:", url)
-	
-	connection, err := driver.ConnectSQL(url)
+	connection, err := driver.ConnectSQL(psqlInfo)
 	if err != nil {
 		log.Panic(err)
 	}
 	alunoHandler := appHandler.NewAluno(connection)
 	disciplinaHandler := appHandler.NewAlunoDisciplina(connection)
 	r := mux.NewRouter()
-
 	r.HandleFunc("/api/v1/login", alunoHandler.Login).Methods("POST")
 	r.HandleFunc("/api/v1/disciplinas", disciplinaHandler.Fetch).Methods("GET")
-
 	headersOk := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
-
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS", "PUT", "DELETE"})
-	log.Println("Servidor startado na porta ", port)
-
+	log.Println("Servidor startado na porta:", port)
 	recoveryH := handlers.RecoveryHandler()(r)
 	err = http.ListenAndServe(":"+port, handlers.CompressHandler(handlers.CORS(headersOk, methodsOk, originsOk)(recoveryH)))
 	if err != nil {
