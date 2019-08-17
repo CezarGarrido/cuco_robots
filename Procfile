@@ -1,2 +1,2 @@
 Procrelease: ./release-task.sh
-web: ./bin/robotjms
+web: ./bin/cuco_robots
