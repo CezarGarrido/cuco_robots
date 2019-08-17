@@ -27,8 +27,7 @@ type postgresEnderecoRepo struct {
 }
 
 func (m *postgresEnderecoRepo) GetByAlunoID(ctx context.Context, aluno_id int64) ([]*entities.Endereco, error) {
-	query := `SELECT id, aluno_id, logradouro, numero, complemento, bairro, cep, cidade, created_at, updated_at FROM cadastros.aluno_enderecos WHERE aluno_id=$1;
-	`
+	query := `SELECT id, aluno_id, logradouro, numero, complemento, bairro, cep, cidade, created_at, updated_at FROM cadastros.aluno_enderecos WHERE aluno_id=$1`
 	return m.fetch(ctx, query, aluno_id)
 }
 func (m *postgresEnderecoRepo) Create(ctx context.Context, endereco *entities.Endereco) (int64, error) {

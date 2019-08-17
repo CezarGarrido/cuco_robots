@@ -27,7 +27,7 @@ type postgresContatoRepo struct {
 }
 
 func (m *postgresContatoRepo) GetByAlunoID(ctx context.Context, aluno_id int64) ([]*entities.Contato, error) {
-	query := "SELECT id, aluno_id, tipo, valor, created_at, updated_at FROM cadastros.aluno_contatos WHERE aluno_id=$1;"
+	query := "SELECT id, aluno_id, tipo, valor, created_at, updated_at FROM cadastros.aluno_contatos WHERE aluno_id=$1"
 	return m.fetch(ctx, query, aluno_id)
 }
 func (m *postgresContatoRepo) Create(ctx context.Context, contato *entities.Contato) (int64, error) {

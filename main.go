@@ -22,6 +22,8 @@ const (
 )
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	port := map[bool]string{true: os.Getenv("PORT"), false: "8080"}[os.Getenv("PORT") != ""]
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
