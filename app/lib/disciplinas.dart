@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:app/constants.dart';
 class Page2 extends StatefulWidget {
   @override
   _Page2State createState() => _Page2State();
@@ -14,7 +14,7 @@ class _Page2State extends State<Page2>
 
   _loadList() async {
     final response =
-        await http.get("https://jsonplaceholder.typicode.com/photos/");
+        await http.get(BaseUrl+'/disciplinas');
     if (response.statusCode == 200) {
       await new Future.delayed(const Duration(seconds: 1));
       if (mounted) {

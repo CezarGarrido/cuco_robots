@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:app/entities/aluno.dart';
 import 'package:app/utils/jwt.dart';
 import 'package:app/driver/database.dart';
+import 'package:app/constants.dart';
 
 class AlunoRepository {
   Client client = Client();
@@ -74,7 +75,7 @@ class AlunoRepository {
       "senha": senha,
     });
     final response = await client.post(
-      "http://192.168.0.104:8091/api/v1/login",
+      BaseUrl + "/api/v1/login",
       headers: {"content-type": "application/json"},
       body: data,
     );
