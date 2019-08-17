@@ -13,7 +13,7 @@ import (
 	repo "github.com/CezarGarrido/cuco_robots/api/repository"
 	"github.com/CezarGarrido/cuco_robots/crawler"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 var jwtKey = []byte("aplicativo_uems_dourados")
@@ -62,7 +62,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			}
 			_, _ = client.Logout()
 			hoje := time.Now()
-			genUuid, err := uuid.NewV4()
+			guid, err := uuid.NewRandom()
 			if err != nil {
 				log.Println(err.Error())
 				respondWithError(w, 500, err.Error())
@@ -71,7 +71,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("# aluno.contatos", aluno.Contatos)
 			fmt.Println("# aluno.enderecos", aluno.Enderecos)
 			newAluno := &entities.Aluno{
-				Guid:  genUuid.String(),
+				Guid:  guid.String(),
 				Nome:  aluno.Nome,
 				Rgm:   creds.Rgm,
 				Senha: creds.Senha,
