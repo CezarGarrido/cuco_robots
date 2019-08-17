@@ -125,7 +125,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 		payload, err := p.repo.GetByLogin(ctx, creds.Rgm)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, "Rgm inválido")
+			respondWithError(w, 500, err.Error())
 			return
 		}
 		if payload.Senha != creds.Senha {
