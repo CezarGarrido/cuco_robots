@@ -191,7 +191,7 @@ func (m *mysqlAlunoRepo) GetByLogin(ctx context.Context, rgm string) (*entities.
 	
 	query := "SELECT id, guid, nome, rgm, senha, data_nascimento, sexo, nome_pai, nome_mae, estado_civil, nacionalidade, naturalidade, fenotipo, cpf, rg, rg_orgao_emissor, rg_estado_emissor, rg_data_emissao, created_at, updated_at FROM cadastros.alunos WHERE rgm=$1"
 
-	rows, err := m.fetch(ctx, query, 1)
+	rows, err := m.fetch(ctx, query, rgm)
 	if err != nil {
 		return nil, err
 	}
