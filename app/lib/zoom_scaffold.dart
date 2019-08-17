@@ -27,12 +27,13 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
       child: new Scaffold(
         backgroundColor: Colors.transparent,
         appBar: new AppBar(
-            backgroundColor: Colors.grey[200],
+            title: Text('Notas'),
+            backgroundColor: Color(0xff454dff),//Colors.grey[200],
             elevation: 0.0,
             leading: new IconButton(
                 icon: Icon(
                   Icons.menu,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
                 onPressed: () {
                   Provider.of<MenuController>(context, listen: true).toggle();
@@ -41,8 +42,8 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
               IconButton(
                 onPressed: () {},
                 icon: Icon(
-                  Icons.access_time,
-                  color: Colors.grey,
+                  Icons.refresh,
+                  color: Colors.white,
                 ),
               )
             ]),

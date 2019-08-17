@@ -29,6 +29,7 @@ dependencies:
   path_provider: ^0.5.0+1
   flutter_screenutil: ^0.4.2
   font_awesome_flutter: ^8.0.1
+  intl: ^0.15.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -71,7 +71,7 @@ func (m *mysqlAlunoDisciplinaRepo) Create(ctx context.Context, alunoDisciplina *
 }
 
 func (m *mysqlAlunoDisciplinaRepo) GetByAlunoID(ctx context.Context, alunoID int64) ([]*entities.AlunoDisciplina, error) {
-	query := `SELECT id, aluno_id, uems_id, unidade, curso, disciplina, turma, serie_disciplina, carga_horaria_presencial, maximo_faltas, periodo_letivo, professor, media_avaliacoes, optativa, exame, media_final, faltas, situacao, created_at, updated_at FROM cadastros.aluno_disciplinas WHERE aluno_id=$1;`
+	query := `SELECT id, aluno_id, uems_id, unidade, curso, disciplina, turma, serie_disciplina, carga_horaria_presencial, maximo_faltas, periodo_letivo, professor, media_avaliacoes, optativa, exame, media_final, faltas, situacao, created_at, updated_at FROM cadastros.aluno_disciplinas WHERE aluno_id=$1 order by id asc;`
 	payload, err := m.fetch(ctx, query, alunoID)
 	if err != nil {
 		return nil, err

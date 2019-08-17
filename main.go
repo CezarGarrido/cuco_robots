@@ -15,7 +15,7 @@ import (
 
 const (
 	host     = "localhost"
-	port     = "5432"
+	portDB     = "5432"
 	user     = "postgres"
 	password = "C102030g"
 	dbname   = "bot_uems"
@@ -28,7 +28,8 @@ func main() {
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s",
-		host, port, user, password, dbname)
+		host, portDB, user, password, dbname)
+		
 	url, ok := os.LookupEnv("DATABASE_URL")
 	if ok {
 		psqlInfo = url

@@ -5,8 +5,13 @@ import 'package:app/zoom_scaffold.dart';
 import 'package:provider/provider.dart';
 import 'package:app/views/login/login.dart';
 //void main() => runApp(new MyApp());
+import 'package:intl/date_symbol_data_local.dart';
+
+
+
 
 Future<void> main() async {
+  initializeDateFormatting("pt_BR", null);
   Widget _defaultHome = new LoginPage();
   runApp(new MaterialApp(
     title: 'App',
