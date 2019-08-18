@@ -40,12 +40,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			respondWithError(w, 500, err.Error())
 			return
 		}
-		sessao, ok, err := p.sessao.Find(ctx, creds.Aluno.ID)
-		if err != nil {
-			log.Println(err.Error())
-			respondWithError(w, 500, err.Error())
-			return
-		}
+		sessao, ok, _ := p.sessao.Find(ctx, creds.Aluno.ID)
 		if ok {
 			var cookies []*http.Cookie
 			cookie := &http.Cookie{
@@ -54,7 +49,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				Path:   "/",
 				Domain: "sistemas.uems.br",
 			}
-		
+
 			cookies = append(cookies, cookie)
 			client, err := crawler.NewSetCookieClient(cookies)
 			if err != nil {
