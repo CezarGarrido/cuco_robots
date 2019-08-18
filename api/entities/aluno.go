@@ -26,6 +26,7 @@ type Aluno struct {
 	RGDataEmissao   *time.Time  `json:"rg_data_emissao "`
 	Contatos        []*Contato  `json:"contatos"`
 	Enderecos       []*Endereco `json:"enderecos"`
+	Sessao          *Sessao     `json:"sessao"`
 	CreatedAt       *time.Time  `json:"created_at"`
 	UpdatedAt       *time.Time  `json:"updated_at"`
 }

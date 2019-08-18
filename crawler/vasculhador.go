@@ -78,6 +78,26 @@ type Nota struct {
 	Valor     string
 }
 
+func NewSetCookieClient(cookies []*http.Cookie) (Client, error) {
+	client := Client{}
+	cookieJar, err := cookiejar.New(nil)
+	if err != nil {
+		return client, err
+	}
+	u, _ := url.Parse("https://sistemas.uems.br/academico/index.php")
+	cookieJar.SetCookies(u, cookies)
+	HtppClient := &http.Client{
+		Jar: cookieJar,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}
+	client.Conn = HtppClient
+	return client, nil
+}
+
 func NewClient(rgm, senha string) (Client, error) {
 	client := Client{}
 	client.BaseURL = "https://sistemas.uems.br/academico/index.php"
@@ -333,6 +353,7 @@ func parserNotas(html string) (Detalhes, error) {
 	var nota Nota
 	var notas []Nota
 	doc.Find("table.event_form").Each(func(index int, tablehtml *goquery.Selection) {
+		//		fmt.Println("index event_form", index)
 		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
 			band, ok := rowhtml.Attr("id")
 			if ok {

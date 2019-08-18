@@ -43,7 +43,7 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
                 onPressed: () {},
                 icon: Icon(
                   Icons.refresh,
-                  color: Colors.white,
+                  color: Colors.grey,
                 ),
               )
             ]),
@@ -92,8 +92,6 @@ class _ZoomScaffoldState extends State<ZoomScaffold>
 
   zoomAndSlideContent(Widget content) {
     var slidePercent, scalePercent;
-    slidePercent = 0.0;
-    scalePercent = 0.0;
     switch (Provider.of<MenuController>(context, listen: true).state) {
       case MenuState.closed:
         slidePercent = 0.0;

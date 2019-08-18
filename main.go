@@ -15,7 +15,7 @@ import (
 
 const (
 	host     = "localhost"
-	portDB     = "5432"
+	portDB   = "5432"
 	user     = "postgres"
 	password = "C102030g"
 	dbname   = "bot_uems"
@@ -27,9 +27,9 @@ func main() {
 	port := map[bool]string{true: os.Getenv("PORT"), false: "8080"}[os.Getenv("PORT") != ""]
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s",
+		"password=%s dbname=%s sslmode=disable",
 		host, portDB, user, password, dbname)
-		
+
 	url, ok := os.LookupEnv("DATABASE_URL")
 	if ok {
 		psqlInfo = url

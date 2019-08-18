@@ -75,34 +75,37 @@ class AlunoRepository {
       "senha": senha,
     });
     final response = await client.post(
-      BaseUrl + "/api/v1/login",
+      BaseUrl + "/login",
       headers: {"content-type": "application/json"},
       body: data,
     );
-    var token = json.decode(response.body);
-    if (response.statusCode != 200) return null;
-    var map = parseJwt(token);
-    var auxAluno = map["aluno"] as Map<String, dynamic>;
-    print(auxAluno);
-    var createdAt = DateTime.parse(auxAluno["created_at"]);
+    var token = json.decode(utf8.decode(response.bodyBytes));
 
-    var aluno = new Aluno(
-        id: auxAluno["id"] as int,
-        nome: auxAluno["nome"],
-        email: auxAluno["email"],
-        telefone: auxAluno["telefone"],
-        rgm: auxAluno["rgm"],
-        senha: auxAluno["senha"],
-        curso: auxAluno["curso"],
-        ano: auxAluno["ano"] as int,
-        unidade: auxAluno["unidade"],
-        createdAt: createdAt);
-    if (auxAluno["updated_at"] != null) {
-      aluno.updatedAt = DateTime.parse(auxAluno["updated_at"]);
+    if (response.statusCode != 200) {
+      final String err = token['message'];
+      throw ('$err');
     } else {
-      aluno.updatedAt = aluno.createdAt;
+      var map = parseJwt(token);
+      var auxAluno = map["aluno"] as Map<String, dynamic>;
+      var createdAt = DateTime.parse(auxAluno["created_at"]);
+      var aluno = new Aluno(
+          id: auxAluno["id"] as int,
+          nome: auxAluno["nome"],
+          email: auxAluno["email"],
+          telefone: auxAluno["telefone"],
+          rgm: auxAluno["rgm"],
+          senha: auxAluno["senha"],
+          curso: auxAluno["curso"],
+          ano: auxAluno["ano"] as int,
+          unidade: auxAluno["unidade"],
+          createdAt: createdAt);
+      if (auxAluno["updated_at"] != null) {
+        aluno.updatedAt = DateTime.parse(auxAluno["updated_at"]);
+      } else {
+        aluno.updatedAt = aluno.createdAt;
+      }
+      return aluno;
     }
-    return aluno;
   }
 
   Future<List> getAll() async {

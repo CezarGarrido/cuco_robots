@@ -1,14 +1,17 @@
 package main
 
 import (
-	"encoding/json"
+	"crypto/tls"
 	"fmt"
-	"strconv"
+	"io/ioutil"
+	"net/http"
+	"time"
 
 	"github.com/CezarGarrido/cuco_robots/crawler"
 )
 
 func main() {
+	start := time.Now()
 	fmt.Println("# Fazendo login")
 	client, err := crawler.NewClient("40089", "C102030g")
 	if err != nil {
@@ -17,7 +20,7 @@ func main() {
 	}
 	fmt.Println("# Login Efetuado")
 	fmt.Println("# Buscando dados do aluno")
-	aluno, err := client.FindAluno()
+	/*aluno, err := client.FindAluno()
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return
@@ -27,9 +30,13 @@ func main() {
 		fmt.Printf("Error: %s", err)
 		return
 	}
-	fmt.Println(string(b))
+	fmt.Println(string(b))*/
+	for _, c := range client.GetCookies() {
+		fmt.Println(c.Name, c.Value, c.Path, c.Domain)
+	}
+	//reqCookie(client.GetCookies())
 
-	disciplinas, err := client.FindDisciplinas()
+	/*disciplinas, err := client.FindDisciplinas()
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return
@@ -49,6 +56,36 @@ func main() {
 			return
 		}
 		fmt.Println(string(bdetalhe))
+	}*/
+	//_, _ = client.Logout()
+	fmt.Println(time.Since(start))
+}
+
+func reqCookie(Cookies []*http.Cookie) {
+	req, err := http.NewRequest("GET", "https://sistemas.uems.br/academico/dcu005.php", nil)
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	HtppClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
 	}
-	_,_ = client.Logout()
+	for _, cookie := range Cookies {
+		req.AddCookie(cookie)
+	}
+	resposta, err := HtppClient.Do(req)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	defer resposta.Body.Close()
+	body, err := ioutil.ReadAll(resposta.Body)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(body))
+
 }

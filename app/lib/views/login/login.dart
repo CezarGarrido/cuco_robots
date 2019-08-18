@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage>
   bool _obscureTextLogin = true;
   bool _obscureTextSignup = true;
   bool _obscureTextSignupConfirm = true;
-
+  bool isSignin = true;
   TextEditingController signupEmailController = new TextEditingController();
   TextEditingController signupNameController = new TextEditingController();
   TextEditingController signupPasswordController = new TextEditingController();
@@ -123,6 +123,7 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   void initState() {
+    isSignin = false;
     super.initState();
 
     SystemChrome.setPreferredOrientations([
@@ -313,18 +314,26 @@ class _LoginPageState extends State<LoginPage>
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
                     color: Theme.Colors.loginGradientEnd,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "LOGIN",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 42.0),
+                        child: !isSignin
+                            ? Text(
+                                "LOGIN",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.0,
+                                    fontFamily: "WorkSansBold"),
+                              )
+                            : Text(
+                                'AGUARDE...',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.0,
+                                    fontFamily: "WorkSansBold"),
+                              )),
                     onPressed: () => _fazerLogin(context)),
               ),
             ],
@@ -489,7 +498,8 @@ class _LoginPageState extends State<LoginPage>
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
                     color: Theme.Colors.loginGradientEnd,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 42.0),
@@ -539,34 +549,36 @@ class _LoginPageState extends State<LoginPage>
   }
 
   void _fazerLogin(BuildContext context) async {
-    print("testando..");
+    print("Fazendo login..");
+    setState(() {
+      isSignin = true;
+    });
     if (loginEmailController.text == "") {
       _showSnackBar("Digite um rgm válido", "ERROR", context);
+      setState(() {
+        isSignin = false;
+      });
       return;
     }
     if (loginPasswordController.text == "") {
       _showSnackBar("Digite uma senha válida", "ERROR", context);
+      setState(() {
+        isSignin = false;
+      });
       return;
     }
-    /*_alunoRepository
+    _alunoRepository
         .login(loginEmailController.text, loginPasswordController.text)
         .then((result) {
-      print("Fazendo o login..");
-      if (result == null) {
-        _showSnackBar("Login ou senha inválidos", "ERROR", context);
-        return;
-      }
-      print("Salvando aluno");
-      _alunoRepository.createSQL(result).then((result) {
-        print('=== result ===');
-        print(result);
+      Navigator.pushNamed(context, '/app');
+      setState(() {
+        isSignin = false;
       });
-      _alunoRepository.getAll().then((result) {
-        print('=== result ===');
-        print(result);
+    }).catchError((error) {
+      _showSnackBar('$error', "ERROR", context);
+      setState(() {
+        isSignin = false;
       });
-
-    });*/
-          Navigator.pushNamed(context, '/app');
+    });
   }
 }

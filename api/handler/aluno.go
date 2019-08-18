@@ -30,6 +30,7 @@ type Aluno struct {
 
 func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+
 	select {
 	case <-ctx.Done():
 		fmt.Fprint(os.Stderr, "request cancelled\n")
@@ -60,7 +61,6 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				respondWithError(w, 500, "Erro interno do sistema")
 				return
 			}
-			_, _ = client.Logout()
 			hoje := time.Now()
 			guid, err := uuid.NewRandom()
 			if err != nil {
@@ -68,8 +68,6 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				respondWithError(w, 500, err.Error())
 				return
 			}
-			fmt.Println("# aluno.contatos", aluno.Contatos)
-			fmt.Println("# aluno.enderecos", aluno.Enderecos)
 			newAluno := &entities.Aluno{
 				Guid:  guid.String(),
 				Nome:  aluno.Nome,
@@ -115,12 +113,25 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 				enderecos = append(enderecos, newEndereco)
 			}
 			newAluno.Enderecos = enderecos
+			cookie := client.GetCookies()[0]
+			fmt.Println(cookie.Value, cookie.Name)
+			newSessao := &entities.Sessao{
+				QtdeLogin:   1,
+				QtdeRequest: 1,
+				CookieName:  cookie.Name,
+				CookieValue: cookie.Value,
+				CreatedAt:   hoje,
+				UpdatedAt:   &hoje,
+			}
+			newAluno.Sessao = newSessao
+
 			_, err = p.repo.Create(ctx, newAluno)
 			if err != nil {
 				log.Println(err.Error())
 				respondWithError(w, 500, "Erro interno do sistema")
 				return
 			}
+			//_, _ = client.Logout()
 		}
 		payload, err := p.repo.GetByLogin(ctx, creds.Rgm)
 		if err != nil {
@@ -147,6 +158,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			respondWithError(w, 500, "Erro interno do sistema")
 			return
 		}
+
 		respondwithJSON(w, 200, tokenString)
 	}
 }

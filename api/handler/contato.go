@@ -41,9 +41,7 @@ func (p *AlunoContato) Fetch(w http.ResponseWriter, r *http.Request) {
 			respondWithError(w, 500, err.Error())
 			return
 		}
-
 		_, _ = client.Logout()
-
 		contatos, err := p.repo.GetByAlunoID(ctx, creds.Aluno.ID)
 		if err != nil {
 			log.Println(err.Error())
