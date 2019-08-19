@@ -61,13 +61,13 @@ class Disciplina {
     maximoFaltas = json['maximo_faltas'];
     periodoLetivo = json['periodo_letivo'];
     professor = json['professor'];
-    mediaAvaliacoes = json['media_avaliacoes'];
-    optativa = json['optativa'];
-    exame = json['exame'];
-    mediaFinal = json['media_final'];
+    mediaAvaliacoes = json['media_avaliacoes'].toDouble();
+    optativa = json['optativa'].toDouble();
+    exame = json['exame'].toDouble();
+    mediaFinal = json['media_final'].toDouble();
     faltas = json['faltas'];
     situacao = json['situacao'];
-    if (json['notas'].length > 0) {
+    if (json['notas'] != null) {
       notas = new List<Nota>();
       json['notas'].forEach((v) {
         notas.add(new Nota.fromJson(v));

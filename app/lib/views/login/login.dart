@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage>
                 ? MediaQuery.of(context).size.height
                 : 775.0,
             decoration: new BoxDecoration(
-              color: Color(0xff454dff),//Color(0xFF067BA5),
+              color: Color(0xff454dff), //Color(0xFF067BA5),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage>
       width: 300.0,
       height: 50.0,
       decoration: BoxDecoration(
-        color: Color(0xff454dff),//Color(0x552B2B2B),
+        color: Color(0xff454dff), //Color(0x552B2B2B),
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
       ),
       child: CustomPaint(
@@ -313,7 +313,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
-                    color:Colors.redAccent ,//Theme.Colors.loginGradientEnd,
+                    color: Colors.redAccent, //Theme.Colors.loginGradientEnd,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: Padding(
@@ -570,10 +570,10 @@ class _LoginPageState extends State<LoginPage>
     _alunoRepository
         .login(loginEmailController.text, loginPasswordController.text)
         .then((result) {
-      Navigator.pushNamed(context, '/app');
       setState(() {
         isSignin = false;
       });
+      Navigator.pushNamed(context, '/app');
     }).catchError((error) {
       print(error);
       _showSnackBar('$error', "ERROR", context);

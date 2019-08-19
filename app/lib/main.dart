@@ -1,18 +1,25 @@
-import 'package:app/circular_image.dart';
 import 'package:app/menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app/zoom_scaffold.dart';
 import 'package:provider/provider.dart';
 import 'package:app/views/login/login.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:app/driver/database.dart';
-//void main() => runApp(new MyApp());
-Future<void> main() async {
+import 'package:app/driver/database.dart' as migrate;
+import 'package:app/repository/aluno.dart';
 
-  runMigrate();
+//void main() => runApp(new MyApp());
+AlunoRepository _alunoRepository = AlunoRepository();
+
+Future<void> main() async {
+  Widget _defaultHome = new LoginPage();
+
+  bool isLogado = await _alunoRepository.isLoggedIn();
+  if (isLogado) {
+    _defaultHome = new MyHomePage();
+  }
+  migrate.runMigrate();
   initializeDateFormatting("pt_BR", null);
 
-  Widget _defaultHome = new LoginPage();
   runApp(new MaterialApp(
     title: 'App',
     debugShowCheckedModeBanner: false,
@@ -22,10 +29,12 @@ Future<void> main() async {
     },
   ));
 }
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => new _MyHomePageState();
 }
+
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   MenuController menuController;
   @override

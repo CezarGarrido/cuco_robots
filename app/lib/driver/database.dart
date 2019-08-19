@@ -6,6 +6,13 @@ import 'dart:io';
 
 const initScript = [
   '''
+  create table if not exists credenciais (
+    id integer primary key autoincrement,
+    nome text UNIQUE,
+    valor text not null
+  )
+  ''',
+  '''
 create table if not exists alunos (
   id integer primary key autoincrement,
 	guid text NULL,

@@ -1,1 +1,1 @@
-const String BaseUrl = "http://crawler-uems.herokuapp.com/api/v1";
+const String BaseUrl = "https://crawler-uems.herokuapp.com/api/v1";

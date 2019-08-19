@@ -21,7 +21,6 @@ class Periodo {
 DisciplinaRepository _disciplinaRepository = DisciplinaRepository();
 
 class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
-
   List<Disciplina> listDisc = List();
 
   bool _loadingInProgress;
@@ -34,14 +33,16 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
 
   Future<Null> _loadList() async {
     try {
-      setState(() {
-        _loadingFailed = false;
-      });
-      List<Disciplina> listDisciplinas = await _disciplinaRepository.getDisciplinas();
-      setState(() {
-        listDisc = listDisciplinas;
-        _dataLoaded();
-      });
+      List<Disciplina> listDisciplinas =
+          await _disciplinaRepository.getDisciplinas();
+      await new Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
+        setState(() {
+          listDisc = listDisciplinas;
+          _loadingFailed = false;
+          _dataLoaded();
+        });
+      }
     } on TimeoutException catch (_) {
       setState(() {
         _loadingFailed = true;
@@ -76,6 +77,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
       children: <Widget>[
         Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(5),

@@ -21,7 +21,7 @@ class Nota {
     disciplinaId = json['disciplina_id'];
     alunoId = json['aluno_id'];
     descricao = json['descricao'];
-    valor = json['valor'];
+    valor = json['valor'].toDouble();
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
