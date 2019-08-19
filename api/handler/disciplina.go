@@ -37,7 +37,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 		creds, err := utils.ValidToken(r)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, err.Error())
+			utils.RespondWithError(w, 500, err.Error())
 			return
 		}
 		var t interface{}
@@ -55,13 +55,13 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			client, err := crawler.NewSetCookieClient(cookies)
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, err.Error())
+				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
 			aux_disciplinas, err := client.FindDisciplinas()
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, "Sistema indisponivel")
+				utils.RespondWithError(w, 500, "Sistema indisponivel")
 				return
 			}
 
@@ -69,13 +69,13 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				isExists, err := p.repo.IsExiste(ctx, creds.Aluno.ID, disciplina.UemsID)
 				if err != nil {
 					log.Println(err.Error())
-					respondWithError(w, 500, "Erro interno do sistema")
+					utils.RespondWithError(w, 500, "Erro interno do sistema")
 					return
 				}
 				detalhe, err := client.FindNotasByDisciplina(strconv.FormatInt(disciplina.UemsID, 10))
 				if err != nil {
 					log.Println(err.Error())
-					respondWithError(w, 500, "Erro interno do sistema")
+					utils.RespondWithError(w, 500, "Erro interno do sistema")
 					return
 				}
 
@@ -109,12 +109,10 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				CargaHorariaPresencial, _ := strconv.Atoi(detalhe.CargaHorariaPresencial)
 				MaximoFaltas, _ := strconv.Atoi(detalhe.MaximoFaltas)
 				Faltas, _ := strconv.Atoi(detalhe.Faltas)
-				/*Formatando para valores numericos, removendo "," e colocando "." no lugar*/
 				MediaAvaliacoesNormalized := strings.Replace(detalhe.MediaAvaliacoes, ",", ".", -1)
 				MediaFinalNormalized := strings.Replace(detalhe.MediaFinal, ",", ".", -1)
 				OptativaNormalized := strings.Replace(detalhe.Optativa, ",", ".", -1)
 				ExameNormalized := strings.Replace(detalhe.Exame, ",", ".", -1)
-				/*Convertendo strings para float64*/
 				MediaAvaliacoes, _ := strconv.ParseFloat(MediaAvaliacoesNormalized, 64)
 				MediaFinal, _ := strconv.ParseFloat(MediaFinalNormalized, 64)
 				Optativa, _ := strconv.ParseFloat(OptativaNormalized, 64)
@@ -130,14 +128,14 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 					_, err = p.repo.Create(ctx, newAlunoDisciplina)
 					if err != nil {
 						log.Println(err.Error())
-						respondWithError(w, 500, "Erro interno do sistema")
+						utils.RespondWithError(w, 500, "Erro interno do sistema")
 						return
 					}
 				} else {
 					disciplinaAnterior, err := p.repo.GetByUemsID(ctx, creds.Aluno.ID, disciplina.UemsID)
 					if err != nil {
 						log.Println(err.Error())
-						respondWithError(w, 500, "Erro interno do sistema")
+						utils.RespondWithError(w, 500, "Erro interno do sistema")
 						return
 					}
 					id_aux := disciplinaAnterior.ID
@@ -147,7 +145,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 					_, err = p.repo.Update(ctx, disciplinaAnterior)
 					if err != nil {
 						log.Println(err.Error())
-						respondWithError(w, 500, "Erro interno do sistema")
+						utils.RespondWithError(w, 500, "Erro interno do sistema")
 						return
 					}
 				}
@@ -156,23 +154,22 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			disciplinas, err := p.repo.GetByAlunoID(ctx, creds.Aluno.ID)
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, "Erro interno do sistema")
+				utils.RespondWithError(w, 500, "Erro interno do sistema")
 				return
 			}
-
-			respondwithJSON(w, 200, disciplinas)
+			utils.RespondwithJSON(w, 200, disciplinas)
 			return
 		} else {
 			client, err := crawler.NewClientCtx(ctx, creds.Aluno.Rgm, creds.Aluno.Senha)
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, err.Error())
+				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
 			aux_disciplinas, err := client.FindDisciplinas()
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, "Sistema indisponivel")
+				utils.RespondWithError(w, 500, "Sistema indisponivel")
 				return
 			}
 
@@ -180,13 +177,13 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				isExists, err := p.repo.IsExiste(ctx, creds.Aluno.ID, disciplina.UemsID)
 				if err != nil {
 					log.Println(err.Error())
-					respondWithError(w, 500, "Erro interno do sistema")
+					utils.RespondWithError(w, 500, "Erro interno do sistema")
 					return
 				}
 				detalhe, err := client.FindNotasByDisciplina(strconv.FormatInt(disciplina.UemsID, 10))
 				if err != nil {
 					log.Println(err.Error())
-					respondWithError(w, 500, "Erro interno do sistema")
+					utils.RespondWithError(w, 500, "Erro interno do sistema")
 					return
 				}
 
@@ -241,14 +238,14 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 					_, err = p.repo.Create(ctx, newAlunoDisciplina)
 					if err != nil {
 						log.Println(err.Error())
-						respondWithError(w, 500, "Erro interno do sistema")
+						utils.RespondWithError(w, 500, "Erro interno do sistema")
 						return
 					}
 				} else {
 					disciplinaAnterior, err := p.repo.GetByUemsID(ctx, creds.Aluno.ID, disciplina.UemsID)
 					if err != nil {
 						log.Println(err.Error())
-						respondWithError(w, 500, "Erro interno do sistema")
+						utils.RespondWithError(w, 500, "Erro interno do sistema")
 						return
 					}
 					id_aux := disciplinaAnterior.ID
@@ -258,7 +255,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 					_, err = p.repo.Update(ctx, disciplinaAnterior)
 					if err != nil {
 						log.Println(err.Error())
-						respondWithError(w, 500, "Erro interno do sistema")
+						utils.RespondWithError(w, 500, "Erro interno do sistema")
 						return
 					}
 				}
@@ -268,13 +265,13 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			disciplinas, err := p.repo.GetByAlunoID(ctx, creds.Aluno.ID)
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, "Erro interno do sistema")
+				utils.RespondWithError(w, 500, "Erro interno do sistema")
 				return
 			}
 			fmt.Println(disciplinas)
 			t = disciplinas
 		}
 
-		respondwithJSON(w, 200, t)
+		utils.RespondwithJSON(w, 200, t)
 	}
 }

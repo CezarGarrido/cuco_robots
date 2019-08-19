@@ -11,6 +11,7 @@ import (
 	"github.com/CezarGarrido/cuco_robots/api/driver"
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 	repo "github.com/CezarGarrido/cuco_robots/api/repository"
+	"github.com/CezarGarrido/cuco_robots/api/utils"
 	"github.com/CezarGarrido/cuco_robots/crawler"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
@@ -39,13 +40,13 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(creds)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, "Login ou senha inválidos")
+			utils.RespondWithError(w, 500, "Login ou senha inválidos")
 			return
 		}
 		isExists, err := p.repo.IsExiste(ctx, creds.Rgm, creds.Senha)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, "Erro interno do sistema")
+			utils.RespondWithError(w, 500, "Erro interno do sistema")
 			return
 		}
 		if !isExists {
@@ -53,21 +54,21 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			client, err := crawler.NewClientCtx(ctx, creds.Rgm, creds.Senha)
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, err.Error())
+				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
 			fmt.Println("# logado")
 			aluno, err := client.FindAluno()
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, "Erro interno do sistema")
+				utils.RespondWithError(w, 500, "Erro interno do sistema")
 				return
 			}
 			hoje := time.Now()
 			guid, err := uuid.NewRandom()
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, err.Error())
+				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
 			newAluno := &entities.Aluno{
@@ -130,7 +131,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			_, err = p.repo.Create(ctx, newAluno)
 			if err != nil {
 				log.Println(err.Error())
-				respondWithError(w, 500, "Erro interno do sistema")
+				utils.RespondWithError(w, 500, "Erro interno do sistema")
 				return
 			}
 			//_, _ = client.Logout()
@@ -138,12 +139,12 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 		payload, err := p.repo.GetByLogin(ctx, creds.Rgm)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, err.Error())
+			utils.RespondWithError(w, 500, err.Error())
 			return
 		}
 		if payload.Senha != creds.Senha {
 			log.Println("Login ou senha inválidos", payload.Senha, creds.Senha)
-			respondWithError(w, 500, "Senha inválida")
+			utils.RespondWithError(w, 500, "Senha inválida")
 			return
 		}
 		//expirationTime := time.Now().Add(20 * time.Minute)
@@ -157,23 +158,10 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := token.SignedString(jwtKey)
 		if err != nil {
 			log.Println(err.Error())
-			respondWithError(w, 500, "Erro interno do sistema")
+			utils.RespondWithError(w, 500, "Erro interno do sistema")
 			return
 		}
 
-		respondwithJSON(w, 200, tokenString)
+		utils.RespondwithJSON(w, 200, tokenString)
 	}
-}
-
-// respondwithJSON write json response format
-func respondwithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(response)
-}
-
-// respondwithError return error message
-func respondWithError(w http.ResponseWriter, code int, msg string) {
-	respondwithJSON(w, code, map[string]string{"message": msg})
 }
