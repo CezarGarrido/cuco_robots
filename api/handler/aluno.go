@@ -49,12 +49,14 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if !isExists {
-			client, err := crawler.NewClient(creds.Rgm, creds.Senha)
+			fmt.Println("# logando")
+			client, err := crawler.NewClientCtx(ctx, creds.Rgm, creds.Senha)
 			if err != nil {
 				log.Println(err.Error())
 				respondWithError(w, 500, err.Error())
 				return
 			}
+			fmt.Println("# logado")
 			aluno, err := client.FindAluno()
 			if err != nil {
 				log.Println(err.Error())

@@ -15,8 +15,6 @@ Estas instruções servem para obter uma cópia do projeto e executar em sua má
 ### Installing
 
 ```
-   go get github.com/lib/pq
-
    go get https://github.com/CezarGarrido/cuco_robots
 
 ```

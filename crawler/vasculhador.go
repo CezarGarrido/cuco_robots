@@ -1,10 +1,13 @@
 package crawler
 
 import (
+	"context"
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -98,6 +101,75 @@ func NewSetCookieClient(cookies []*http.Cookie) (Client, error) {
 	return client, nil
 }
 
+func NewClientCtx(ctx context.Context, rgm, senha string) (Client, error) {
+	client := Client{}
+	client.BaseURL = "https://sistemas.uems.br/academico/index.php"
+	param := url.Values{}
+	param.Add("login", "")
+	param.Add("rgm", rgm)
+	param.Add("senha", senha)
+	cookieJar, err := cookiejar.New(nil)
+	if err != nil {
+		return client, err
+	}
+	fmt.Println("# Montando requisição")
+	req, err := http.NewRequest("POST", client.BaseURL, strings.NewReader(param.Encode()))
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Accept-Language", "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7")
+	req.Header.Set("Cache-Control", "max-age=0")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Content-Length", "31")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Host", "sistemas.uems.br")
+	req.Header.Set("Origin", "https://sistemas.uems.br")
+	req.Header.Set("Referer", "https://sistemas.uems.br/academico/index.php")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "same-origin")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36")
+
+	HtppClient := &http.Client{
+		Jar: cookieJar,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}
+	/*tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		Dial: (&net.Dialer{
+			Timeout: 1 * time.Minute,
+		}).Dial,
+		TLSHandshakeTimeout: 1 * time.Minute,
+	}
+
+	HtppClient := &http.Client{Jar: cookieJar, Transport: tr, Timeout: time.Duration(1 * time.Minute)}*/
+
+	//ctxreq, cancel := context.WithTimeout(ctx, 1*time.Millisecond)
+	//defer cancel()
+
+	req = req.WithContext(ctx)
+	fmt.Println("# Enviando dados")
+	resp, err := HtppClient.Do(req)
+	if err != nil {
+		return client, err
+	}
+	defer resp.Body.Close()
+	fmt.Println("# Ok, parseando os dados")
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return client, err
+	}
+	msg, ok := checkLoginError(string(body))
+	if !ok {
+		return client, errors.New(msg)
+	}
+	client.Conn = HtppClient
+	return client, nil
+}
 func NewClient(rgm, senha string) (Client, error) {
 	client := Client{}
 	client.BaseURL = "https://sistemas.uems.br/academico/index.php"
@@ -112,14 +184,25 @@ func NewClient(rgm, senha string) (Client, error) {
 	req, err := http.NewRequest("POST", client.BaseURL, strings.NewReader(param.Encode()))
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	HtppClient := &http.Client{
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		Dial: (&net.Dialer{
+			Timeout: 1 * time.Minute,
+		}).Dial,
+		TLSHandshakeTimeout: 1 * time.Minute,
+	}
+
+	HtppClient := &http.Client{Jar: cookieJar, Transport: tr, Timeout: time.Duration(1 * time.Minute)}
+
+	/*HtppClient := &http.Client{
 		Jar: cookieJar,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true,
 			},
 		},
-	}
+	}*/
 	resp, err := HtppClient.Do(req)
 	if err != nil {
 		return client, err

@@ -23,13 +23,10 @@ const (
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 	port := map[bool]string{true: os.Getenv("PORT"), false: "8080"}[os.Getenv("PORT") != ""]
-
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, portDB, user, password, dbname)
-
 	url, ok := os.LookupEnv("DATABASE_URL")
 	if ok {
 		psqlInfo = url
@@ -41,8 +38,10 @@ func main() {
 	alunoHandler := appHandler.NewAluno(connection)
 	disciplinaHandler := appHandler.NewAlunoDisciplina(connection)
 	r := mux.NewRouter()
+	
 	r.HandleFunc("/api/v1/login", alunoHandler.Login).Methods("POST")
 	r.HandleFunc("/api/v1/disciplinas", disciplinaHandler.Fetch).Methods("GET")
+
 	headersOk := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS", "PUT", "DELETE"})

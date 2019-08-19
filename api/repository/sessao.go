@@ -3,18 +3,17 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 )
 
-// NotaRepo explain...
+// SessaoRepo explain...
 type SessaoRepo interface {
 	Find(ctx context.Context, aluno_id int64) (*entities.Sessao, bool, error)
 	Commit(ctx context.Context, sessao *entities.Sessao) error
 }
 
-// NewSQLNotaRepo retunrs implement of nota repository interface
+// NewSQLSessaoRepo retunrs implement of nota repository interface
 func NewSQLSessaoRepo(Conn *sql.DB) SessaoRepo {
 	return &postgressqlRepo{Conn: Conn}
 }
@@ -67,8 +66,6 @@ func (m *postgressqlRepo) Find(ctx context.Context, aluno_id int64) (*entities.S
 	} else if err != nil {
 		return nil, false, err
 	}
-
 	//defer rows.Close()
-	fmt.Println(sessao)
 	return sessao, true, nil
 }
