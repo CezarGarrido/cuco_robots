@@ -163,7 +163,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			respondwithJSON(w, 200, disciplinas)
 			return
 		} else {
-			/*client, err := crawler.NewClient(creds.Aluno.Rgm, creds.Aluno.Senha)
+			client, err := crawler.NewClientCtx(ctx, creds.Aluno.Rgm, creds.Aluno.Senha)
 			if err != nil {
 				log.Println(err.Error())
 				respondWithError(w, 500, err.Error())
@@ -220,7 +220,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				CargaHorariaPresencial, _ := strconv.Atoi(detalhe.CargaHorariaPresencial)
 				MaximoFaltas, _ := strconv.Atoi(detalhe.MaximoFaltas)
 				Faltas, _ := strconv.Atoi(detalhe.Faltas)
-		
+
 				MediaAvaliacoesNormalized := strings.Replace(detalhe.MediaAvaliacoes, ",", ".", -1)
 				MediaFinalNormalized := strings.Replace(detalhe.MediaFinal, ",", ".", -1)
 				OptativaNormalized := strings.Replace(detalhe.Optativa, ",", ".", -1)
@@ -263,7 +263,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 
-			}*/
+			}
 			fmt.Println("disciplinas")
 			disciplinas, err := p.repo.GetByAlunoID(ctx, creds.Aluno.ID)
 			if err != nil {
@@ -274,7 +274,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(disciplinas)
 			t = disciplinas
 		}
-		
+
 		respondwithJSON(w, 200, t)
 	}
 }
