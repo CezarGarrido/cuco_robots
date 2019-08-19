@@ -25,21 +25,21 @@ class AlunoRepository {
     }
   }
 
-  Future<Aluno> findByID(int id) async {
-    final response = await client.get("https://api.balta.io/v1/courses/$id");
-    if (response.statusCode == 200) {
-      var map = json.decode(response.body) as Map<String, dynamic>;
-      return new Aluno(
-          id: map["id"],
-          nome: map["nome"],
-          email: map["email"],
-          telefone: map["telefone"],
-          rgm: map["rgm"],
-          senha: map["senha"]);
-    } else {
-      throw Exception('Deu ruim!');
-    }
-  }
+  // Future<Aluno> findByID(int id) async {
+  //   final response = await client.get("https://api.balta.io/v1/courses/$id");
+  //   if (response.statusCode == 200) {
+  //     var map = json.decode(response.body) as Map<String, dynamic>;
+  //     return new Aluno(
+  //         id: map["id"],
+  //         nome: map["nome"],
+  //         email: map["email"],
+  //         telefone: map["telefone"],
+  //         rgm: map["rgm"],
+  //         senha: map["senha"]);
+  //   } else {
+  //     throw Exception('Deu ruim!');
+  //   }
+  // }
 
   Future<bool> createApi(Aluno data) async {
     String jsonData = json.encode(data);
@@ -80,30 +80,14 @@ class AlunoRepository {
       body: data,
     );
     var token = json.decode(utf8.decode(response.bodyBytes));
-
     if (response.statusCode != 200) {
       final String err = token['message'];
       throw ('$err');
     } else {
       var map = parseJwt(token);
       var auxAluno = map["aluno"] as Map<String, dynamic>;
-      var createdAt = DateTime.parse(auxAluno["created_at"]);
-      var aluno = new Aluno(
-          id: auxAluno["id"] as int,
-          nome: auxAluno["nome"],
-          email: auxAluno["email"],
-          telefone: auxAluno["telefone"],
-          rgm: auxAluno["rgm"],
-          senha: auxAluno["senha"],
-          curso: auxAluno["curso"],
-          ano: auxAluno["ano"] as int,
-          unidade: auxAluno["unidade"],
-          createdAt: createdAt);
-      if (auxAluno["updated_at"] != null) {
-        aluno.updatedAt = DateTime.parse(auxAluno["updated_at"]);
-      } else {
-        aluno.updatedAt = aluno.createdAt;
-      }
+      var aluno = new Aluno.fromJson(auxAluno);
+      save(aluno);
       return aluno;
     }
   }
@@ -116,61 +100,71 @@ class AlunoRepository {
     return result.toList();
   }
 
-  Future<int> createSQL(Aluno aluno) async {
+  Future<int> save(Aluno aluno) async {
     var db = await conexao.db;
-    var table = await db.rawQuery("SELECT MAX(id)+1 as id FROM alunos");
-    int id = table.first["id"];
-    var raw = await db.rawInsert(
-        "INSERT Into alunos (id,nome,email,telefone,rgm,senha,curso,ano,unidade,logado,created_at,updated_at)"
-        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+    print("# Salvando aluno");
+    // aluno.id = await db.insert("alunos", aluno.toJson());
+    var result = await db.rawInsert(
+        "INSERT OR REPLACE INTO alunos (id, guid, nome, rgm, senha, curso, data_nascimento, sexo, nome_pai, nome_mae, estado_civil, nacionalidade,naturalidade, fenotipo, cpf, rg, rg_orgao_emissor, rg_estado_emissor, rg_data_emissao , created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
-          id,
+          aluno.id,
+          aluno.guid,
           aluno.nome,
-          aluno.email,
-          aluno.telefone,
           aluno.rgm,
           aluno.senha,
           aluno.curso,
-          aluno.ano,
-          aluno.unidade,
-          1,
-          aluno.createdAt.toIso8601String(),
-          aluno.updatedAt.toIso8601String(),
+          aluno.dataNascimento,
+          aluno.sexo,
+          aluno.nomePai,
+          aluno.nomeMae,
+          aluno.estadoCivil,
+          aluno.nacionalidade,
+          aluno.naturalidade,
+          aluno.fenotipo,
+          aluno.cpf,
+          aluno.rg,
+          aluno.rgOrgaoEmissor,
+          aluno.rgEstadoEmissor,
+          aluno.rgDataEmissao,
+          aluno.createdAt,
+          aluno.updatedAt
         ]);
-    return raw;
+
+    print("# aluno criado $result");
+    return result;
   }
 
-  Future<Aluno> findIsLogado() async {
-    var conexao = new ConexaoSqlite();
-    var db = await conexao.db;
-    //var result = await db.query(tableNote, columns: [columnId, columnTitle, columnDescription]);
-    var result = await db.query("alunos", where: "logado = ?", whereArgs: [1]);
-    print(result.length);
+  //Future<Aluno> findIsLogado() async {
+  // var conexao = new ConexaoSqlite();
+  // var db = await conexao.db;
+  // //var result = await db.query(tableNote, columns: [columnId, columnTitle, columnDescription]);
+  // var result = await db.query("alunos", where: "logado = ?", whereArgs: [1]);
+  // print(result.length);
 
-    if (result.length == 0) {
-      return Aluno(logado: 0);
-    }
+  // if (result.length == 0) {
+  //   return Aluno(logado: 0);
+  // }
 
-    var auxAluno = result.first;
-    var createdAt = DateTime.parse(auxAluno["created_at"]);
-    var aluno = new Aluno(
-        id: auxAluno["id"] as int,
-        nome: auxAluno["nome"],
-        email: auxAluno["email"],
-        telefone: auxAluno["telefone"],
-        rgm: auxAluno["rgm"],
-        senha: auxAluno["senha"],
-        curso: auxAluno["curso"],
-        ano: auxAluno["ano"] as int,
-        unidade: auxAluno["unidade"],
-        logado: auxAluno["logado"] as int,
-        createdAt: createdAt);
-    if (auxAluno["updated_at"] != null) {
-      aluno.updatedAt = DateTime.parse(auxAluno["updated_at"]);
-    } else {
-      aluno.updatedAt = aluno.createdAt;
-    }
-    print(aluno);
-    return aluno;
-  }
+  // var auxAluno = result.first;
+  // var createdAt = DateTime.parse(auxAluno["created_at"]);
+  // var aluno = new Aluno(
+  //     id: auxAluno["id"] as int,
+  //     nome: auxAluno["nome"],
+  //     email: auxAluno["email"],
+  //     telefone: auxAluno["telefone"],
+  //     rgm: auxAluno["rgm"],
+  //     senha: auxAluno["senha"],
+  //     curso: auxAluno["curso"],
+  //     ano: auxAluno["ano"] as int,
+  //     unidade: auxAluno["unidade"],
+  //     logado: auxAluno["logado"] as int,
+  //     createdAt: createdAt);
+  // if (auxAluno["updated_at"] != null) {
+  //   aluno.updatedAt = DateTime.parse(auxAluno["updated_at"]);
+  // } else {
+  //   aluno.updatedAt = aluno.createdAt;
+  // }
+  // print(aluno);
+  // return aluno;
+  // }
 }

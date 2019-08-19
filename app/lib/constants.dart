@@ -1,1 +1,1 @@
-const String BaseUrl = "https://crawler-uems.herokuapp.com/api/v1";
+const String BaseUrl = "http://192.168.0.11:8080/api/v1";
