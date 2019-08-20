@@ -573,7 +573,7 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         isSignin = false;
       });
-      Navigator.pushNamed(context, '/app');
+      Navigator.pushReplacementNamed(context, '/app');
     }).catchError((error) {
       print(error);
       _showSnackBar('$error', "ERROR", context);

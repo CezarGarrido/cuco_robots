@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:app/repository/disciplina.dart';
 import 'package:app/entities/disciplina.dart';
 import 'package:app/zoom_scaffold.dart';
 
-final Screen notasScreen = new Screen(
-    title: 'Notas',
+final Screen disciplinasScreen = new Screen(
+    title: 'Disciplinas',
     contentBuilder: (BuildContext context) {
-      return new Notas();
+      return new DisciplinasPage();
     });
 
-class Notas extends StatefulWidget {
+class DisciplinasPage extends StatefulWidget {
   @override
-  _NotasState createState() => _NotasState();
+  _DiscplinasState createState() => _DiscplinasState();
 }
 
 class Periodo {
@@ -24,7 +23,8 @@ class Periodo {
 
 DisciplinaRepository _disciplinaRepository = DisciplinaRepository();
 
-class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
+class _DiscplinasState extends State<DisciplinasPage>
+    with SingleTickerProviderStateMixin {
   List<Disciplina> listDisc = List();
 
   bool _loadingInProgress;
@@ -171,88 +171,31 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
       itemCount: listDisc.length,
       itemBuilder: (BuildContext context, int index) {
         final data = listDisc[index];
-        int notasLength = 0;
-        if (data.notas != null) {
-          notasLength = data.notas.length;
-        }
-        return Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                  data.disciplina,
-                  //style: new TextStyle(fontWeight: FontWeight.bold, height:1.5)
+        return new Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundColor: Colors.blueAccent,
+                  child: new Icon(
+                    Icons.account_circle,
+                    color: Colors.white,
+                  ),
                 ),
-                trailing: Icon(Icons.keyboard_arrow_right),
-              ),
-              notasLength == 0
-                  ? Center(
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(5),
-                          ),
-                          Icon(
-                            Icons.error,
-                          ),
-                          Text('Não há notas'),
-                        ],
-                      ),
-                    )
-                  : Container(
-                      padding: EdgeInsets.only(top: 2.0),
-                      child: ListView.builder(
-                        itemCount: notasLength,
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (BuildContext context, int indexn) {
-                          final nota = data.notas[indexn];
-                          Color cor = Colors.green[300];
-                          final intValue = nota.valor;
-                          if (intValue < 6) {
-                            cor = Colors.redAccent;
-                          }
-                          String anotherValue = '$intValue';
-                          DateTime dataAtualizada =
-                              DateTime.parse(nota.updatedAt);
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: cor,
-                              child: Text(
-                                anotherValue,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            contentPadding: EdgeInsets.all(10.0),
-                            title: new Row(children: <Widget>[
-                              new Expanded(child: new Text(nota.descricao)),
-                              new Expanded(child: new Text('')),
-                              new Expanded(child: new Text('')),
-                              /*new Expanded(
-                                  child: new Text(
-                                new DateFormat.MMMd("pt_BR")
-                                    .format(dataAtualizada),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              )),*/
-                            ]),
-                            subtitle: Text(
-                              new DateFormat.MMMd("pt_BR")
-                                  .format(dataAtualizada),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        },
-                      ),
-                    )
-            ],
-          ),
-        );
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(data.disciplina),
+                      SizedBox(height: 8.0),
+                      Text('Secondary Text'),
+                    ],
+                  ),
+                ),
+              ],
+            ));
       },
     );
   }

@@ -5,35 +5,41 @@ import 'package:app/entities/disciplina.dart';
 import 'package:app/utils/secure_store.dart';
 import 'package:app/driver/database.dart';
 import 'package:app/constants.dart';
+import 'nota.dart';
+//import 'dart:io';
 
 class DisciplinaRepository {
   Client client = Client();
 
   ConexaoSqlite conexao = new ConexaoSqlite();
   Future<List<Disciplina>> getDisciplinas() async {
-    var key = await getSecureStore("jwt");
-    Map<String, String> headers = {
-      "Authorization": "Bearer " + key,
-      'Content-Type': 'application/json; charset=utf-8'
-    };
-    final response =
-        await client.get(BaseUrl + "/disciplinas", headers: headers);
-
-        
-    if (response.statusCode == 200) {
-      var list = json.decode(utf8.decode(response.bodyBytes)) as List<dynamic>;
-      if (list.length <= 0) {
+    try {
+      var key = await getSecureStore("jwt");
+      Map<String, String> headers = {
+        "Authorization": "Bearer " + key,
+        'Content-Type': 'application/json; charset=utf-8'
+      };
+      final response =
+          await client.get(BaseUrl + "/disciplinas", headers: headers);
+      if (response.statusCode == 200) {
+        var list =
+            json.decode(utf8.decode(response.bodyBytes)) as List<dynamic>;
+        if (list == null || list.length <= 0) {
+          return await _getDisciplinas();
+        }
+        var disciplinas = new List<Disciplina>();
+        for (Map<String, dynamic> item in list) {
+          Disciplina disciplina = new Disciplina.fromJson(item);
+          _save(disciplina);
+          disciplinas.add(disciplina);
+        }
+        return await _getDisciplinas();
+      } else {
         return await _getDisciplinas();
       }
-      var disciplinas = new List<Disciplina>();
-      for (Map<String, dynamic> item in list) {
-        Disciplina disciplina = new Disciplina.fromJson(item);
-        _save(disciplina);
-        disciplinas.add(disciplina);
-      }
-      return disciplinas;
-    } else {
-      throw ('Errrou!');
+    } catch (_) {
+      print('not connected');
+      return await _getDisciplinas();
     }
   }
 
@@ -63,7 +69,9 @@ class DisciplinaRepository {
           disciplina.createdAt,
           disciplina.updatedAt
         ]);
-
+    disciplina.notas.forEach((nota) async {
+      await NotaRepository().save(nota);
+    });
     print("# Disciplina criada $result");
     return result;
   }
@@ -73,7 +81,9 @@ class DisciplinaRepository {
     var result = await db.rawQuery('SELECT * FROM aluno_disciplinas');
     var disciplinas = new List<Disciplina>();
     for (Map<String, dynamic> item in result) {
-      disciplinas.add(new Disciplina.fromJson(item));
+      var disciplina = new Disciplina.fromJson(item);
+      disciplina.notas = await NotaRepository().getNotas(disciplina.id);
+      disciplinas.add(disciplina);
     }
     return disciplinas;
   }

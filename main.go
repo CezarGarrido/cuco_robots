@@ -45,7 +45,9 @@ func main() {
 	headersOk := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS", "PUT", "DELETE"})
+	
 	log.Println("Servidor startado na porta:", port)
+
 	recoveryH := handlers.RecoveryHandler()(r)
 	err = http.ListenAndServe(":"+port, handlers.CompressHandler(handlers.CORS(headersOk, methodsOk, originsOk)(recoveryH)))
 	if err != nil {

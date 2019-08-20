@@ -6,38 +6,44 @@ import 'package:app/utils/jwt.dart';
 import 'package:app/utils/secure_store.dart';
 import 'package:app/driver/database.dart';
 import 'package:app/constants.dart';
+import 'dart:io';
 
 class AlunoRepository {
   Client client = Client();
   ConexaoSqlite conexao = new ConexaoSqlite();
 
   Future<Aluno> login(String rgm, String senha) async {
-    var data = json.encode({
-      "rgm": rgm,
-      "senha": senha,
-    });
-    final response = await client.post(
-      BaseUrl + "/login",
-      headers: {"content-type": "application/json"},
-      body: data,
-    );
-    var res = json.decode(utf8.decode(response.bodyBytes));
-    if (response.statusCode != 200) {
-      final String err = res['error_message'];
-      throw ('$err');
-    } else {
-      var token = parseJwt(res);
-      var auxAluno = token["aluno"] as Map<String, dynamic>;
-      var aluno = new Aluno.fromJson(auxAluno);
-      save(aluno);
-      setSecureStore("jwt", res);
-      return aluno;
+    try {
+      var data = json.encode({
+        "rgm": rgm,
+        "senha": senha,
+      });
+      final response = await client.post(
+        BaseUrl + "/login",
+        headers: {"content-type": "application/json"},
+        body: data,
+      );
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      if (response.statusCode != 200) {
+        final String err = res['error_message'];
+        throw ('$err');
+      } else {
+        var token = parseJwt(res);
+        var auxAluno = token["aluno"] as Map<String, dynamic>;
+        var aluno = new Aluno.fromJson(auxAluno);
+        save(aluno);
+        setSecureStore("jwt", res);
+        return aluno;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      throw ('Não foi possivel se conectar');
     }
   }
 
-  Future<Aluno> getAluno(int id) async {
+  Future<Aluno> getAluno() async {
     var db = await conexao.db;
-    var result = await db.query("alunos", where: "id = ?", whereArgs: [id]);
+    var result = await db.query("alunos");
     return result.isNotEmpty ? Aluno.fromJson(result.first) : Null;
   }
 
@@ -74,5 +80,12 @@ class AlunoRepository {
     var db = await conexao.db;
     var res = await db.query("alunos");
     return res.length > 0 ? true : false;
+  }
+
+  Future<int> delete() async {
+    final conexao = new ConexaoSqlite();
+    final db = await conexao.db;
+    removeSecureStore("jwt");
+    return await db.rawDelete("DELETE from alunos");
   }
 }
