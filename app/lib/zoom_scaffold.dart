@@ -42,11 +42,13 @@ class _ZoomScaffoldState extends State<ZoomScaffold> with TickerProviderStateMix
   createContentDisplay() {
     return zoomAndSlideContent(
       new Container(
-
+        decoration: new BoxDecoration(
+          image: widget.contentScreen.background,
+        ),
         child: new Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           appBar: new AppBar(
-            backgroundColor: Color(0xff454dff),
+            backgroundColor: Colors.transparent,
             elevation: 0.0,
             leading: new IconButton(
                 icon: new Icon(Icons.menu),
@@ -57,6 +59,7 @@ class _ZoomScaffoldState extends State<ZoomScaffold> with TickerProviderStateMix
             title: new Text(
               widget.contentScreen.title,
               style: new TextStyle(
+                fontFamily: 'bebas-neue',
                 fontSize: 25.0,
               ),
             ),

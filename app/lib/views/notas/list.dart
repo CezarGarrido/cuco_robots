@@ -3,13 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app/repository/disciplina.dart';
 import 'package:app/entities/disciplina.dart';
-import 'package:app/zoom_scaffold.dart';
-
-final Screen notasScreen = new Screen(
-    title: 'Notas',
-    contentBuilder: (BuildContext context) {
-      return new Notas();
-    });
 
 class Notas extends StatefulWidget {
   @override
@@ -26,7 +19,7 @@ DisciplinaRepository _disciplinaRepository = DisciplinaRepository();
 
 class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
   List<Disciplina> listDisc = List();
-
+  AnimationController controller;
   bool _loadingInProgress;
   bool _loadingFailed;
   Periodo selectedPeriodo;
@@ -74,6 +67,8 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
     _loadingFailed = false;
     _loadList();
     super.initState();
+    controller =
+        AnimationController(duration: Duration(milliseconds: 900), vsync: this);
   }
 
   Widget _myListNoData(BuildContext context) {
@@ -88,6 +83,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
               ),
               Icon(
                 Icons.error,
+                color: Colors.grey[300],
               ),
               Text('Sistema indiponível, tente novamente mais tarde'),
             ],
@@ -175,16 +171,38 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
         if (data.notas != null) {
           notasLength = data.notas.length;
         }
+        Color corMedia = Colors.green;
+        final mediaFormated = data.mediaAvaliacoes;
+        if (mediaFormated < 6) {
+          corMedia = Colors.redAccent;
+        }
+        String mediaValue = '$mediaFormated';
         return Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
               ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: corMedia,
+                  child: Text(
+                    mediaValue,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
                 title: Text(
                   data.disciplina,
-                  //style: new TextStyle(fontWeight: FontWeight.bold, height:1.5)
+                  style: new TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                trailing: Icon(Icons.keyboard_arrow_right),
+                subtitle: Text('Média aritmética'),
+                trailing: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: Colors.black,
+                ),
               ),
               notasLength == 0
                   ? Center(
@@ -193,22 +211,29 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                           Padding(
                             padding: EdgeInsets.all(5),
                           ),
+                          // FloatingActionButton(
+                          //     child: Icon(Icons.cloud_circle),
+                          //     onPressed: () {},
+                          //     backgroundColor: Colors.blue),
                           Icon(
                             Icons.error,
+                            color: Colors.blue,
                           ),
-                          Text('Não há notas'),
+                          Text(''),
+                          Text(
+                              'Nenhuma nota foi lançada para esta disciplina.'),
                         ],
                       ),
                     )
                   : Container(
-                      padding: EdgeInsets.only(top: 2.0),
+                      padding: EdgeInsets.only(top: 2.0, left: 40.0),
                       child: ListView.builder(
                         itemCount: notasLength,
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int indexn) {
                           final nota = data.notas[indexn];
-                          Color cor = Colors.green[300];
+                          Color cor = Colors.green;
                           final intValue = nota.valor;
                           if (intValue < 6) {
                             cor = Colors.redAccent;
@@ -222,6 +247,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                               child: Text(
                                 anotherValue,
                                 style: TextStyle(
+                                  fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                               ),
@@ -249,7 +275,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                           );
                         },
                       ),
-                    )
+                    ),
             ],
           ),
         );
@@ -259,6 +285,10 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody(context);
+    return new Scaffold(
+        appBar: AppBar(
+          title: Text("Notas"),
+        ),
+        body: _buildBody(context));
   }
 }

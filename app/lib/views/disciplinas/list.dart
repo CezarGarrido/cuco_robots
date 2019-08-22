@@ -171,31 +171,31 @@ class _DiscplinasState extends State<DisciplinasPage>
       itemCount: listDisc.length,
       itemBuilder: (BuildContext context, int index) {
         final data = listDisc[index];
-        return new Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundColor: Colors.blueAccent,
-                  child: new Icon(
-                    Icons.account_circle,
-                    color: Colors.white,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(data.disciplina),
-                      SizedBox(height: 8.0),
-                      Text('Secondary Text'),
-                    ],
-                  ),
-                ),
-              ],
-            ));
+  return Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          child: ListTile(
+            leading: CircleAvatar(
+               backgroundImage: AssetImage(
+               'https://github.com/JideGuru/FlutterCryptoUI/blob/master/assets/cm1.jpeg',
+               ),
+              radius: 25,
+            ),
+            title: Text(data.disciplina),
+            subtitle: Text('teste'),
+            trailing: Text('102112',
+              style: TextStyle(
+                color:
+                    Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
       },
     );
   }

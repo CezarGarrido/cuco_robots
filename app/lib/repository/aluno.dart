@@ -25,7 +25,7 @@ class AlunoRepository {
       );
       var res = json.decode(utf8.decode(response.bodyBytes));
       if (response.statusCode != 200) {
-        final String err = res['error_message'];
+        final String err = res['message'];
         throw ('$err');
       } else {
         var token = parseJwt(res);

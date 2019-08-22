@@ -12,25 +12,25 @@ import 'package:app/views/notas/list.dart';
 AlunoRepository _alunoRepository = AlunoRepository();
 
 Future<void> main() async {
-  migrate.runMigrate();
-  initializeDateFormatting("pt_BR", null);
+  initializeDateFormatting("pt_BR", null).then((onValue) async {
+    migrate.runMigrate();
+    Widget _defaultHome = new LoginPage();
 
-  Widget _defaultHome = new LoginPage();
+    bool isLogado = await _alunoRepository.isLoggedIn();
+    if (isLogado) {
+      _defaultHome = new MyHomePage();
+    }
 
-  bool isLogado = await _alunoRepository.isLoggedIn();
-  if (isLogado) {
-    _defaultHome = new MyHomePage();
-  }
-
-  runApp(new MaterialApp(
-    title: 'App',
-    debugShowCheckedModeBanner: false,
-    home: _defaultHome,
-    routes: <String, WidgetBuilder>{
-      "/app": (BuildContext context) => new MyHomePage(),
-      "/login": (BuildContext context) => new LoginPage(),
-    },
-  ));
+    runApp(new MaterialApp(
+      title: 'App',
+      debugShowCheckedModeBanner: false,
+      home: _defaultHome,
+      routes: <String, WidgetBuilder>{
+        "/app": (BuildContext context) => new MyHomePage(),
+        "/login": (BuildContext context) => new LoginPage(),
+      },
+    ));
+  });
 }
 
 class MyHomePage extends StatefulWidget {
@@ -39,46 +39,85 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  final menu = new Menu(
-    items: [
-      new MenuItem(
-        id: 'notas',
-        title: 'Notas',
-      ),
-      new MenuItem(
-        id: 'disciplinas',
-        title: 'Disciplinas',
-      ),
-      new MenuItem(
-        id: 'logout',
-        title: 'Sair',
-      ),
-    ],
-  );
-
-  var selectedMenuItemId = 'notas';
-  var activeScreen = notasScreen;
-
   @override
   Widget build(BuildContext context) {
-    return new ZoomScaffold(
-      menuScreen: new MenuScreen(
-        menu: menu,
-        selectedItemId: selectedMenuItemId,
-        onMenuItemSelected: (String itemId) {
-          selectedMenuItemId = itemId;
-          if (itemId == 'disciplinas') {
-            setState(() => activeScreen = disciplinasScreen);
-          } else if (itemId == 'notas') {
-            setState(() => activeScreen = notasScreen);
-          } else if (itemId == 'logout') {
-            logout();
-          } else {
-            setState(() => activeScreen = notasScreen);
-          }
-        },
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text("Uems"),
       ),
-      contentScreen: activeScreen,
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text("Cezar Garrido Britez"),
+              accountEmail: Text("offline"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? Colors.blue
+                        : Colors.white,
+                child: Text(
+                  "C",
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.stars,color: Colors.blue,),
+              title: Text("Notas"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => Notas()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.school,color: Colors.blue,),
+              title: Text("Disciplinas"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => Notas()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.check_circle,color: Colors.blue,),
+              title: Text("Frequências"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => Notas()));
+              },
+            ),
+            ListTile(
+                leading: Icon(Icons.settings,color: Colors.blue,),
+                title: Text("Configurações"),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+            Divider(),
+            ListTile(
+                leading: Icon(Icons.insert_comment),
+                title: Text("Críticas ou Sugestões"),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+            ListTile(
+                leading: Icon(Icons.info),
+                title: Text("Sobre"),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+            ListTile(
+              title: Text("Sair"),
+              leading: Icon(Icons.power_settings_new),
+              onTap: () {
+                logout();
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
