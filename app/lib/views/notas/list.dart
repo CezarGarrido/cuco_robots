@@ -174,7 +174,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
         Color corMedia = Colors.green;
         final mediaFormated = data.mediaAvaliacoes;
         if (mediaFormated < 6) {
-          corMedia = Colors.redAccent;
+          corMedia = Colors.red;
         }
         String mediaValue = '$mediaFormated';
         return Padding(
@@ -184,6 +184,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: corMedia,
+                     radius: 25.0,
                   child: Text(
                     mediaValue,
                     style: TextStyle(
@@ -233,7 +234,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int indexn) {
                           final nota = data.notas[indexn];
-                          Color cor = Colors.green;
+                          Color cor = Colors.greenAccent;
                           final intValue = nota.valor;
                           if (intValue < 6) {
                             cor = Colors.redAccent;
@@ -244,6 +245,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                           return ListTile(
                             leading: CircleAvatar(
                               backgroundColor: cor,
+                              radius: 20.0,
                               child: Text(
                                 anotherValue,
                                 style: TextStyle(

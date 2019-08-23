@@ -21,7 +21,7 @@ func CreateNotifications(client *onesignal.Client) string {
 	//playerID := "a5f1f696-550a-44ba-9ae7-9ad5f0f5414d" // invalid
 	//playerID := "bfb6f92a-ca46-4407-883a-db0e340c6947"
 	//playerID:="bfb6f92a-ca46-4407-883a-db0e340c6947"
-	playerID:="bfb6f92a-ca46-4407-883a-db0e340c6947"
+	playerID:="85f45a01-c429-4f57-adba-4e011078b17f"
 	
 	notificationReq := &onesignal.NotificationRequest{
 		AppID:           appID,
@@ -64,8 +64,8 @@ func main() {
 	client := onesignal.NewClient(nil)
 	//11872906087d4a7a30fa9bc711cb19743b05d43faeddd984c9cb799e7aad35fc
 	//client.AppKey = "NWVkNzFjZjktOWE4Yy00NzUxLWJmMzgtOWNkNjA1YTczYWE0"
-	client.AppKey = "Yjc5YjlhMjMtOGU0MC00ZGYwLWJmNTctYzZkZGMwYTc0ZTE1"
-	//client.AppKey = "NTI1ODdhODktNGNjYS00MTkzLWI3MWQtNGM2NGIyMDAyYmVj"
+	//client.AppKey = "Yjc5YjlhMjMtOGU0MC00ZGYwLWJmNTctYzZkZGMwYTc0ZTE1"
+	client.AppKey = "NTI1ODdhODktNGNjYS00MTkzLWI3MWQtNGM2NGIyMDAyYmVj" //android
 	//client.UserKey = "11872906087d4a7a30fa9bc711cb19743b05d43faeddd984c9cb799e7aad35fc"
 	CreateNotifications(client)
 	// Output:
