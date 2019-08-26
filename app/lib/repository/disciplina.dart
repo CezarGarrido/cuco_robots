@@ -25,7 +25,7 @@ class DisciplinaRepository {
         var list =
             json.decode(utf8.decode(response.bodyBytes)) as List<dynamic>;
         if (list == null || list.length <= 0) {
-          return await _getDisciplinas();
+          return await getDisciplinasDB();
         }
         var disciplinas = new List<Disciplina>();
         for (Map<String, dynamic> item in list) {
@@ -33,13 +33,13 @@ class DisciplinaRepository {
           _save(disciplina);
           disciplinas.add(disciplina);
         }
-        return await _getDisciplinas();
+        return await getDisciplinasDB();
       } else {
-        return await _getDisciplinas();
+        return await getDisciplinasDB();
       }
     } catch (_) {
       print('not connected');
-      return await _getDisciplinas();
+      return await getDisciplinasDB();
     }
   }
 
@@ -76,7 +76,7 @@ class DisciplinaRepository {
     return result;
   }
 
-  Future<List<Disciplina>> _getDisciplinas() async {
+  Future<List<Disciplina>> getDisciplinasDB() async {
     var db = await conexao.db;
     var result = await db.rawQuery('SELECT * FROM aluno_disciplinas');
     var disciplinas = new List<Disciplina>();

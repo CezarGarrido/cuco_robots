@@ -1,3 +1,8 @@
+import 'contato.dart';
+import 'endereco.dart';
+
+
+
 class Aluno {
   int id;
   String guid;
@@ -18,8 +23,8 @@ class Aluno {
   String rgOrgaoEmissor;
   String rgEstadoEmissor;
   String rgDataEmissao;
-  Null contatos;
-  Null enderecos;
+  List<Contato> contatos;
+  List<Endereco> enderecos;
   String createdAt;
   String updatedAt;
 
@@ -68,6 +73,18 @@ class Aluno {
     rgOrgaoEmissor = json['rg_orgao_emissor'];
     rgEstadoEmissor = json['rg_estado_emissor'];
     rgDataEmissao = json['rg_data_emissao '];
+    if (json['contatos'] != null) {
+      contatos = new List<Contato>();
+      json['contatos'].forEach((v) {
+        contatos.add(new Contato.fromJson(v));
+      });
+    }
+    if (json['enderecos'] != null) {
+      enderecos = new List<Endereco>();
+      json['enderecos'].forEach((v) {
+        enderecos.add(new Endereco.fromJson(v));
+      });
+    }
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -93,6 +110,12 @@ class Aluno {
     data['rg_orgao_emissor'] = this.rgOrgaoEmissor;
     data['rg_estado_emissor'] = this.rgEstadoEmissor;
     data['rg_data_emissao '] = this.rgDataEmissao;
+    if (this.contatos != null) {
+      data['contatos'] = this.contatos.map((v) => v.toJson()).toList();
+    }
+    if (this.enderecos != null) {
+      data['enderecos'] = this.enderecos.map((v) => v.toJson()).toList();
+    }
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:path/path.dart';
-//import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-//import 'dart:io';
 
 const initScript = [
   '''
@@ -83,7 +81,38 @@ CREATE TABLE if not exists aluno_notas (
     REFERENCES aluno_disciplinas(id)
     ON DELETE CASCADE
   );
-'''
+''',
+  '''
+CREATE TABLE IF NOT EXISTS aluno_contatos (
+	id integer primary key NOT NULL,
+	aluno_id integer NOT NULL,
+	tipo text NULL,
+	valor text NULL,
+	created_at timestamp NULL,
+	updated_at timestamp NULL,
+	CONSTRAINT aluno_contatos_aluno_id_fkey 
+  FOREIGN KEY (aluno_id) 
+  REFERENCES alunos(id) 
+  ON DELETE CASCADE
+);
+''',
+  '''
+CREATE TABLE if not exists aluno_enderecos (
+	id integer primary key NOT NULL,
+	aluno_id integer NOT NULL,
+	logradouro text NULL,
+	numero integer NULL,
+	complemento text NULL,
+	bairro text NULL,
+	cep text NULL,
+	cidade text NULL,
+	created_at timestamp NULL,
+	updated_at timestamp NULL,
+	CONSTRAINT aluno_enderecos_aluno_id_fkey 
+  FOREIGN KEY (aluno_id) 
+  REFERENCES alunos(id) 
+  ON DELETE CASCADE
+);'''
 ];
 const migrationScripts = [];
 

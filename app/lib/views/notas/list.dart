@@ -27,6 +27,25 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
     const Periodo(1, '1º Periodo'),
     const Periodo(2, '2º Periodo')
   ];
+  Future<Null> _loadListDB() async {
+    try {
+      List<Disciplina> listDisciplinas =
+          await _disciplinaRepository.getDisciplinasDB();
+      await new Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
+        setState(() {
+          listDisc = listDisciplinas;
+          _loadingFailed = false;
+          _dataLoaded();
+        });
+      }
+    } on TimeoutException catch (_) {
+      setState(() {
+        _loadingFailed = true;
+        _dataLoaded();
+      });
+    }
+  }
 
   Future<Null> _loadList() async {
     try {
@@ -65,6 +84,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
     selectedPeriodo = periodos[0];
     _loadingInProgress = true;
     _loadingFailed = false;
+    _loadListDB();
     _loadList();
     super.initState();
     controller =
@@ -171,7 +191,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
         if (data.notas != null) {
           notasLength = data.notas.length;
         }
-        Color corMedia = Colors.green;
+        Color corMedia = Colors.blue;
         final mediaFormated = data.mediaAvaliacoes;
         if (mediaFormated < 6) {
           corMedia = Colors.red;
@@ -234,7 +254,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int indexn) {
                           final nota = data.notas[indexn];
-                          Color cor = Colors.greenAccent;
+                          Color cor = Colors.blue;
                           final intValue = nota.valor;
                           if (intValue < 6) {
                             cor = Colors.redAccent;

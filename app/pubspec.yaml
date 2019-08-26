@@ -30,6 +30,7 @@ dependencies:
   flutter_screenutil: ^0.4.2
   font_awesome_flutter: ^8.0.1
   intl: ^0.15.8
+  url_launcher: ^5.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

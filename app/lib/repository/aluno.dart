@@ -7,6 +7,10 @@ import 'package:app/utils/secure_store.dart';
 import 'package:app/driver/database.dart';
 import 'package:app/constants.dart';
 import 'dart:io';
+import 'contato.dart';
+import 'endereco.dart';
+
+
 
 class AlunoRepository {
   Client client = Client();
@@ -49,7 +53,7 @@ class AlunoRepository {
 
   Future<int> save(Aluno aluno) async {
     var db = await conexao.db;
-    return await db.rawInsert(
+    var newId =  await db.rawInsert(
         "INSERT OR REPLACE INTO alunos (id, guid, nome, rgm, senha, curso, data_nascimento, sexo, nome_pai, nome_mae, estado_civil, nacionalidade,naturalidade, fenotipo, cpf, rg, rg_orgao_emissor, rg_estado_emissor, rg_data_emissao , created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           aluno.id,
@@ -74,6 +78,15 @@ class AlunoRepository {
           aluno.createdAt,
           aluno.updatedAt
         ]);
+
+      aluno.contatos.forEach((contato) async {
+         await ContatoRepository().save(contato);
+      });
+      aluno.enderecos.forEach((endereco) async {
+       await EnderecoRepository().save(endereco);
+      });
+
+      return newId;
   }
 
   Future<bool> isLoggedIn() async {
