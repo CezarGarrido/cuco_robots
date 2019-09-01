@@ -81,6 +81,16 @@ type Nota struct {
 	Valor     string
 }
 
+type Falta struct {
+	Materia     string
+	Mes         string
+	Frequencias []Frequencia
+}
+type Frequencia struct {
+	Dia   string
+	Falta string
+}
+
 func NewSetCookieClient(cookies []*http.Cookie) (Client, error) {
 	client := Client{}
 	cookieJar, err := cookiejar.New(nil)
@@ -311,8 +321,6 @@ func parserAluno(html string) (*Aluno, error) {
 	enderecos, _ := parserEnderecosAluno(html)
 	aluno.Enderecos = enderecos
 
-	//fmt.Println(contatos)
-
 	return aluno, nil
 }
 
@@ -436,7 +444,6 @@ func parserNotas(html string) (Detalhes, error) {
 	var nota Nota
 	var notas []Nota
 	doc.Find("table.event_form").Each(func(index int, tablehtml *goquery.Selection) {
-		//		fmt.Println("index event_form", index)
 		tablehtml.Find("tr").Each(func(indextr int, rowhtml *goquery.Selection) {
 			band, ok := rowhtml.Attr("id")
 			if ok {
@@ -611,6 +618,67 @@ func checkLoginError(html string) (string, bool) {
 		isLoggged = false
 	})
 	return msg, isLoggged
+}
+
+func (c Client) FindFaltas(disciplina string) ([]*Falta, error) {
+	//https://sistemas.uems.br/academico/dcu004.php
+	/*
+		event: faltas
+		list[matricula_aluno_turma.codigo]: 1391920
+
+	*/
+	param := url.Values{}
+	param.Add("event", "faltas")
+	param.Add("list[matricula_aluno_turma.codigo]", disciplina)
+
+	req, err := http.NewRequest("POST", "https://sistemas.uems.br/academico/dcu004.php", strings.NewReader(param.Encode()))
+
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := c.Conn.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return parserFaltas(string(body))
+}
+
+func parserFaltas(html string) ([]*Falta, error) {
+	faltas := make([]*Falta, 0)
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return faltas, err
+	}
+	doc.Find("table.event_list").Each(func(indexTable int, tablehtml *goquery.Selection) {
+		falta := &Falta{}
+		tablehtml.Find("thead tr th").Each(func(indexThead int, thead *goquery.Selection) {
+			if indexThead == 0 {
+				mes := strings.Split(thead.Text(), ":")[1]
+				falta.Mes = strings.Join(strings.Fields(mes), " ")
+			}
+		})
+		frequencia := Frequencia{}
+		tablehtml.Find("tbody tr").Each(func(indexTrbody int, trbody *goquery.Selection) {
+			trbody.Find("td").Each(func(indexTdbody int, tdbody *goquery.Selection) {
+				if indexTrbody == 0 {
+					if indexTdbody > 0 {
+						frequencia.Dia = tdbody.Text()
+						falta.Frequencias = append(falta.Frequencias, frequencia)
+					}
+				}
+				if indexTrbody == 1 {
+					falta.Frequencias[indexTdbody].Falta = tdbody.Text()
+				}
+			})
+		})
+		faltas = append(faltas, falta)
+	})
+	return faltas, nil
 }
 
 //isPhoneNumber: verifica se uma string é um numero de telefone valido

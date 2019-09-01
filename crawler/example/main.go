@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,6 +21,17 @@ func main() {
 	}
 	fmt.Println("# Login Efetuado")
 	fmt.Println("# Buscando dados do aluno")
+	falta, err := client.FindFaltas("1391920")
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	b, err := json.Marshal(falta)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(b))
 	/*aluno, err := client.FindAluno()
 	if err != nil {
 		fmt.Printf("Error: %s", err)
@@ -31,9 +43,9 @@ func main() {
 		return
 	}
 	fmt.Println(string(b))*/
-	for _, c := range client.GetCookies() {
-		fmt.Println(c.Name, c.Value, c.Path, c.Domain)
-	}
+	//for _, c := range client.GetCookies() {
+	//	fmt.Println(c.Name, c.Value, c.Path, c.Domain)
+	//	}
 	//reqCookie(client.GetCookies())
 
 	/*disciplinas, err := client.FindDisciplinas()
