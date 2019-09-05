@@ -20,8 +20,9 @@ import (
 )
 
 type Client struct {
-	BaseURL string
-	Conn    *http.Client
+	Expirado bool
+	BaseURL  string
+	Conn     *http.Client
 }
 type Detalhes struct {
 	Unidade                string
@@ -88,7 +89,7 @@ type Falta struct {
 }
 type Frequencia struct {
 	Dia   string
-	Falta string
+	Valor string
 }
 
 func NewSetCookieClient(cookies []*http.Cookie) (Client, error) {
@@ -559,7 +560,28 @@ func (c Client) FindDisciplinas() ([]*Disciplina, error) {
 	if err != nil {
 		return nil, err
 	}
+	if string(body) == "Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta fun&ccedil;&atilde;o" {
+		c.Expirado = true
+	}
+	if string(body) == "Você não tem permissão para acessar esta função" {
+		c.Expirado = true
+	}
 	return parserDisciplinas(string(body))
+}
+
+func (c Client) ValidSession() bool {
+	req, _ := http.NewRequest("GET", "https://sistemas.uems.br/academico/dcu003.php", nil)
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, _ := c.Conn.Do(req)
+	body, _ := ioutil.ReadAll(resp.Body)
+	if string(body) == "Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta fun&ccedil;&atilde;o" {
+		return false
+	}
+	if string(body) == "Você não tem permissão para acessar esta função" {
+		return false
+	}
+	return true
 }
 
 func parserDisciplinas(html string) ([]*Disciplina, error) {
@@ -672,7 +694,7 @@ func parserFaltas(html string) ([]*Falta, error) {
 					}
 				}
 				if indexTrbody == 1 {
-					falta.Frequencias[indexTdbody].Falta = tdbody.Text()
+					falta.Frequencias[indexTdbody].Valor = tdbody.Text()
 				}
 			})
 		})

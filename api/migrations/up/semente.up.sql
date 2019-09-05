@@ -73,6 +73,7 @@ CREATE TABLE  IF NOT EXISTS cadastros.aluno_notas (
   id bigserial CONSTRAINT pk_id_aluno_nota primary key,
   aluno_id int8 not null,
   disciplina_id int8 not null,
+  periodo_letivo TEXT,
   descricao TEXT not null,
   valor numeric(18,2),
   created_at TIMESTAMP,
@@ -80,3 +81,14 @@ CREATE TABLE  IF NOT EXISTS cadastros.aluno_notas (
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE,
   FOREIGN KEY (disciplina_id) REFERENCES cadastros.aluno_disciplinas(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS cadastros.aluno_faltas (
+  id bigserial CONSTRAINT pk_id_aluno_falta primary key,
+  aluno_id int8 not null,
+  disciplina_id int8 not null,
+  periodo_letivo TEXT, 
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE,
+  FOREIGN KEY (disciplina_id) REFERENCES cadastros.aluno_disciplinas(id) ON DELETE CASCADE
+)

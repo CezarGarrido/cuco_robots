@@ -191,10 +191,10 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
         if (data.notas != null) {
           notasLength = data.notas.length;
         }
-        Color corMedia = Colors.blue;
+        Color corMedia = Colors.greenAccent;
         final mediaFormated = data.mediaAvaliacoes;
         if (mediaFormated < 6) {
-          corMedia = Colors.red;
+          corMedia = Colors.redAccent;
         }
         String mediaValue = '$mediaFormated';
         return Padding(
@@ -216,7 +216,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                 title: Text(
                   data.disciplina,
                   style: new TextStyle(
-                    fontWeight: FontWeight.bold,
+                  //  fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text('Média aritmética'),
@@ -254,7 +254,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int indexn) {
                           final nota = data.notas[indexn];
-                          Color cor = Colors.blue;
+                          Color cor = Colors.lightGreen;
                           final intValue = nota.valor;
                           if (intValue < 6) {
                             cor = Colors.redAccent;

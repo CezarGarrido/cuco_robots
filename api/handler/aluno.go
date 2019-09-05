@@ -136,6 +136,7 @@ func (p *Aluno) Login(w http.ResponseWriter, r *http.Request) {
 			}
 			//_, _ = client.Logout()
 		}
+		
 		payload, err := p.repo.GetByLogin(ctx, creds.Rgm)
 		if err != nil {
 			log.Println(err.Error())

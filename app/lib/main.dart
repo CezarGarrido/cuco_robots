@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               leading: Icon(
                 Icons.check_circle,
               ),
-              title: Text("Frequências"),
+              title: Text("Faltas"),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(

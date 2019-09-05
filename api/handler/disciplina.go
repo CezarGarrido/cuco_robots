@@ -50,7 +50,7 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				Path:   "/",
 				Domain: "sistemas.uems.br",
 			}
-
+			fmt.Println(cookie.Name, cookie.Value)
 			cookies = append(cookies, cookie)
 			client, err := crawler.NewSetCookieClient(cookies)
 			if err != nil {
@@ -58,13 +58,40 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
+			if !client.ValidSession() {
+				client, err = crawler.NewClientCtx(ctx, creds.Rgm, creds.Senha)
+				if err != nil {
+					log.Println(err.Error())
+					utils.RespondWithError(w, 500, err.Error())
+					return
+				}
+				cookie := client.GetCookies()[0]
+				fmt.Println(cookie.Value, cookie.Name)
+				hoje := time.Now()
+				newSessao := &entities.Sessao{
+					QtdeLogin:   1,
+					QtdeRequest: 1,
+					CookieName:  cookie.Name,
+					CookieValue: cookie.Value,
+					CreatedAt:   hoje,
+					UpdatedAt:   &hoje,
+				}
+				newSessao.AlunoID = creds.ID
+
+				err = p.sessao.Commit(ctx, newSessao)
+				if err != nil {
+					log.Println(err.Error())
+					utils.RespondWithError(w, 500, "Erro interno do sistema")
+					return
+				}
+			}
 			aux_disciplinas, err := client.FindDisciplinas()
 			if err != nil {
 				log.Println(err.Error())
 				utils.RespondWithError(w, 500, "Sistema indisponivel")
 				return
 			}
-
+			fmt.Println(aux_disciplinas)
 			for _, disciplina := range aux_disciplinas {
 				isExists, err := p.repo.IsExiste(ctx, creds.Aluno.ID, disciplina.UemsID)
 				if err != nil {
@@ -259,7 +286,6 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 				}
-
 			}
 			fmt.Println("disciplinas")
 			disciplinas, err := p.repo.GetByAlunoID(ctx, creds.Aluno.ID)
@@ -271,7 +297,6 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(disciplinas)
 			t = disciplinas
 		}
-
 		utils.RespondwithJSON(w, 200, t)
 	}
 }
