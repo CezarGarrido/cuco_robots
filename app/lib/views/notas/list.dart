@@ -204,7 +204,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: corMedia,
-                     radius: 25.0,
+                     radius: 30.0,
                   child: Text(
                     mediaValue,
                     style: TextStyle(
