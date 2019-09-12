@@ -194,21 +194,22 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
         Color corMedia = Colors.greenAccent;
         final mediaFormated = data.mediaAvaliacoes;
         if (mediaFormated < 6) {
-          corMedia = Colors.redAccent;
+          corMedia = Color(0xFFF25961);
         }
         String mediaValue = '$mediaFormated';
         return Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
+              index > 0 ? Divider() : Text(''),
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: corMedia,
-                     radius: 30.0,
+                  radius: 30.0,
                   child: Text(
                     mediaValue,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
@@ -216,14 +217,14 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                 title: Text(
                   data.disciplina,
                   style: new TextStyle(
-                  //  fontWeight: FontWeight.bold,
-                  ),
+                      //  fontWeight: FontWeight.bold,
+                      ),
                 ),
                 subtitle: Text('Média aritmética'),
-                trailing: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.black,
-                ),
+                // trailing: Icon(
+                //   Icons.keyboard_arrow_right,
+                //   color: Colors.black,
+                // ),
               ),
               notasLength == 0
                   ? Center(
@@ -236,13 +237,20 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                           //     child: Icon(Icons.cloud_circle),
                           //     onPressed: () {},
                           //     backgroundColor: Colors.blue),
-                          Icon(
-                            Icons.error,
-                            color: Colors.blue,
-                          ),
+                          // Icon(
+                          //   Icons.error,
+                          //   color: Colors.blue,
+                          // ),
                           Text(''),
+                          //#6c757d!important
                           Text(
-                              'Nenhuma nota foi lançada para esta disciplina.'),
+                            'Nenhuma nota foi lançada para esta disciplina.',
+                            style: TextStyle(
+                              //fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
                         ],
                       ),
                     )
@@ -254,11 +262,14 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int indexn) {
                           final nota = data.notas[indexn];
-                          Color cor = Colors.lightGreen;
+                          Color cor = Color(0xFF31CE36);
                           final intValue = nota.valor;
-                          if (intValue < 6) {
-                            cor = Colors.redAccent;
+                          if (intValue > 4 && intValue < 6) {
+                            cor = Color(0xFFFFAD46); //LARANJA
+                          } else if (intValue < 4) {
+                            cor = Color(0xFFF25961);
                           }
+                          //ffad46
                           String anotherValue = '$intValue';
                           DateTime dataAtualizada =
                               DateTime.parse(nota.updatedAt);
@@ -309,6 +320,7 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF1572E8),
           title: Text("Notas"),
         ),
         body: _buildBody(context));

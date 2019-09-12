@@ -12,6 +12,8 @@ import 'package:app/views/aluno/perfil.dart';
 import 'package:app/views/about/about.dart';
 import 'package:app/repository/disciplina.dart';
 import 'package:app/entities/disciplina.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'dart:math';
 
 //void main() => runApp(new MyApp());
 AlunoRepository _alunoRepository = AlunoRepository();
@@ -34,7 +36,7 @@ Future<void> main() async {
       routes: <String, WidgetBuilder>{
         "/app": (BuildContext context) => new MyHomePage(),
         "/login": (BuildContext context) => new LoginPage(),
-        "/perfil":(BuildContext context)=> new ContactsDemo(),
+        "/perfil": (BuildContext context) => new ContactsDemo(),
       },
     ));
   });
@@ -59,8 +61,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       });
     }
   }
+
   Future<Null> sincronize() async {
-     await _disciplinaRepository.getDisciplinas();
+    await _disciplinaRepository.getDisciplinas();
   }
 
   @override
@@ -74,20 +77,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF1572E8),
         title: Text("Inicio"),
       ),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xFF1572E8),
+              ),
               accountName: Text(nomeAluno),
               accountEmail: Text("offline"),
               currentAccountPicture: CircleAvatar(
                 backgroundColor:
                     Theme.of(context).platform == TargetPlatform.iOS
-                        ? Colors.blue
+                        ? Color(0xFF1572E8)
                         : Colors.white,
-                child:  Center( // Replace with a Row for horizontal icon + text
+                child: Center(
+                  // Replace with a Row for horizontal icon + text
                   child: Icon(Icons.photo_camera, color: Colors.grey),
                 ),
               ),
@@ -132,8 +140,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 title: Text("Configurações"),
                 onTap: () {
                   Navigator.pop(context);
-                                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => ContactsDemo()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => ContactsDemo()));
                 }),
             Divider(),
             ListTile(
@@ -158,6 +166,27 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
+      body: new Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: new Column(children: <Widget>[
+            new Card(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                new ListTile(
+                  // leading: Icon(Icons.album),
+                  title: Text('Suas notas'),
+                  subtitle: Text('Em breve...'),
+                ),
+                new SizedBox(
+                    height: 250.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new SimpleBarChart.withRandomData(),
+                    )),
+              ],
+            ))
+          ])),
     );
   }
 
@@ -168,4 +197,93 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     });
   }
+}
+
+class SimpleBarChart extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  SimpleBarChart(this.seriesList, {this.animate});
+
+  /// Creates a [BarChart] with sample data and no transition.
+  factory SimpleBarChart.withSampleData() {
+    return new SimpleBarChart(
+      _createSampleData(),
+      // Disable animations for image tests.
+      animate: false,
+    );
+  }
+
+  // EXCLUDE_FROM_GALLERY_DOCS_START
+  // This section is excluded from being copied to the gallery.
+  // It is used for creating random series data to demonstrate animation in
+  // the example app only.
+  factory SimpleBarChart.withRandomData() {
+    return new SimpleBarChart(_createRandomData());
+  }
+
+  /// Create random data.
+  static List<charts.Series<OrdinalSales, String>> _createRandomData() {
+    final random = new Random();
+
+    final data = [
+      new OrdinalSales('Bio', random.nextInt(100)),
+      new OrdinalSales('Hist', random.nextInt(100)),
+      new OrdinalSales('Quim', random.nextInt(100)),
+      new OrdinalSales('Port', random.nextInt(100)),
+      new OrdinalSales('Mat', random.nextInt(100)),
+      new OrdinalSales('Geo', random.nextInt(100)),
+    ];
+
+    return [
+      new charts.Series<OrdinalSales, String>(
+          id: 'Notas',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (OrdinalSales sales, _) => sales.year,
+          measureFn: (OrdinalSales sales, _) => sales.sales,
+          data: data,
+          labelAccessorFn: (OrdinalSales sales, _) =>
+              '${sales.sales.toString()}%')
+    ];
+  }
+  // EXCLUDE_FROM_GALLERY_DOCS_END
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.BarChart(
+      seriesList,
+      animate: animate,
+      barRendererDecorator: new charts.BarLabelDecorator<String>(),
+      domainAxis: new charts.OrdinalAxisSpec(),
+    );
+  }
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
+    final data = [
+      new OrdinalSales('2014', 5),
+      new OrdinalSales('2015', 25),
+      new OrdinalSales('2016', 100),
+      new OrdinalSales('2017', 75),
+    ];
+
+    return [
+      new charts.Series<OrdinalSales, String>(
+          id: 'Notas',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (OrdinalSales sales, _) => sales.year,
+          measureFn: (OrdinalSales sales, _) => sales.sales,
+          data: data,
+          labelAccessorFn: (OrdinalSales sales, _) =>
+              '${sales.sales.toString()}%')
+    ];
+  }
+}
+
+/// Sample ordinal data type.
+class OrdinalSales {
+  final String year;
+  final int sales;
+
+  OrdinalSales(this.year, this.sales);
 }

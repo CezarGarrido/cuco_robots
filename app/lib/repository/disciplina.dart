@@ -88,3 +88,8 @@ class DisciplinaRepository {
     return disciplinas;
   }
 }
+
+class DisciplinaChart {
+  String descricao;
+  double valor;
+}
