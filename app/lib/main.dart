@@ -10,6 +10,7 @@ import 'package:app/views/disciplinas/list.dart';
 import 'package:app/views/notas/list.dart';
 import 'package:app/views/aluno/perfil.dart';
 import 'package:app/views/about/about.dart';
+import 'package:app/views/faltas/faltas.dart';
 import 'package:app/repository/disciplina.dart';
 import 'package:app/entities/disciplina.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -130,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Notas()));
+                    builder: (BuildContext context) => FaltasView()));
               },
             ),
             ListTile(

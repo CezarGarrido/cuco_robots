@@ -16,6 +16,7 @@ type AlunoDisciplinaRepo interface {
 	Create(ctx context.Context, alunoDisciplina *entities.AlunoDisciplina) (int64, error)
 	Update(ctx context.Context, alunoDisciplina *entities.AlunoDisciplina) (*entities.AlunoDisciplina, error)
 	GetByUemsID(ctx context.Context, alunoID, uems_id int64) (*entities.AlunoDisciplina, error)
+	GetByID(ctx context.Context, aluno_id, id int64) (*entities.AlunoDisciplina, error)
 }
 
 // NewSQLAlunoDisciplinaRepo retunrs implement of AlunoDisciplina repository interface
@@ -27,6 +28,20 @@ type mysqlAlunoDisciplinaRepo struct {
 	Conn *sql.DB
 }
 
+func (m *mysqlAlunoDisciplinaRepo) GetByID(ctx context.Context, aluno_id, id int64) (*entities.AlunoDisciplina, error) {
+	query := "SELECT id, aluno_id, uems_id, unidade, curso, disciplina, turma, serie_disciplina, carga_horaria_presencial, maximo_faltas, periodo_letivo, professor, media_avaliacoes, optativa, exame, media_final, faltas, situacao, created_at, updated_at FROM cadastros.aluno_disciplinas WHERE aluno_id=$1 and id=$2"
+	rows, err := m.fetch(ctx, query, aluno_id, id)
+	if err != nil {
+		return nil, err
+	}
+	payload := &entities.AlunoDisciplina{}
+	if len(rows) > 0 {
+		payload = rows[0]
+	} else {
+		return nil, errors.New("Disciplina não encontada.")
+	}
+	return payload, nil
+}
 func (m *mysqlAlunoDisciplinaRepo) Create(ctx context.Context, alunoDisciplina *entities.AlunoDisciplina) (int64, error) {
 	query := `INSERT INTO cadastros.aluno_disciplinas (aluno_id, uems_id, unidade, curso, disciplina, turma, serie_disciplina, carga_horaria_presencial, maximo_faltas, periodo_letivo, professor, media_avaliacoes, optativa, exame, media_final, faltas, situacao, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING id`
 	stmt, err := m.Conn.PrepareContext(ctx, query)

@@ -112,7 +112,27 @@ CREATE TABLE if not exists aluno_enderecos (
   FOREIGN KEY (aluno_id) 
   REFERENCES alunos(id) 
   ON DELETE CASCADE
-);'''
+);''',
+  '''
+CREATE TABLE IF NOT EXISTS aluno_frequencia (
+  id bigserial CONSTRAINT pk_id_aluno_frequencia primary key,
+  aluno_id int8 not null,
+  disciplina_id int8 not null,
+  mes TEXT not null,
+  dia int not null,
+  valor TEXT not null, 
+  created_at TIMESTAMP NULL,
+  updated_at TIMESTAMP NULL,
+  CONSTRAINT aluno_frequencia_aluno_id_fkey 
+  FOREIGN KEY (aluno_id) 
+  REFERENCES alunos(id) 
+  ON DELETE CASCADE,
+  CONSTRAINT aluno_frequencia_disciplina_id_fkey 
+  FOREIGN KEY (disciplina_id) 
+  REFERENCES aluno_disciplinas(id) 
+  ON DELETE CASCADE
+)
+'''
 ];
 const migrationScripts = [];
 

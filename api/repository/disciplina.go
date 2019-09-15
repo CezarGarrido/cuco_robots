@@ -12,6 +12,7 @@ import (
 type DisciplinaRepo interface {
 	//Fetch(ctx context.Context, num int64) ([]*entities.Contato, error)
 	GetByUemsID(ctx context.Context, aluno_id int64) (*entities.Disciplina, error)
+	GetByID(ctx context.Context, aluno_id, id int64) (*entities.Disciplina, error)
 	Create(ctx context.Context, p *entities.Disciplina) (int64, error)
 	//Update(ctx context.Context, p *entities.Contato) (*entities.Contato, error)
 	//Delete(ctx context.Context, id int64) (bool, error)
@@ -28,6 +29,20 @@ type postgresDisciplinaRepo struct {
 	Conn *sql.DB
 }
 
+func (m *postgresDisciplinaRepo) GetByID(ctx context.Context, aluno_id, id int64) (*entities.Disciplina, error) {
+	query := "SELECT id, uems_id, descricao, oferta, created_at, updated_at FROM cadastros.disciplinas WHERE aluno_id=$1 and id=$2"
+	rows, err := m.fetch(ctx, query, aluno_id, id)
+	if err != nil {
+		return nil, err
+	}
+	payload := &entities.Disciplina{}
+	if len(rows) > 0 {
+		payload = rows[0]
+	} else {
+		return nil, errors.New("Disciplina não encontada.")
+	}
+	return payload, nil
+}
 func (m *postgresDisciplinaRepo) GetByUemsID(ctx context.Context, uems_id int64) (*entities.Disciplina, error) {
 	query := "SELECT id, uems_id, descricao, oferta, created_at, updated_at FROM cadastros.disciplinas WHERE id IS $1"
 	rows, err := m.fetch(ctx, query, uems_id)

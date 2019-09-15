@@ -37,10 +37,12 @@ func main() {
 	}
 	alunoHandler := appHandler.NewAluno(connection)
 	disciplinaHandler := appHandler.NewAlunoDisciplina(connection)
+	frequenciaHandler := appHandler.NewFrequencia(connection)
 	r := mux.NewRouter()
 	
 	r.HandleFunc("/api/v1/login", alunoHandler.Login).Methods("POST")
 	r.HandleFunc("/api/v1/disciplinas", disciplinaHandler.Fetch).Methods("GET")
+	r.HandleFunc("/api/v1/frequencia/disciplina/{id:[0-9]+}", frequenciaHandler.Fetch).Methods("GET")
 
 	headersOk := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})

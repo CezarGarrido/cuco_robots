@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:app/repository/disciplina.dart';
-import 'package:app/entities/disciplina.dart';
+import 'package:app/repository/frequencia.dart';
+import 'package:app/entities/frequencia.dart';
+import 'package:app/utils/collection.dart';
 
-class Notas extends StatefulWidget {
+class FaltasView extends StatefulWidget {
   @override
-  _NotasState createState() => _NotasState();
+  _FaltasState createState() => _FaltasState();
 }
 
 class Periodo {
@@ -15,26 +16,41 @@ class Periodo {
   final int id;
 }
 
-DisciplinaRepository _disciplinaRepository = DisciplinaRepository();
+FrequenciaRepository _frequenciaRepository = FrequenciaRepository();
 
-class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
-  List<Disciplina> listDisc = List();
+class _FaltasState extends State<FaltasView>
+    with SingleTickerProviderStateMixin {
+  List<Frequencia> listDisc = List();
+  var listaPorMes = List();
+
   AnimationController controller;
   bool _loadingInProgress;
   bool _loadingFailed;
   Periodo selectedPeriodo;
+
   List<Periodo> periodos = <Periodo>[
     const Periodo(1, '1º Periodo'),
     const Periodo(2, '2º Periodo')
   ];
+
   Future<Null> _loadListDB() async {
     try {
-      List<Disciplina> listDisciplinas =
-          await _disciplinaRepository.getDisciplinasDB();
+      List<Frequencia> listDisciplinas =
+          await _frequenciaRepository.getFrequenciasDB(62);
       await new Future.delayed(const Duration(seconds: 1));
       if (mounted) {
         setState(() {
           listDisc = listDisciplinas;
+          listaPorMes = [
+            {
+              "Fevereiro": listDisc
+                  .where((o) => o.mes == "Fevereiro")
+                  .toList()
+                  .map((f) => {"dia": f.dia, "valor": f.valor})
+                  .toList()
+            },
+          ];
+
           _loadingFailed = false;
           _dataLoaded();
         });
@@ -49,12 +65,23 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
 
   Future<Null> _loadList() async {
     try {
-      List<Disciplina> listDisciplinas =
-          await _disciplinaRepository.getDisciplinas();
+      List<Frequencia> listDisciplinas =
+          await _frequenciaRepository.getFrequenciasApi(62);
       await new Future.delayed(const Duration(seconds: 1));
       if (mounted) {
         setState(() {
           listDisc = listDisciplinas;
+
+          listaPorMes = [
+            {
+              "Fevereiro": listDisc
+                  .where((o) => o.mes == "Fevereiro")
+                  .toList()
+                  .map((f) => {"dia": f.dia, "valor": f.valor})
+                  .toList()
+            },
+          ];
+
           _loadingFailed = false;
           _dataLoaded();
         });
@@ -184,113 +211,66 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
 
   Widget _buildListview(BuildContext context) {
     return ListView.builder(
-      itemCount: listDisc.length,
+      itemCount: listaPorMes.length,
       itemBuilder: (BuildContext context, int index) {
-        final data = listDisc[index];
-        int notasLength = 0;
-        if (data.notas != null) {
-          notasLength = data.notas.length;
+
+        teste(listDisc);
+
+        final mes = listaPorMes[index]["Fevereiro"];
+        int faltasLength = 0;
+        if (mes != null) {
+          faltasLength = mes.length;
         }
-        Color corMedia = Colors.greenAccent;
-        final mediaFormated = data.mediaAvaliacoes;
-        if (mediaFormated < 6) {
-          corMedia = Color(0xFFF25961);
-        }
-        String mediaValue = '$mediaFormated';
+
         return Padding(
-          padding: EdgeInsets.all(0.0),
+          padding: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              index > 0 ? Padding(padding: new EdgeInsets.only(left: 30.0, right:0.0),child:Divider(), ) : Text(''),
+              index > 0 ? Divider() : Text(''),
               ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: corMedia,
-                  radius: 30.0,
-                  child: Text(
-                    mediaValue,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
                 title: Text(
-                  data.disciplina,
+                  "Fevereiro",
                   style: new TextStyle(
                       //  fontWeight: FontWeight.bold,
                       ),
                 ),
-                subtitle: Text('Média aritmética'),
+                subtitle: Text(""),
                 // trailing: Icon(
                 //   Icons.keyboard_arrow_right,
                 //   color: Colors.black,
                 // ),
               ),
-              notasLength == 0
-                  ? Center(
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(5),
+              Container(
+                padding: EdgeInsets.only(top: 2.0, left: 40.0),
+                child: ListView.builder(
+                  itemCount: faltasLength,
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int indexn) {
+                    final data = mes[indexn];
+                    //print("# data");
+                    var dia = data["dia"] as int;
+                    var valor = data["valor"] as String;
+
+                    //int dia = data.dia;
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.red,
+                        radius: 20.0,
+                        child: Text(
+                          "$valor",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          // FloatingActionButton(
-                          //     child: Icon(Icons.cloud_circle),
-                          //     onPressed: () {},
-                          //     backgroundColor: Colors.blue),
-                          // Icon(
-                          //   Icons.error,
-                          //   color: Colors.blue,
-                          // ),
-                          Text(''),
-                          //#6c757d!important
-                          Text(
-                            'Nenhuma nota foi lançada para esta disciplina.',
-                            style: TextStyle(
-                              //fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
-                              color: Color(0xFF6C757D),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    )
-                  : Container(
-                      padding: EdgeInsets.only(top: 0.0, left: 40.0),
-                      child: ListView.builder(
-                        itemCount: notasLength,
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (BuildContext context, int indexn) {
-                          final nota = data.notas[indexn];
-                          Color cor = Color(0xFF31CE36);
-                          final intValue = nota.valor;
-                          if (intValue > 4 && intValue < 6) {
-                            cor = Color(0xFFFFAD46); //LARANJA
-                          } else if (intValue < 4) {
-                            cor = Color(0xFFF25961);
-                          }
-                          //ffad46
-                          String anotherValue = '$intValue';
-                          DateTime dataAtualizada =
-                              DateTime.parse(nota.updatedAt);
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: cor,
-                              radius: 20.0,
-                              child: Text(
-                                anotherValue,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            contentPadding: EdgeInsets.all(5.0),
-                            title: new Row(children: <Widget>[
-                              new Expanded(child: new Text(nota.descricao)),
-                              new Expanded(child: new Text('')),
-                              new Expanded(child: new Text('')),
-                              /*new Expanded(
+                      contentPadding: EdgeInsets.all(10.0),
+                      title: new Row(children: <Widget>[
+                        new Expanded(child: new Text("$valor")),
+                        // new Expanded(child: new Text('')),
+                        // new Expanded(child: new Text('')),
+                        /*new Expanded(
                                   child: new Text(
                                 new DateFormat.MMMd("pt_BR")
                                     .format(dataAtualizada),
@@ -298,17 +278,16 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
                                   fontSize: 12,
                                 ),
                               )),*/
-                            ]),
-                            subtitle: Text(
-                              new DateFormat.MMMd("pt_BR")
-                                  .format(dataAtualizada),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        },
+                      ]),
+                      subtitle: Text(
+                        '$dia de ' + 'Fevereiro',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         );
@@ -321,8 +300,55 @@ class _NotasState extends State<Notas> with SingleTickerProviderStateMixin {
     return new Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF1572E8),
-          title: Text("Notas"),
+          title: Text("Faltas"),
         ),
         body: _buildBody(context));
   }
+}
+
+var meses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro"
+];
+
+class Filter {
+  String mes;
+  List faltas;
+}
+
+class Filtros {
+  List<Filter> frequencias;
+}
+
+void teste(List<Frequencia> array) {
+  List lista = new List();
+
+   print("array");
+  print(array);
+  for (var item in meses) {
+    List listaPorMes = [
+      {
+        item: array
+            .where((o) => o.mes == item)
+            .toList()
+            .map((f) => {"dia": f.dia, "valor": f.valor})
+            .toList()
+      },
+    ];
+    if(listaPorMes!=null){
+        lista.add(listaPorMes);
+    }
+    
+  }
+  print(lista);
 }
