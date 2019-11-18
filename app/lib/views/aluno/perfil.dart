@@ -109,7 +109,7 @@ enum AppBarBehavior { normal, pinned, floating, snapping }
 class ContactsDemoState extends State<ContactsDemo> {
   static final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
-  final double _appBarHeight = 256.0;
+  final double _appBarHeight = 180.0;
 
   AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   AlunoRepository _alunoRepository = AlunoRepository();
@@ -124,8 +124,9 @@ class ContactsDemoState extends State<ContactsDemo> {
   Future<Null> loadAluno() async {
     Aluno alunoDB = await _alunoRepository.getAluno();
     List<Contato> contatosdb = await _contatoRepository.getContatos(alunoDB.id);
-    List<Endereco> enderecosdb = await _enderecoRepository.getContatos(alunoDB.id);
-   // await new Future.delayed(const Duration(seconds: 1));
+    List<Endereco> enderecosdb =
+        await _enderecoRepository.getContatos(alunoDB.id);
+    // await new Future.delayed(const Duration(seconds: 1));
     if (mounted) {
       setState(() {
         aluno = alunoDB;
@@ -143,24 +144,23 @@ class ContactsDemoState extends State<ContactsDemo> {
 
   @override
   Widget build(BuildContext context) {
-
-    final contato_items = <Widget>[];
+    final contatoItems = <Widget>[];
     for (var i = 0; i < contatos.length; i++) {
-        contato_items.add(new _ContactItem(
-                        lines: <String>[
-                          contatos[i].valor,
-                          contatos[i].tipo,
-                        ],
-        ));
+      contatoItems.add(new _ContactItem(
+        lines: <String>[
+          contatos[i].valor,
+          contatos[i].tipo,
+        ],
+      ));
     }
-        final endereco_items = <Widget>[];
+    final enderecoItems = <Widget>[];
     for (var i = 0; i < enderecos.length; i++) {
-        endereco_items.add(new _ContactItem(
-                        lines: <String>[
-                          enderecos[i].cidade,
-                          "Cidade",
-                        ],
-        ));
+      enderecoItems.add(new _ContactItem(
+        lines: <String>[
+          enderecos[i].cidade,
+          "Cidade",
+        ],
+      ));
     }
     return Theme(
       data: ThemeData(
@@ -247,29 +247,28 @@ class ContactsDemoState extends State<ContactsDemo> {
               ),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-              <Widget>[
-                   AnnotatedRegion<SystemUiOverlayStyle>(
-                       value: SystemUiOverlayStyle.dark,
-                       child: _ContactCategory(
-                              icon: Icons.send,
-                              children: contato_items,
-                       )
-                   ),
-                   _ContactCategory(
-                              icon: Icons.location_on,
-                              children: endereco_items,
-                       ),
-                   _ContactCategory(
-                              icon: Icons.today,
-                              children: <Widget>[ _ContactItem(
-                        lines: <String>[
-                          aluno.dataNascimento != null? DateFormat.yMMMd("pt_BR")
-                                  .format(DateTime.parse(aluno.dataNascimento)):"Indefinido",
-                          "Aniversário",
-                        ],
-        ),]
-                   )
+              delegate: SliverChildListDelegate(<Widget>[
+                AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: SystemUiOverlayStyle.dark,
+                    child: _ContactCategory(
+                      icon: Icons.send,
+                      children: contatoItems,
+                    )),
+                _ContactCategory(
+                  icon: Icons.location_on,
+                  children: enderecoItems,
+                ),
+                _ContactCategory(icon: Icons.today, children: <Widget>[
+                  _ContactItem(
+                    lines: <String>[
+                      aluno.dataNascimento != null
+                          ? DateFormat.yMMMd("pt_BR")
+                              .format(DateTime.parse(aluno.dataNascimento))
+                          : "Indefinido",
+                      "Aniversário",
+                    ],
+                  ),
+                ])
               ]),
             ),
           ],

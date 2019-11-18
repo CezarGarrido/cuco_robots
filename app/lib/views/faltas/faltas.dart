@@ -335,6 +335,7 @@ void teste(List<Frequencia> array) {
 
    print("array");
   print(array);
+  
   for (var item in meses) {
     List listaPorMes = [
       {

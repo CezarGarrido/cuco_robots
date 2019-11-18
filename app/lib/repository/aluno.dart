@@ -14,6 +14,7 @@ import 'endereco.dart';
 
 class AlunoRepository {
   Client client = Client();
+
   ConexaoSqlite conexao = new ConexaoSqlite();
 
   Future<Aluno> login(String rgm, String senha) async {
@@ -33,8 +34,11 @@ class AlunoRepository {
         throw ('$err');
       } else {
         var token = parseJwt(res);
+
         var auxAluno = token["aluno"] as Map<String, dynamic>;
+        
         var aluno = new Aluno.fromJson(auxAluno);
+
         save(aluno);
         setSecureStore("jwt", res);
         return aluno;

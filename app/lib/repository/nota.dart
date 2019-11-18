@@ -8,8 +8,11 @@ class NotaRepository {
   ConexaoSqlite conexao = new ConexaoSqlite();
 
   Future<int> save(Nota nota) async {
+
     var db = await conexao.db;
+
     var result = await db.rawInsert(
+      
         "INSERT OR REPLACE INTO aluno_notas (id, disciplina_id, aluno_id, descricao, valor, created_at, updated_at) VALUES(?,?,?,?,?,?,?)",
         [
           nota.id,

@@ -2,9 +2,6 @@ import 'package:app/repository/aluno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:app/style/theme.dart' as Theme;
-import 'package:app/utils/bubble_indication_painter.dart';
-
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
 
@@ -57,7 +54,7 @@ class _LoginPageState extends State<LoginPage>
                 ? MediaQuery.of(context).size.height
                 : 775.0,
             decoration: new BoxDecoration(
-              color:Colors.blue ,//Color(0xff454dff), //Color(0xFF067BA5),
+              color: Colors.white, //Color(0xff454dff), //Color(0xFF067BA5),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -70,10 +67,6 @@ class _LoginPageState extends State<LoginPage>
                       fit: BoxFit.fill,
                       image: new AssetImage('assets/images/login_logo.png')),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(top: 20.0),
-                //   child: _buildMenuBar(context),
-                // ),
                 Expanded(
                   flex: 2,
                   child: PageView(
@@ -96,10 +89,6 @@ class _LoginPageState extends State<LoginPage>
                         constraints: const BoxConstraints.expand(),
                         child: _buildSignIn(context),
                       ),
-                      // new ConstrainedBox(
-                      //   constraints: const BoxConstraints.expand(),
-                      //   child: _buildSignUp(context),
-                      // ),
                     ],
                   ),
                 ),
@@ -159,14 +148,14 @@ class _LoginPageState extends State<LoginPage>
     }
     _scaffoldKey.currentState?.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
+      content: new Text(text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 16.0,)
-            //fontFamily: "WorkSansSemiBold"),
-      ),
+            fontSize: 16.0,
+          )
+          //fontFamily: "WorkSansSemiBold"),
+          ),
       backgroundColor: snackColor,
       duration: Duration(seconds: 3),
     ));
@@ -200,20 +189,20 @@ class _LoginPageState extends State<LoginPage>
                           controller: loginEmailController,
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
-                             // fontFamily: "WorkSansSemiBold",
+                              // fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                              size: 22.0,
-                            ),
-                            hintText: "Rgm",
-                            hintStyle: TextStyle()
-                               // fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          ),
+                              border: InputBorder.none,
+                              icon: Icon(
+                                FontAwesomeIcons.envelope,
+                                color: Colors.black,
+                                size: 22.0,
+                              ),
+                              hintText: "Rgm",
+                              hintStyle: TextStyle()
+                              // fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                              ),
                         ),
                       ),
                       Container(
@@ -241,8 +230,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Senha",
                             hintStyle: TextStyle(
-                               // fontFamily: "WorkSansSemiBold",
-                                 fontSize: 17.0),
+                                // fontFamily: "WorkSansSemiBold",
+                                fontSize: 17.0),
                             suffixIcon: GestureDetector(
                               onTap: _toggleLogin,
                               child: Icon(
@@ -264,8 +253,8 @@ class _LoginPageState extends State<LoginPage>
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 ),
                 child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    color: Colors.redAccent, //Theme.Colors.loginGradientEnd,
+                    // highlightColor: Colors.transparent,
+                    color: Colors.yellow, //Theme.Colors.loginGradientEnd,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: Padding(
@@ -275,18 +264,18 @@ class _LoginPageState extends State<LoginPage>
                             ? Text(
                                 "Login",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25.0,
-                                    //fontFamily: "WorkSansBold"
-                                    ),
+                                  color: Colors.black,
+                                  fontSize: 25.0,
+                                  //fontFamily: "WorkSansBold"
+                                ),
                               )
                             : Text(
                                 'Aguarde...',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25.0,
-                                   // fontFamily: "WorkSansBold"
-                                    ),
+                                  color: Colors.black,
+                                  fontSize: 25.0,
+                                  // fontFamily: "WorkSansBold"
+                                ),
                               )),
                     onPressed: () => _fazerLogin(context)),
               ),

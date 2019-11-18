@@ -12,9 +12,12 @@ class DisciplinaRepository {
   Client client = Client();
 
   ConexaoSqlite conexao = new ConexaoSqlite();
+  
   Future<List<Disciplina>> getDisciplinas() async {
     try {
+
       var key = await getSecureStore("jwt");
+
       Map<String, String> headers = {
         "Authorization": "Bearer " + key,
         'Content-Type': 'application/json; charset=utf-8'
@@ -24,14 +27,20 @@ class DisciplinaRepository {
       if (response.statusCode == 200) {
         var list =
             json.decode(utf8.decode(response.bodyBytes)) as List<dynamic>;
+
         if (list == null || list.length <= 0) {
           return await getDisciplinasDB();
         }
         var disciplinas = new List<Disciplina>();
+
         for (Map<String, dynamic> item in list) {
+
           Disciplina disciplina = new Disciplina.fromJson(item);
+
           _save(disciplina);
+
           disciplinas.add(disciplina);
+
         }
         return await getDisciplinasDB();
       } else {
@@ -79,6 +88,20 @@ class DisciplinaRepository {
   Future<List<Disciplina>> getDisciplinasDB() async {
     var db = await conexao.db;
     var result = await db.rawQuery('SELECT * FROM aluno_disciplinas');
+    var disciplinas = new List<Disciplina>();
+    for (Map<String, dynamic> item in result) {
+      var disciplina = new Disciplina.fromJson(item);
+      disciplina.notas = await NotaRepository().getNotas(disciplina.id);
+      disciplinas.add(disciplina);
+    }
+    return disciplinas;
+  }
+
+    Future<List<Disciplina>> getDisciplinasBySerie(String serie) async {
+    var db = await conexao.db;
+      var result = await db.query('aluno_disciplinas',
+        where: 'serie_disciplina = ?', whereArgs: [serie]);
+
     var disciplinas = new List<Disciplina>();
     for (Map<String, dynamic> item in result) {
       var disciplina = new Disciplina.fromJson(item);

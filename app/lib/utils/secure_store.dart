@@ -8,6 +8,7 @@ void setSecureStore(String key, String data) async {
       [key, data]);
 }
 
+
 Future<String> getSecureStore(String key) async {
   final conexao = new ConexaoSqlite();
   var db = await conexao.db;

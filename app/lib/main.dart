@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:app/views/login/login.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:app/driver/database.dart' as migrate;
+
 import 'package:app/repository/aluno.dart';
+
 import 'package:app/entities/aluno.dart';
 import 'package:app/views/disciplinas/list.dart';
 import 'package:app/views/notas/list.dart';
@@ -17,7 +19,9 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'dart:math';
 
 //void main() => runApp(new MyApp());
+
 AlunoRepository _alunoRepository = AlunoRepository();
+
 DisciplinaRepository _disciplinaRepository = DisciplinaRepository();
 
 Future<void> main() async {
@@ -49,6 +53,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Aluno aluno = new Aluno();
   var nomeAluno = "";
 
@@ -77,27 +83,50 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF1572E8),
-        title: Text("Inicio"),
-      ),
+          elevation: 0.5,
+          backgroundColor: Colors.white, //Color(0xFF1572E8),
+          title: Text(
+            "Notas",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              //fontSize: 14.0,
+              color: Colors.black,
+            ),
+          ),
+          automaticallyImplyLeading: true,
+          //`true` if you want Flutter to automatically add Back Button when needed,
+          //or `false` if you want to force your own back button every where
+
+          leading: IconButton(
+            color: Colors.black,
+            icon: Icon(Icons.menu),
+            onPressed: () => _scaffoldKey.currentState.openDrawer(),
+          )),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF1572E8),
+                color: Colors.white,
               ),
-              accountName: Text(nomeAluno),
-              accountEmail: Text("offline"),
+              accountName: Text(
+                nomeAluno,
+                style: new TextStyle(color: Colors.black),
+              ),
+              accountEmail: Text(
+                "",
+                style: new TextStyle(color: Colors.black),
+              ),
               currentAccountPicture: CircleAvatar(
                 backgroundColor:
                     Theme.of(context).platform == TargetPlatform.iOS
                         ? Color(0xFF1572E8)
-                        : Colors.white,
+                        : Colors.grey,
                 child: Center(
                   // Replace with a Row for horizontal icon + text
-                  child: Icon(Icons.photo_camera, color: Colors.grey),
+                  child: Icon(Icons.photo_camera, color: Colors.black),
                 ),
               ),
             ),
@@ -109,10 +138,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Notas()));
+                    builder: (BuildContext context) => MyHomePage()));
               },
             ),
-            ListTile(
+            /*ListTile(
               leading: Icon(
                 Icons.school,
               ),
@@ -120,10 +149,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Notas()));
+                    builder: (BuildContext context) => Disciplinas()));
               },
-            ),
-            ListTile(
+            ),*/
+            /*ListTile(
               leading: Icon(
                 Icons.check_circle,
               ),
@@ -133,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => FaltasView()));
               },
-            ),
+            ),*/
             ListTile(
                 leading: Icon(
                   Icons.settings,
@@ -167,7 +196,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
-      body: new Padding(
+      body: Notas(),
+      /* body: new Padding(
           padding: const EdgeInsets.all(8.0),
           child: new Column(children: <Widget>[
             new Card(
@@ -187,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     )),
               ],
             ))
-          ])),
+          ])),*/
     );
   }
 
