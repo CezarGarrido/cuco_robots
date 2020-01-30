@@ -14,7 +14,7 @@ import (
 func main() {
 	start := time.Now()
 	fmt.Println("# Fazendo login")
-	client, err := crawler.NewClient("40089", "C102030g")
+	client, err := crawler.NewClient("***", "****")
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return
