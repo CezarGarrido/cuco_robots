@@ -9,3 +9,5 @@ require (
 	github.com/lib/pq v1.2.0
 	github.com/tbalthazar/onesignal-go v0.0.0-20160928064723-312530be66c8
 )
+
+go 1.13

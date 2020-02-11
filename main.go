@@ -38,16 +38,17 @@ func main() {
 	alunoHandler := appHandler.NewAluno(connection)
 	disciplinaHandler := appHandler.NewAlunoDisciplina(connection)
 	frequenciaHandler := appHandler.NewFrequencia(connection)
+	notificacaoHandler := appHandler.NewNotificacao(connection)
 	r := mux.NewRouter()
-	
+
 	r.HandleFunc("/api/v1/login", alunoHandler.Login).Methods("POST")
 	r.HandleFunc("/api/v1/disciplinas", disciplinaHandler.Fetch).Methods("GET")
 	r.HandleFunc("/api/v1/frequencia/disciplina/{id:[0-9]+}", frequenciaHandler.Fetch).Methods("GET")
-
+	r.HandleFunc("/api/v1/vasculhador", notificacaoHandler.StartNotificacao).Methods("GET")
 	headersOk := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS", "PUT", "DELETE"})
-	
+
 	log.Println("Servidor startado na porta:", port)
 
 	recoveryH := handlers.RecoveryHandler()(r)
