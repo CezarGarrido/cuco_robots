@@ -20,12 +20,14 @@ func NewAlunoDisciplina(db *driver.DB) *AlunoDisciplina {
 	return &AlunoDisciplina{
 		repo:   repo.NewSQLAlunoDisciplinaRepo(db.SQL),
 		sessao: repo.NewSQLSessaoRepo(db.SQL),
+		nota: repo.NewSQLNotaRepo(db.SQL),
 	}
 }
 
 type AlunoDisciplina struct {
 	repo   repo.AlunoDisciplinaRepo
 	sessao repo.SessaoRepo
+	nota  repo.NotaRepo
 }
 
 func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {

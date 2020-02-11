@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"time"
 
 	entities "github.com/CezarGarrido/cuco_robots/api/entities"
 )
@@ -187,32 +186,7 @@ func (m *mysqlAlunoDisciplinaRepo) Update(ctx context.Context, alunoDisciplina *
 		return nil, err
 	}
 	defer stmt.Close()
-	notaRepo := NewSQLNotaRepo(m.Conn)
-	for _, nota := range alunoDisciplina.Notas {
-		nota.DisciplinaID = alunoDisciplina.ID
-		exist, err := notaRepo.IsExiste(ctx, alunoDisciplina.AlunoID, alunoDisciplina.ID, nota.Descricao)
-		if !exist {
-			_, err = notaRepo.Create(ctx, nota)
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			notaAnterior, err := notaRepo.GetByDescricao(ctx, alunoDisciplina.AlunoID, alunoDisciplina.ID, nota.Descricao)
-			if err != nil {
-				return nil, err
-			}
 
-			if nota.Valor != nil {
-				notaAnterior.Valor = nota.Valor
-			}
-			h := time.Now()
-			notaAnterior.UpdatedAt = &h
-			_, err = notaRepo.Update(ctx, notaAnterior)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
 	return alunoDisciplina, nil
 }
 

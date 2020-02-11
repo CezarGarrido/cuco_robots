@@ -22,6 +22,7 @@ func NewNotificacao(db *driver.DB) *Notificacao {
 		repo:       repo.NewSQLNotificacaoRepo(db.SQL),
 		aluno:      repo.NewSQLAlunoRepo(db.SQL),
 		disciplina: repo.NewSQLAlunoDisciplinaRepo(db.SQL),
+		nota:       repo.NewSQLNotaRepo(db.SQL),
 	}
 }
 
@@ -30,9 +31,10 @@ type Notificacao struct {
 	sessao     repo.SessaoRepo
 	aluno      repo.AlunoRepo
 	disciplina repo.AlunoDisciplinaRepo
+	nota       repo.NotaRepo
 }
 
-func (this *Notificacao) StartNotificacao(w http.ResponseWriter, r *http.Request) {
+func (this *Notificacao) StartVascullhador(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	select {
 	case <-ctx.Done():
@@ -52,6 +54,7 @@ func (this *Notificacao) startCrawler() {
 		return
 	}
 	for _, aluno := range alunos {
+		log.Println("# Buscando notas do aluno ->", aluno.ID, aluno.Nome)
 		sessao, ok, _ := this.sessao.Find(ctx, aluno.ID)
 		if ok {
 			var cookies []*http.Cookie
@@ -98,6 +101,7 @@ func (this *Notificacao) startCrawler() {
 				return
 			}
 			for _, disciplina := range aux_disciplinas {
+				log.Println("# Buscando notas da disciplina ->", disciplina.UemsID, disciplina.Descricao)
 				isExists, err := this.disciplina.IsExiste(ctx, aluno.ID, disciplina.UemsID)
 				if err != nil {
 					log.Println(err.Error())
@@ -108,7 +112,7 @@ func (this *Notificacao) startCrawler() {
 					log.Println(err.Error())
 					return
 				}
-
+				fmt.Println("# Detalhes ->", detalhe)
 				hoje := time.Now()
 				newAlunoDisciplina := &entities.AlunoDisciplina{
 					AlunoID:         aluno.ID,
@@ -130,9 +134,12 @@ func (this *Notificacao) startCrawler() {
 						Descricao: nota.Descricao,
 						CreatedAt: &hoje,
 					}
-					valorNormalized := strings.Replace(nota.Valor, ",", ".", -1)
-					Valor, _ := strconv.ParseFloat(valorNormalized, 64)
-					newNota.Valor = &Valor
+					fmt.Print("Nota.Valor ->", nota.Valor)
+					if nota.Valor != "" {
+						valorNormalized := strings.Replace(nota.Valor, ",", ".", -1)
+						Valor, _ := strconv.ParseFloat(valorNormalized, 64)
+						newNota.Valor = &Valor
+					}
 					notas = append(notas, newNota)
 				}
 				newAlunoDisciplina.Notas = notas
@@ -175,9 +182,42 @@ func (this *Notificacao) startCrawler() {
 						log.Println(err.Error())
 						return
 					}
+
+					for _, nota := range newAlunoDisciplina.Notas {
+						nota.DisciplinaID = disciplinaAnterior.ID
+						exist, err := this.nota.IsExiste(ctx, disciplinaAnterior.AlunoID, disciplinaAnterior.ID, nota.Descricao)
+						if !exist {
+							_, err = this.nota.Create(ctx, nota)
+							if err != nil {
+								log.Println(err.Error())
+								return
+							}
+						} else {
+							notaAnterior, err := this.nota.GetByDescricao(ctx, disciplinaAnterior.AlunoID, disciplinaAnterior.ID, nota.Descricao)
+							if err != nil {
+								log.Println(err.Error())
+								return
+							}
+							if nota.Valor != nil {
+								log.Println("# Nova nota lançada:", nota.Descricao, nota.Valor)
+								notaAnterior.Valor = nota.Valor
+							}
+							h := time.Now()
+							notaAnterior.UpdatedAt = &h
+							_, err = this.nota.Update(ctx, notaAnterior)
+							if err != nil {
+								log.Println(err.Error())
+								return
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 	log.Println("# fim da execução")
+}
+
+func (this *Notificacao) sendNotificacao() {
+
 }
