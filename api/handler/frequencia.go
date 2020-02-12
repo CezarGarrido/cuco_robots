@@ -66,7 +66,13 @@ func (p *Frequencia) Fetch(w http.ResponseWriter, r *http.Request) {
 				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
-			if !client.ValidSession() {
+			isValidSession, err := client.ValidSession()
+			if err != nil {
+				log.Println(err.Error())
+				utils.RespondWithError(w, 500, "Não foi possivel estabelecer uma conexão")
+				return
+			}
+			if !isValidSession {
 				client, err = crawler.NewClientCtx(ctx, creds.Rgm, creds.Senha)
 				if err != nil {
 					log.Println(err.Error())
@@ -104,16 +110,16 @@ func (p *Frequencia) Fetch(w http.ResponseWriter, r *http.Request) {
 				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
-			hoje:=time.Now()
+			hoje := time.Now()
 			for _, falta := range faltas {
-				
+
 				for _, frequencia := range falta.Frequencias {
 					freq := &entities.Frequencia{
 						AlunoID:      creds.Aluno.ID,
 						DisciplinaID: disciplinaID,
 						Mes:          falta.Mes,
 						Valor:        frequencia.Valor,
-						CreatedAt:     &hoje,
+						CreatedAt:    &hoje,
 					}
 					freq.Dia, _ = strconv.Atoi(frequencia.Dia)
 					fmt.Println(freq)
@@ -127,8 +133,8 @@ func (p *Frequencia) Fetch(w http.ResponseWriter, r *http.Request) {
 							utils.RespondWithError(w, 500, err.Error())
 							return
 						}
-					} 
-			
+					}
+
 				}
 			}
 

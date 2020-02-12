@@ -60,7 +60,13 @@ func (p *AlunoDisciplina) Fetch(w http.ResponseWriter, r *http.Request) {
 				utils.RespondWithError(w, 500, err.Error())
 				return
 			}
-			if !client.ValidSession() {
+			isValidSession, err :=  client.ValidSession()
+			if err != nil {
+				log.Println(err.Error())
+				utils.RespondWithError(w, 500, "Não foi possivel estabelecer uma conexão")
+				return
+			}
+			if !isValidSession {
 				client, err = crawler.NewClientCtx(ctx, creds.Rgm, creds.Senha)
 				if err != nil {
 					log.Println(err.Error())

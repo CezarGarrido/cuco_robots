@@ -569,19 +569,29 @@ func (c Client) FindDisciplinas() ([]*Disciplina, error) {
 	return parserDisciplinas(string(body))
 }
 
-func (c Client) ValidSession() bool {
-	req, _ := http.NewRequest("GET", "https://sistemas.uems.br/academico/dcu003.php", nil)
+func (c Client) ValidSession() (bool, error) {
+	req, err := http.NewRequest("GET", "https://sistemas.uems.br/academico/dcu003.php", nil)
+	if err != nil {
+		return false, err
+	}
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp, _ := c.Conn.Do(req)
-	body, _ := ioutil.ReadAll(resp.Body)
+	resp, err := c.Conn.Do(req)
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
 	if string(body) == "Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta fun&ccedil;&atilde;o" {
-		return false
+		return false, nil
 	}
 	if string(body) == "Você não tem permissão para acessar esta função" {
-		return false
+		return false, nil
 	}
-	return true
+	return true, nil
 }
 
 func parserDisciplinas(html string) ([]*Disciplina, error) {

@@ -46,6 +46,12 @@ func (this *Notificacao) StartVascullhador(w http.ResponseWriter, r *http.Reques
 }
 
 func (this *Notificacao) startCrawler() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("recovered error %v", r)
+		}
+	}()
+
 	ctx := context.Background()
 	log.Println("# iniciando vasculhador")
 	alunos, err := this.aluno.GetAll(ctx)
@@ -70,7 +76,12 @@ func (this *Notificacao) startCrawler() {
 				log.Println(err.Error())
 				return
 			}
-			if !client.ValidSession() {
+			isValidSession, err := client.ValidSession()
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			if !isValidSession {
 				client, err = crawler.NewClientCtx(ctx, aluno.Rgm, aluno.Senha)
 				if err != nil {
 					log.Println(err.Error())
