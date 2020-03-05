@@ -94,3 +94,32 @@ CREATE TABLE IF NOT EXISTS cadastros.aluno_frequencia (
   FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE,
   FOREIGN KEY (disciplina_id) REFERENCES cadastros.aluno_disciplinas(id) ON DELETE CASCADE
 )
+
+CREATE TABLE IF NOT EXISTS cadastros.dispositivos (
+  id bigserial CONSTRAINT pk_id_dispositivo primary key,
+  aluno_id int8 not null,
+  model TEXT not null,
+  platform TEXT not null,
+  uuid TEXT not null,
+  `version` TEXT not null,
+  manufacturer TEXT not null,
+  is_virtual TEXT not null,
+  `serial` TEXT not null, 
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (aluno_id) REFERENCES cadastros.alunos(id) ON DELETE CASCADE
+)
+
+CREATE TABLE IF NOT EXISTS cadastros.horarios (
+  id bigserial CONSTRAINT pk_id_horario primary key,
+  curso varchar(100) NOT NULL,
+  ano_letivo varchar(50) NOT NULL,
+  serie varchar(50) NOT NULL,
+  periodo varchar(50) NOT NULL,
+  horario varchar(50) NOT NULL,
+  professor_nome varchar(50) NOT NULL,
+  disciplina varchar(50) NOT NULL,
+  dia_semana varchar(50) NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+)

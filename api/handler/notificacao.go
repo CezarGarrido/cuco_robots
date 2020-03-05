@@ -145,7 +145,6 @@ func (this *Notificacao) startCrawler() {
 						Descricao: nota.Descricao,
 						CreatedAt: &hoje,
 					}
-					fmt.Print("Nota.Valor ->", nota.Valor)
 					if nota.Valor != "" {
 						valorNormalized := strings.Replace(nota.Valor, ",", ".", -1)
 						Valor, _ := strconv.ParseFloat(valorNormalized, 64)
@@ -210,7 +209,11 @@ func (this *Notificacao) startCrawler() {
 								return
 							}
 							if nota.Valor != nil {
-								log.Println("# Nova nota lançada:", nota.Descricao, nota.Valor)
+								if notaAnterior.Valor != nota.Valor {
+									log.Println("# Nova nota lançada:", nota.Descricao, nota.Valor)
+									notaAnterior.Valor = nota.Valor
+									this.enviaNotificacao(*disciplinaAnterior.Disciplina+" - Nova nota lançada.", "Valor: "+fmt.Sprintf("%.2f", *nota.Valor))
+								}
 								notaAnterior.Valor = nota.Valor
 							}
 							h := time.Now()
@@ -229,6 +232,6 @@ func (this *Notificacao) startCrawler() {
 	log.Println("# fim da execução")
 }
 
-func (this *Notificacao) sendNotificacao() {
-
+func (this *Notificacao) enviaNotificacao(titulo, body string) {
+	log.Println("# Enviando notificação ->", titulo, body)
 }

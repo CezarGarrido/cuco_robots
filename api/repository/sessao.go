@@ -23,7 +23,7 @@ type postgressqlRepo struct {
 }
 
 func (m *postgressqlRepo) Commit(ctx context.Context, sessao *entities.Sessao) error {
-	query := `INSERT INTO cadastros.aluno_sessao (aluno_id, qtde_login, qtde_req, cookie_name, cookie_value, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (aluno_id) DO UPDATE SET qtde_login = EXCLUDED.qtde_login, qtde_req = EXCLUDED.qtde_req,cookie_name = EXCLUDED.cookie_name, cookie_value = EXCLUDED.cookie_value, updated_at = EXCLUDED.updated_at `
+	query := `INSERT INTO cadastros.aluno_sessao (aluno_id, qtde_login, qtde_req, cookie_name, cookie_value, created_at, updated_at) VALUES($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (aluno_id) DO UPDATE SET qtde_login = EXCLUDED.qtde_login + 1, qtde_req = EXCLUDED.qtde_req + 1,cookie_name = EXCLUDED.cookie_name, cookie_value = EXCLUDED.cookie_value, updated_at = EXCLUDED.updated_at `
 	stmt, err := m.Conn.PrepareContext(ctx, query)
 	if err != nil {
 		return err
